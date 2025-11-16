@@ -1,5 +1,5 @@
 #include "window/Window.hpp"
-#include "util/StringUtils.hpp"
+#include "util/String.hpp"
 #include "util/Logger.hpp"
 
 #include <fmt/core.h>

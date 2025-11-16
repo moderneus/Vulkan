@@ -1,5 +1,5 @@
 #include "core/objects/Instance.hpp"
-#include "util/StringUtils.hpp"
+#include "util/String.hpp"
 #include "util/Logger.hpp"
 
 #include <SDL3/SDL_vulkan.h>
@@ -43,17 +43,18 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
     createInfo.ppEnabledExtensionNames = extensions;
     createInfo.enabledLayerCount = 0;
 
-    Engine::Utils::log->info("The Instance info was created!");
+    Engine::Utils::log->success("The Instance info was created!");
 
     return createInfo;
 }
 
 void Engine::Core::Instance::create()
 {
+    Engine::Utils::log->info("Creating an Instance...");
+
     VkApplicationInfo appInfo = createAppInfo();
     VkInstanceCreateInfo createInfo = createInstanceInfo(&appInfo);
-    
-    Engine::Utils::log->info("Creating an Instance...");
+
     VkResult res = vkCreateInstance(&createInfo, nullptr, &instance);
         
     if(res != VK_SUCCESS)

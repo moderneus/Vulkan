@@ -1,4 +1,4 @@
-#include "util/StringUtils.hpp"
+#include "util/String.hpp"
 
 std::vector<std::string> cstrArrayToVector(const char* const* cstr, const size_t count)
 {
