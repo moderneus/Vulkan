@@ -22,7 +22,7 @@ void Engine::gfx::Renderer::destroy()
     sdlContext.destroy();
     vkCore.destroy();
 
-    Engine::Utils::log->info("The Renderer was Destroyed!");
+    Engine::Utils::log->success("The Renderer was Destroyed!");
 }
 
 void Engine::gfx::Renderer::draw()

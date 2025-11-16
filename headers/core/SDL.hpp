@@ -7,7 +7,7 @@ namespace Engine
         class SDL
         {
         private:
-            bool isInit;
+            bool isInit = false;
             
         public:    
             void init();

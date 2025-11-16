@@ -9,7 +9,7 @@ namespace Engine
         class Window
         {
         private:
-            SDL_Window* pWindow;
+            SDL_Window* pWindow = nullptr;
             bool isClosed = false;
             
         public:

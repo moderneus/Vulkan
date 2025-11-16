@@ -21,7 +21,7 @@ VkApplicationInfo Engine::Core::Instance::createAppInfo()
     return appInfo;
 }
 
-VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(VkApplicationInfo* appInfo)
+VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicationInfo* appInfo)
 {
     Engine::Utils::log->info("Creating the Instance Info...");
     
@@ -65,7 +65,10 @@ void Engine::Core::Instance::create()
 void Engine::Core::Instance::destroy()
 {
     Engine::Utils::log->info("Destroying the Instance...");
-    
+   
+    if(instance == VK_NULL_HANDLE)
+        Engine::Utils::log->critical("Cannot Destroy the Instance::Instance is not Created!");
+        
     vkDestroyInstance(instance, nullptr);
     
     Engine::Utils::log->success("The Instance was Destroyed!");

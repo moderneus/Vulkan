@@ -9,10 +9,10 @@ namespace Engine
         class Instance
         {
         private: 
-            VkInstance instance;
+            VkInstance instance = VK_NULL_HANDLE;
 
             VkApplicationInfo createAppInfo();
-            VkInstanceCreateInfo createInstanceInfo(VkApplicationInfo* appInfo);
+            VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo* appInfo);
 
         public: 
             void create();

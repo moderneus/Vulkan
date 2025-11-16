@@ -2,6 +2,8 @@
 
 #include "window/Window.hpp"
 
+#include <SDL3/SDL.h>
+
 namespace Engine
 {
     namespace Utils

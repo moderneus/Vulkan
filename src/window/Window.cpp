@@ -20,6 +20,9 @@ void Engine::Window::Window::destroy()
 {
     Engine::Utils::log->info("Destroying the Window...");
     
+    if(pWindow == nullptr)
+        Engine::Utils::log->critical("Cannot Destroy the Window::Window is not Created!");
+        
     SDL_DestroyWindow(pWindow);
     
     Engine::Utils::log->success("The Window was Destroyed!");
