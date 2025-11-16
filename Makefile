@@ -41,3 +41,6 @@ $(TARGET) : $(BUILD_DIR)
 
 clean : 
 	@rm -rf $(BUILD_DIR)
+
+cleanLogs :
+	@rm -rf $(BUILD_DIR)logs

@@ -1,26 +1,31 @@
 #include "core/SDL.hpp"
+#include "util/StringUtils.hpp"
+#include "util/Logger.hpp"
 
 #include <SDL3/SDL.h>
 #include <fmt/core.h>
 
-void SDL::init()
+void Engine::Core::SDL::init()
 {
+    Engine::Utils::log->info("Initializing the SDL...");
+    
     if(!SDL_Init(SDL_INIT_VIDEO))
-    {
-        fmt::print("SDL Initialization failed!\n");
-        std::exit(-1);
-    }
+        Engine::Utils::log->critical("Cannot Initialize SDL::" + cstrToString(SDL_GetError()));
 
     isInit = true;
+    Engine::Utils::log->success("The SDL was initialiazed!");
 }
 
-void SDL::destroy()
+void Engine::Core::SDL::destroy()
 {
+    Engine::Utils::log->info("Quitting SDL...");
+    
     if(isInit)
         SDL_Quit();
 
     else
-        fmt::print("Cannot free SDL memory: SDL is not initialiazed!\n");
+        Engine::Utils::log->critical("Cannot free the SDL memory::SDL initialiazed.");
     
     isInit = false;
+    Engine::Utils::log->success("SDL quit!");
 }

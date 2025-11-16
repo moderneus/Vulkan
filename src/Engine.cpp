@@ -2,7 +2,7 @@
 
 int main()
 {
-    Renderer vkRenderer;
+    Engine::gfx::Renderer vkRenderer;
 
     vkRenderer.init();
 

@@ -2,11 +2,17 @@
 
 #include "window/Window.hpp"
 
-class EventManager
+namespace Engine
 {
-private:
-    SDL_Event event;
+    namespace Utils
+    {
+        class EventManager
+        {
+        private:
+            SDL_Event event;
 
-public:
-    void pollEvents(Window& window);
-};
+        public:
+            void pollEvents(Engine::Window::Window& window);
+        };
+    }
+}

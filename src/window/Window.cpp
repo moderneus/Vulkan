@@ -1,28 +1,41 @@
 #include "window/Window.hpp"
+#include "util/StringUtils.hpp"
+#include "util/Logger.hpp"
 
 #include <fmt/core.h>
 
-void Window::create(const char* title, const unsigned int width, const unsigned int height)
+void Engine::Window::Window::create(const char* title, const unsigned int width, const unsigned int height)
 {
+    Engine::Utils::log->info("Creating a Window...");
+    
     pWindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_VULKAN);
+
+    if(!pWindow)
+        Engine::Utils::log->critical("Failed to create the Window::" + cstrToString(SDL_GetError()));
+
+    Engine::Utils::log->success("The Window was Created!");
 }
 
-void Window::destroy()
+void Engine::Window::Window::destroy()
 {
+    Engine::Utils::log->info("Destroying the Window...");
+    
     SDL_DestroyWindow(pWindow);
+    
+    Engine::Utils::log->success("The Window was Destroyed!");
 }
 
-void Window::close()
+void Engine::Window::Window::close()
 {
     isClosed = true;
 }
 
-bool Window::closed()
+bool Engine::Window::Window::closed()
 {
     return isClosed;
 }
 
-SDL_Window* Window::get()
+SDL_Window* Engine::Window::Window::get()
 {
     return pWindow;
 }

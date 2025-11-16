@@ -2,13 +2,19 @@
 
 #include "core/objects/Instance.hpp"
 
-class Core
+namespace Engine
 {
-private:    
-    Instance vkInstance;
-    
-public: 
-    void init();
-    void destroy();
-    Instance& getInstance();
-};
+    namespace Core
+    {
+        class Core
+        {
+        private:    
+            Instance vkInstance;
+            
+        public: 
+            void init();
+            void destroy();
+            Instance& getInstance();
+        };
+    }
+}

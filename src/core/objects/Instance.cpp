@@ -1,12 +1,13 @@
 #include "core/objects/Instance.hpp"
+#include "util/StringUtils.hpp"
+#include "util/Logger.hpp"
 
 #include <SDL3/SDL_vulkan.h>
-#include <fmt/core.h>
 
-#include <cstdlib>
-
-VkApplicationInfo Instance::createAppInfo()
+VkApplicationInfo Engine::Core::Instance::createAppInfo()
 {
+    Engine::Utils::log->info("Creating an Application Info...");
+    
     VkApplicationInfo appInfo = {};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     appInfo.pApplicationName = "Vulkan";
@@ -15,11 +16,15 @@ VkApplicationInfo Instance::createAppInfo()
     appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);
     appInfo.apiVersion = VK_API_VERSION_1_4;
 
+    Engine::Utils::log->success("The Application Info created!");
+
     return appInfo;
 }
 
-VkInstanceCreateInfo Instance::createInstanceInfo(VkApplicationInfo* appInfo)
+VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(VkApplicationInfo* appInfo)
 {
+    Engine::Utils::log->info("Creating the Instance Info...");
+    
     VkInstanceCreateInfo createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     createInfo.pApplicationInfo = appInfo;
@@ -28,31 +33,45 @@ VkInstanceCreateInfo Instance::createInstanceInfo(VkApplicationInfo* appInfo)
     const char* const* extensions;
     
     extensions = SDL_Vulkan_GetInstanceExtensions(&extensionsCount);
+
+    std::vector<std::string> extensionNames = cstrArrayToVector(extensions, extensionsCount);
+
+    Engine::Utils::log->info("Extensions = ", extensionNames);
+    Engine::Utils::log->info("Extensions count = " + std::to_string(extensionsCount));
     
     createInfo.enabledExtensionCount = extensionsCount;
     createInfo.ppEnabledExtensionNames = extensions;
     createInfo.enabledLayerCount = 0;
 
+    Engine::Utils::log->info("The Instance info was created!");
+
     return createInfo;
 }
 
-void Instance::create()
+void Engine::Core::Instance::create()
 {
     VkApplicationInfo appInfo = createAppInfo();
     VkInstanceCreateInfo createInfo = createInstanceInfo(&appInfo);
+    
+    Engine::Utils::log->info("Creating an Instance...");
+    VkResult res = vkCreateInstance(&createInfo, nullptr, &instance);
+        
+    if(res != VK_SUCCESS)
+        Engine::Utils::log->critical("The Instance creation Failed::" + std::to_string(res));
 
-    if(vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
-        std::exit(-1);
-
-    fmt::print("Instance created!\n");
+    Engine::Utils::log->success("The Instance was Created!");
 }
 
-void Instance::destroy()
+void Engine::Core::Instance::destroy()
 {
+    Engine::Utils::log->info("Destroying the Instance...");
+    
     vkDestroyInstance(instance, nullptr);
+    
+    Engine::Utils::log->success("The Instance was Destroyed!");
 }
 
-VkInstance& Instance::get()
+VkInstance& Engine::Core::Instance::get()
 {
     return instance;
 }

@@ -1,6 +1,6 @@
 #include "util/EventManager.hpp"
 
-void EventManager::pollEvents(Window& window)
+void Engine::Utils::EventManager::pollEvents(Engine::Window::Window& window)
 {
     while(SDL_PollEvent(&event))
     {

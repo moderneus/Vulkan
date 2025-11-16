@@ -1,16 +1,25 @@
 #include "core/Core.hpp"
+#include "util/Logger.hpp"
 
-void Core::init()
+void Engine::Core::Core::init()
 {
+    Engine::Utils::log->info("Initializing a Core...");
+    
     vkInstance.create();
+
+    Engine::Utils::log->success("The Core was Initialized!");
 }
 
-void Core::destroy()
+void Engine::Core::Core::destroy()
 {
+    Engine::Utils::log->info("Destroying the Core...");
+    
     vkInstance.destroy();
+
+    Engine::Utils::log->success("The Core was Destroyed!");
 }
 
-Instance& Core::getInstance()
+Engine::Core::Instance& Engine::Core::Core::getInstance()
 {
     return vkInstance;
 }

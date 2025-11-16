@@ -2,17 +2,23 @@
 
 #include <vulkan/vulkan.h>
 
-class Instance
+namespace Engine
 {
-private: 
-    VkInstance instance;
+    namespace Core
+    {
+        class Instance
+        {
+        private: 
+            VkInstance instance;
 
-    VkApplicationInfo createAppInfo();
-    VkInstanceCreateInfo createInstanceInfo(VkApplicationInfo* appInfo);
+            VkApplicationInfo createAppInfo();
+            VkInstanceCreateInfo createInstanceInfo(VkApplicationInfo* appInfo);
 
-public: 
-    void create();
-    void destroy();
-    
-    VkInstance& get();
-};
+        public: 
+            void create();
+            void destroy();
+            
+            VkInstance& get();
+        };
+    }
+}

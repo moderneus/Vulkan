@@ -1,11 +1,17 @@
 #pragma once
 
-class SDL
+namespace Engine
 {
-private:
-    bool isInit;
-    
-public:    
-    void init();
-    void destroy();
-};
+    namespace Core
+    {
+        class SDL
+        {
+        private:
+            bool isInit;
+            
+        public:    
+            void init();
+            void destroy();
+        };
+    }
+}
