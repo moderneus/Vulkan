@@ -18,9 +18,9 @@ void Engine::gfx::Renderer::destroy()
 {
     Engine::Utils::log->info("Destroying the Renderer...");
     
+    vkCore.destroy();
     window.destroy();
     sdlContext.destroy();
-    vkCore.destroy();
 
     Engine::Utils::log->success("The Renderer was Destroyed!");
 }

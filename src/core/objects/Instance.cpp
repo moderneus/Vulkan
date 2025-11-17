@@ -75,7 +75,7 @@ void Engine::Core::Instance::destroy()
     Engine::Utils::log->success("The Instance was Destroyed!");
 }
 
-VkInstance& Engine::Core::Instance::get()
+VkInstance Engine::Core::Instance::get()
 {
     return instance;
 }

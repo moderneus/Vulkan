@@ -18,7 +18,7 @@ namespace Engine
             void create();
             void destroy();
             
-            VkInstance& get();
+            VkInstance get();
         };
     }
 }
