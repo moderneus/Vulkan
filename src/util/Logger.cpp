@@ -1,7 +1,11 @@
 #include "util/Logger.hpp"
 
-#include <filesystem>
 #include <fmt/core.h>
+
+#include <filesystem>
+#include <chrono>
+#include <sstream>
+#include <iomanip>
 
 Engine::Utils::Logger::Logger()
 {
@@ -28,24 +32,40 @@ void Engine::Utils::Logger::write(const std::string& msg, const Level level)
     switch(level)
     {
         case INFO:
-            logf << "INFO::" << msg << std::endl;
+            logf << currentDateTime() << "INFO::" << msg << std::endl;
         break;
             
         case ERROR:
-            logf << "ERROR::" << msg << std::endl;
+            logf << currentDateTime() << "ERROR::" << msg << std::endl;
         break;
 
         case CRITICAL:
-            logf << "CRITICAL::" << msg << std::endl;
+            logf << currentDateTime() << "CRITICAL::" << msg << std::endl;
             std::exit(-1);
         break;
             
         case SUCCESS:
-            logf << "SUCCESS::" << msg << std::endl;
+            logf << currentDateTime() << "SUCCESS::" << msg << std::endl;
         break;
     }
     
     logf.flush();
+}
+
+std::string Engine::Utils::Logger::currentDateTime()
+{
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t t = std::chrono::system_clock::to_time_t(now);
+
+    std::tm tm = {};
+
+    localtime_r(&t, &tm);
+
+    std::ostringstream oss;
+    oss << '[' << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "] ";
+
+    return oss.str();
 }
 
 void Engine::Utils::Logger::info(const std::string& msg)

@@ -17,6 +17,7 @@ namespace Engine
             
             void openLogFile(const std::string& path);
             void write(const std::string& msg, const Level level);
+            std::string currentDateTime();
             
             Logger& operator=(const Logger& other) = delete;
             Logger(const Logger& other) = delete;
@@ -31,8 +32,6 @@ namespace Engine
             void critical(const std::string& msg);
             void success(const std::string& msg);
         };
-        
-        inline Logger* log = Logger::get();
     }
 }
 

@@ -5,24 +5,24 @@
 
 void Engine::gfx::Renderer::init()
 {
-    Engine::Utils::log->info("Initializing a Renderer...");
+    Engine::Utils::Logger::get()->info("Initializing a Renderer...");
     
     sdlContext.init();
     window.create("Vulkan", 640, 480);
     vkCore.init();
 
-    Engine::Utils::log->success("The Renderer was Initialized!");
+    Engine::Utils::Logger::get()->success("The Renderer was Initialized!");
 }
 
 void Engine::gfx::Renderer::destroy()
 {
-    Engine::Utils::log->info("Destroying the Renderer...");
+    Engine::Utils::Logger::get()->info("Destroying the Renderer...");
     
     vkCore.destroy();
     window.destroy();
     sdlContext.destroy();
 
-    Engine::Utils::log->success("The Renderer was Destroyed!");
+    Engine::Utils::Logger::get()->success("The Renderer was Destroyed!");
 }
 
 void Engine::gfx::Renderer::draw()
