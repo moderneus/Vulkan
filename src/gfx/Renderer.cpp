@@ -1,32 +1,32 @@
 #include "gfx/Renderer.hpp"
 #include "util/EventManager.hpp"
-#include "util/Logger.hpp"
-#include "core/Core.hpp"
+#include "util/debug/Logger.hpp"
 
-void Engine::gfx::Renderer::init()
+void Engine::gfx::Renderer::init(Window::Window* pWindow)
 {
-    Engine::Utils::Logger::get()->info("Initializing a Renderer...");
-    
-    sdlContext.init();
-    window.create("Vulkan", 640, 480);
-    vkCore.init();
+    Utils::Logger::get()->info("Initializing a Renderer...");
 
-    Engine::Utils::Logger::get()->success("The Renderer was Initialized!");
+    window = pWindow;
+    
+    Utils::Logger::get()->success("The Renderer was Initialized!");
 }
 
 void Engine::gfx::Renderer::destroy()
 {
-    Engine::Utils::Logger::get()->info("Destroying the Renderer...");
-    
-    vkCore.destroy();
-    window.destroy();
-    sdlContext.destroy();
+    Utils::Logger::get()->info("Destroying the Renderer...");
 
-    Engine::Utils::Logger::get()->success("The Renderer was Destroyed!");
+    window = nullptr;
+    
+    Utils::Logger::get()->success("The Renderer was Destroyed!");
+}
+
+void Engine::gfx::Renderer::loop()
+{
+    while(!window->closed())
+        e.pollEvents(*window);
 }
 
 void Engine::gfx::Renderer::draw()
 {
-    while(!window.closed())
-        e.pollEvents(window);
+    loop();
 }

@@ -1,6 +1,6 @@
 #include "core/objects/Instance.hpp"
 #include "util/String.hpp"
-#include "util/Logger.hpp"
+#include "util/debug/Logger.hpp"
 
 #include <SDL3/SDL_vulkan.h>
 
@@ -34,7 +34,7 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
     
     extensions = SDL_Vulkan_GetInstanceExtensions(&extensionsCount);
 
-    std::vector<std::string> extensionNames = cstrArrayToVector(extensions, extensionsCount);
+    std::vector<std::string> extensionNames = Engine::Utils::cstrArrayToVector(extensions, extensionsCount);
 
     Engine::Utils::Logger::get()->info("Extensions = ", extensionNames);
     Engine::Utils::Logger::get()->info("Extensions count = " + std::to_string(extensionsCount));

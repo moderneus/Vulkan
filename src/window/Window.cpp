@@ -1,6 +1,6 @@
 #include "window/Window.hpp"
 #include "util/String.hpp"
-#include "util/Logger.hpp"
+#include "util/debug/Logger.hpp"
 
 #include <fmt/core.h>
 
@@ -11,7 +11,7 @@ void Engine::Window::Window::create(const char* title, const unsigned int width,
     pWindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_VULKAN);
 
     if(!pWindow)
-        Engine::Utils::Logger::get()->critical("Failed to create the Window::" + cstrToString(SDL_GetError()));
+        Engine::Utils::Logger::get()->critical("Failed to create the Window::" + Engine::Utils::cstrToString(SDL_GetError()));
 
     Engine::Utils::Logger::get()->success("The Window was Created!");
 }

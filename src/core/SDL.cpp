@@ -1,6 +1,6 @@
 #include "core/SDL.hpp"
 #include "util/String.hpp"
-#include "util/Logger.hpp"
+#include "util/debug/Logger.hpp"
 
 #include <SDL3/SDL.h>
 #include <fmt/core.h>
@@ -10,7 +10,7 @@ void Engine::Core::SDL::init()
     Engine::Utils::Logger::get()->info("Initializing the SDL...");
     
     if(!SDL_Init(SDL_INIT_VIDEO))
-        Engine::Utils::Logger::get()->critical("Cannot Initialize SDL::" + cstrToString(SDL_GetError()));
+        Engine::Utils::Logger::get()->critical("Cannot Initialize SDL::" + Engine::Utils::cstrToString(SDL_GetError()));
 
     isInit = true;
 
