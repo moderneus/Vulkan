@@ -4,7 +4,7 @@ namespace Engine
 {
     namespace Utils 
     {
-        std::vector<std::string> cstrArrayToVector(const char* const* cstr, const size_t count)
+        std::vector<std::string> cstrArrayToStringVector(const char* const* cstr, const size_t count)
         {
             std::vector<std::string> strs;
             
