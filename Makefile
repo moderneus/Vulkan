@@ -4,7 +4,7 @@ TARGET = Vulkan
 
 CXX = clang++
 
-CXX_FLAGS = -g -std=c++20 -O2 -Wall -Wextra -Wpedantic
+CXX_FLAGS = -g -std=c++20 -O2 -Wall -Wextra -Wpedantic -DDEBUG
 
 BUILD_DIR = ./build/
 INCLUDE = -I./headers

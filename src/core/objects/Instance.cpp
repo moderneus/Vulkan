@@ -45,7 +45,9 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
 
     Utils::ValidationLayers validationLayers;
 
+#ifdef DEBUG
     validationLayers.enable();
+#endif
     
     if(validationLayers.enabled() && validationLayers.checkSupport())
     {

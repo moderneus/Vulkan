@@ -6,26 +6,26 @@
 
 void Engine::Window::Window::create(const char* title, const unsigned int width, const unsigned int height)
 {
-    Engine::Utils::Logger::get()->info("Creating a Window...");
+    Utils::Logger::get()->info("Creating a Window...");
     
     pWindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_VULKAN);
 
     if(!pWindow)
-        Engine::Utils::Logger::get()->critical("Failed to create the Window::" + Engine::Utils::cstrToString(SDL_GetError()));
+        Utils::Logger::get()->critical("Failed to create the Window::" + Utils::cstrToString(SDL_GetError()));
 
-    Engine::Utils::Logger::get()->success("The Window was Created!");
+    Utils::Logger::get()->success("The Window was Created!");
 }
 
 void Engine::Window::Window::destroy()
 {
-    Engine::Utils::Logger::get()->info("Destroying the Window...");
+    Utils::Logger::get()->info("Destroying the Window...");
     
     if(pWindow == nullptr)
-        Engine::Utils::Logger::get()->critical("Cannot Destroy the Window::Window is not Created!");
+        Utils::Logger::get()->critical("Cannot Destroy the Window::Window is not Created!");
         
     SDL_DestroyWindow(pWindow);
     
-    Engine::Utils::Logger::get()->success("The Window was Destroyed!");
+    Utils::Logger::get()->success("The Window was Destroyed!");
 }
 
 void Engine::Window::Window::close()

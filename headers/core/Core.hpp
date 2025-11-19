@@ -2,6 +2,8 @@
 
 #include "core/objects/Instance.hpp"
 
+#include <vulkan/vulkan.h>
+
 namespace Engine
 {
     namespace Core
@@ -9,12 +11,12 @@ namespace Engine
         class Core
         {
         private:    
-            Instance vkInstance;
+            static Instance vkInstance;
             
         public: 
             void init();
             void destroy();
-            Instance& getInstance();
+            static VkInstance getInstance();
         };
     }
 }
