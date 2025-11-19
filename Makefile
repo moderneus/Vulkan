@@ -3,7 +3,6 @@ MAKEFLAGS += --no-print-directory
 TARGET = Vulkan
 
 CXX = clang++
-CC = clang
 
 CXX_FLAGS = -g -std=c++20 -O2 -Wall -Wextra -Wpedantic
 
@@ -32,7 +31,7 @@ $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(OBJ_DIR)
 	@mkdir -p $(dir $@)
 	@$(CXX) $(CXX_FLAGS) -c $< -o $@ $(INCLUDE)
 
-$(BIN) : $(SDL) $(FMT) $(OBJ)
+$(BIN) : $(OBJ)
 	@echo "LD: $(notdir $@)"
 	@$(CXX) $(CXX_FLAGS) $(OBJ) -o $@ $(LIBS) 
 	
