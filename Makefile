@@ -4,7 +4,7 @@ TARGET = Vulkan
 
 CXX = clang++
 
-CXX_FLAGS = -g -std=c++20 -O2 -Wall -Wextra -Wpedantic -DDEBUG
+CXX_FLAGS = -g -std=c++20 -O2 -Wall -Wextra -Wpedantic -DDEBUG -MMD -MP
 
 BUILD_DIR = ./build/
 INCLUDE = -I./headers
@@ -27,17 +27,19 @@ $(OBJ_DIR) :
 	@mkdir -p $@
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(OBJ_DIR)
-	@echo "CC: $(notdir $@)"
+	@echo "CC: $@"
 	@mkdir -p $(dir $@)
 	@$(CXX) $(CXX_FLAGS) -c $< -o $@ $(INCLUDE)
 
-$(BIN) : $(OBJ)
-	@echo "LD: $(notdir $@)"
-	@$(CXX) $(CXX_FLAGS) $(OBJ) -o $@ $(LIBS) 
-	
+-include $(OBJ:.o=.d)
+
 $(TARGET) : $(BUILD_DIR)
 	@bear --output $(CCJSON) -- $(MAKE) $(BIN)
 
+$(BIN) : $(OBJ)
+	@echo "LD: $@"
+	@$(CXX) $(CXX_FLAGS) $(OBJ) -o $@ $(LIBS) 
+	
 clean : 
 	@rm -rf $(BUILD_DIR)
 

@@ -1,6 +1,5 @@
 #include "core/objects/Instance.hpp"
 #include "util/String.hpp"
-#include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
 
 #include <SDL3/SDL_vulkan.h>
@@ -35,30 +34,17 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
     
     extensions = SDL_Vulkan_GetInstanceExtensions(&extensionsCount);
 
-    std::vector<std::string> extensionNames = Utils::cstrArrayToStringVector(extensions, extensionsCount);
+    std::vector<std::string> extensionsVector = Utils::cstrArrayToStringVector(extensions, extensionsCount);
 
-    Utils::Logger::get()->info("Extensions = ", extensionNames);
+    Utils::Logger::get()->info("Extensions = ", extensionsVector);
     Utils::Logger::get()->info("Extensions count = " + std::to_string(extensionsCount));
     
     createInfo.enabledExtensionCount = extensionsCount;
     createInfo.ppEnabledExtensionNames = extensions;
-
-    Utils::ValidationLayers validationLayers;
-
-#ifdef DEBUG
-    validationLayers.enable();
-#endif
     
-    if(validationLayers.enabled() && validationLayers.checkSupport())
-    {
-        createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.get().size());
-        createInfo.ppEnabledLayerNames = Utils::ValidationLayers::get().data();
-    }
+    createInfo.enabledLayerCount = 0;
+    createInfo.ppEnabledLayerNames = (const char* const*)(extensionsVector.data());
 
-    else
-    {
-        createInfo.enabledLayerCount = 0;
-    }
 
     Utils::Logger::get()->success("The Instance info was created!");
 
