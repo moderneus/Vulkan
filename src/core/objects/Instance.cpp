@@ -43,7 +43,7 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
     createInfo.ppEnabledExtensionNames = extensions;
     
     createInfo.enabledLayerCount = 0;
-    createInfo.ppEnabledLayerNames = (const char* const*)(extensionsVector.data());
+    createInfo.ppEnabledLayerNames = nullptr;
 
 
     Utils::Logger::get()->success("The Instance info was created!");
