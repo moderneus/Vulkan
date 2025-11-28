@@ -1,5 +1,6 @@
 #include "util/debug/Logger.hpp"
 
+#include <ctime>
 #include <fmt/core.h>
 
 #include <filesystem>
@@ -60,7 +61,13 @@ std::string Engine::Utils::Logger::currentDateTime()
 
     std::tm tm = {};
 
+#ifdef WIN32
+    localtime_s(&tm, &t);
+#endif 
+
+#ifdef __linux__
     localtime_r(&t, &tm);
+#endif
 
     std::ostringstream oss;
     oss << '[' << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "] ";
