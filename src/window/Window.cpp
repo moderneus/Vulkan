@@ -2,8 +2,6 @@
 #include "util/String.hpp"
 #include "util/debug/Logger.hpp"
 
-#include <fmt/core.h>
-
 void Engine::Window::Window::create(const char* title, const unsigned int width, const unsigned int height)
 {
     Utils::Logger::get()->info("Creating a Window...");

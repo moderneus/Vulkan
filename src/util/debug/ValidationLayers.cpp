@@ -11,8 +11,6 @@
 #include <cstring>
 #include <cstdint>
 
-VkDebugUtilsMessengerEXT debugMessenger;
-
 bool Engine::Utils::checkValidationLayerSupport()
 {
     uint32_t layerCount;
@@ -53,14 +51,24 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL Engine::Utils::callBack
 
     fmt::color color;
 
-    if(messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
-        color = fmt::color::white_smoke;
-    
-    else if(messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
-        color = fmt::color::gold;
+    switch(messageSeverity)
+    {
+        default:
+            color = fmt::color::white;
+        break;
+        
+        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+            color = fmt::color::lime_green;
+        break;
 
-    else if(messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
-        color = fmt::color::red;
+        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+            color = fmt::color::gold;
+        break;
+
+        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+            color = fmt::color::red;
+        break;
+    }
 
     fmt::print(fmt::fg(color), "{}: ", pCallBackData->pMessageIdName);
     fmt::print(fmt::fg(fmt::color::white), "{}\n", pCallBackData->pMessage);
@@ -70,6 +78,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL Engine::Utils::callBack
 
 VkDebugUtilsMessengerCreateInfoEXT Engine::Utils::createDebugMessengerInfo()
 {
+    Utils::Logger::get()->info("Creating a Debug Messenger Info...");
+
     VkDebugUtilsMessengerCreateInfoEXT createInfo {};
 
     createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -82,6 +92,8 @@ VkDebugUtilsMessengerCreateInfoEXT Engine::Utils::createDebugMessengerInfo()
     createInfo.pfnUserCallback = Engine::Utils::callBack;
     createInfo.pUserData = nullptr;
 
+    Utils::Logger::get()->success("The Debug Messenger Info was created!");
+
     return createInfo;
 }
 
@@ -90,7 +102,8 @@ void Engine::Utils::setupDebugMessenger()
     Utils::Logger::get()->info("Creating a Debug Messenger...");
 
     VkDebugUtilsMessengerCreateInfoEXT createInfo = createDebugMessengerInfo();
-
+    VkDebugUtilsMessengerEXT debugMessenger;
+    
     if(createDebugMessenger(Engine::Core::Core::getInstance(), &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
         Utils::Logger::get()->error("Failed to Create the Debug Messenger!");
 

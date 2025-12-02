@@ -2,7 +2,7 @@
 
 #include "window/Window.hpp"
 
-#include <SDL3/SDL.h>
+#include "SDL3/SDL_events.h"
 
 namespace Engine
 {

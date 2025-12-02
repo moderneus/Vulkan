@@ -53,6 +53,8 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
     
     createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
     createInfo.ppEnabledExtensionNames = (const char* const*)extensions.data();
+
+    Utils::Logger::get()->info("Checking Valiation Layers Support...");
     
     if(Utils::checkValidationLayerSupport())
     {

@@ -1,24 +1,18 @@
 #include "util/String.hpp"
 
-namespace Engine
+std::vector<std::string> Engine::Utils::cstrVectorToStringVector(const std::vector<const char*> cstrs)
 {
-    namespace Utils 
-    {
-        std::vector<std::string> cstrVectorToStringVector(const std::vector<const char*> cstrs)
-        {
-            std::vector<std::string> strs;
-            
-            for(const char* cstr : cstrs)
-                strs.push_back(cstr);
+    std::vector<std::string> strs;
+    
+    for(const char* cstr : cstrs)
+        strs.push_back(cstr);
 
-            return strs;
-        }
+    return strs;
+}
 
-        std::string cstrToString(const char* cstr)
-        {
-            std::string tmp = cstr;
+std::string Engine::Utils::cstrToString(const char* cstr)
+{
+    std::string tmp = cstr;
 
-            return tmp;
-        }
-    }
+    return tmp;
 }
