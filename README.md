@@ -20,7 +20,8 @@ Vulkan
 │   │   ├── EventManager.hpp
 │   │   ├── String.hpp
 │   │   └── debug
-│   │       └── Logger.hpp
+│   │       ├── Logger.hpp
+│   │       └── ValidationLayers.hpp
 │   └── window
 │       └── Window.hpp
 ├── libs
@@ -41,7 +42,8 @@ Vulkan
 │   │   ├── EventManager.cpp
 │   │   ├── String.cpp
 │   │   └── debug
-│   │       └── Logger.cpp
+│   │       ├── Logger.cpp
+│   │       └── ValidationLayers.cpp
 │   └── window
 │       └── Window.cpp
 │
