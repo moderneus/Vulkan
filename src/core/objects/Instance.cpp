@@ -35,14 +35,14 @@ VkApplicationInfo Engine::Core::Instance::createAppInfo()
     appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 2);
     appInfo.pEngineName = "No Engine";
     appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 2);
-    appInfo.apiVersion = VK_MAKE_API_VERSION(1, 4, 0, 0);
+    appInfo.apiVersion = VK_API_VERSION_1_4;
 
     Utils::Logger::get()->success("The Application Info created!");
 
     return appInfo;
 }
 
-VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicationInfo* appInfo, VkDebugUtilsMessengerCreateInfoEXT* debugInfo)
+VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicationInfo* appInfo, const VkDebugUtilsMessengerCreateInfoEXT* debugInfo, const std::vector<const char*>& extensions)
 {
     Utils::Logger::get()->info("Creating the Instance Info...");
     
@@ -51,7 +51,6 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
     createInfo.pNext = nullptr;
     createInfo.pApplicationInfo = appInfo;
     
-    std::vector<const char*> extensions = getRequiredExtensions();
     createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
     createInfo.ppEnabledExtensionNames = (const char* const*)extensions.data();
     
@@ -83,8 +82,9 @@ void Engine::Core::Instance::create()
 
     VkApplicationInfo appInfo = createAppInfo();
     VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = Utils::createDebugMessengerInfo();
+    std::vector<const char*> extensions = getRequiredExtensions();
 
-    VkInstanceCreateInfo createInfo = createInstanceInfo(&appInfo, &debugCreateInfo);
+    VkInstanceCreateInfo createInfo = createInstanceInfo(&appInfo, &debugCreateInfo, extensions);
 
     VkResult res = vkCreateInstance(&createInfo, nullptr, &instance);
         

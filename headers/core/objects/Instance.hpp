@@ -14,7 +14,7 @@ namespace Engine
             VkInstance instance = VK_NULL_HANDLE;
 
             VkApplicationInfo createAppInfo();
-            VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo* appInfo, VkDebugUtilsMessengerCreateInfoEXT* debugInfo);
+            VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo* appInfo, const VkDebugUtilsMessengerCreateInfoEXT* debugInfo, const std::vector<const char*>& extensions);
             std::vector<const char*> getRequiredExtensions();
 
         public: 
