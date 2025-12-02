@@ -2,6 +2,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include <vector>
+
 namespace Engine
 {
     namespace Core
@@ -13,6 +15,7 @@ namespace Engine
 
             VkApplicationInfo createAppInfo();
             VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo* appInfo);
+            std::vector<const char*> getRequiredExtensions();
 
         public: 
             void create();

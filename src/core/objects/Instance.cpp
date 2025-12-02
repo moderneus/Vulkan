@@ -1,8 +1,29 @@
 #include "core/objects/Instance.hpp"
 #include "util/String.hpp"
+#include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
 
 #include <SDL3/SDL_vulkan.h>
+#include <vulkan/vulkan.h>
+
+#include <cstdint>
+
+std::vector<const char*> Engine::Core::Instance::getRequiredExtensions()
+{
+    uint32_t extensionsCount = 0;
+    const char* const* extensions;
+    
+    extensions = SDL_Vulkan_GetInstanceExtensions(&extensionsCount);
+
+    std::vector<const char*> extensionsVector(extensions, extensions + extensionsCount);
+
+    extensionsVector.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
+    Utils::Logger::get()->info("Extensions = ", Utils::cstrVectorToStringVector(extensionsVector));
+    Utils::Logger::get()->info("Extensions count = " + std::to_string(extensionsCount));
+
+    return extensionsVector;
+}
 
 VkApplicationInfo Engine::Core::Instance::createAppInfo()
 {
@@ -14,7 +35,7 @@ VkApplicationInfo Engine::Core::Instance::createAppInfo()
     appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 2);
     appInfo.pEngineName = "No Engine";
     appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 2);
-    appInfo.apiVersion = VK_API_VERSION_1_4;
+    appInfo.apiVersion = VK_MAKE_API_VERSION(1, 4, 0, 0);
 
     Utils::Logger::get()->success("The Application Info created!");
 
@@ -28,24 +49,27 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
     VkInstanceCreateInfo createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     createInfo.pApplicationInfo = appInfo;
-
-    uint32_t extensionsCount;
-    const char* const* extensions;
     
-    extensions = SDL_Vulkan_GetInstanceExtensions(&extensionsCount);
-
-    std::vector<std::string> extensionsVector = Utils::cstrArrayToStringVector(extensions, extensionsCount);
-
-    Utils::Logger::get()->info("Extensions = ", extensionsVector);
-    Utils::Logger::get()->info("Extensions count = " + std::to_string(extensionsCount));
+    std::vector<const char*> extensions = getRequiredExtensions();
+    createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+    createInfo.ppEnabledExtensionNames = (const char* const*)extensions.data();
     
-    createInfo.enabledExtensionCount = extensionsCount;
-    createInfo.ppEnabledExtensionNames = extensions;
+    if(Utils::checkValidationLayerSupport())
+    {
+        Utils::Logger::get()->success("Validation layers is support!");
+
+        createInfo.enabledLayerCount = static_cast<uint32_t>(Utils::validationLayers.size());
+        createInfo.ppEnabledLayerNames = Utils::validationLayers.data();
+    }
     
-    createInfo.enabledLayerCount = 0;
-    createInfo.ppEnabledLayerNames = nullptr;
+    else 
+    {
+        Utils::Logger::get()->error("Validation Layers doesn't support!");
 
-
+        createInfo.enabledLayerCount = 0;
+        createInfo.ppEnabledLayerNames = nullptr;
+    }
+    
     Utils::Logger::get()->success("The Instance info was created!");
 
     return createInfo;

@@ -4,12 +4,12 @@ namespace Engine
 {
     namespace Utils 
     {
-        std::vector<std::string> cstrArrayToStringVector(const char* const* cstr, const size_t count)
+        std::vector<std::string> cstrVectorToStringVector(const std::vector<const char*> cstrs)
         {
             std::vector<std::string> strs;
             
-            for(size_t i = 0; i < count; ++i)
-                strs.push_back(cstr[i]);
+            for(const char* cstr : cstrs)
+                strs.push_back(cstr);
 
             return strs;
         }

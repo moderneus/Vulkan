@@ -7,7 +7,7 @@ namespace Engine
 {
     namespace Utils
     {
-        std::vector<std::string> cstrArrayToStringVector(const char* const* cstr, const size_t count);
+        std::vector<std::string> cstrVectorToStringVector(const std::vector<const char*> cstrs);
 
         std::string cstrToString(const char* cstr);
     }
