@@ -7,6 +7,7 @@
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
+#include <vulkan/vulkan_core.h>
 
 std::vector<const char*> Engine::Core::Instance::getRequiredExtensions()
 {
@@ -60,6 +61,9 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
 
         createInfo.enabledLayerCount = static_cast<uint32_t>(Utils::validationLayers.size());
         createInfo.ppEnabledLayerNames = Utils::validationLayers.data();
+
+        VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = Utils::createDebugMessengerInfo();
+        createInfo.pNext = &debugCreateInfo;
     }
     
     else 
@@ -68,6 +72,7 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
 
         createInfo.enabledLayerCount = 0;
         createInfo.ppEnabledLayerNames = nullptr;
+        createInfo.pNext = nullptr;
     }
     
     Utils::Logger::get()->success("The Instance info was created!");
