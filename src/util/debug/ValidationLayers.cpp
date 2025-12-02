@@ -10,7 +10,6 @@
 #include <vector>
 #include <cstring>
 #include <cstdint>
-#include <vulkan/vulkan_core.h>
 
 VkDebugUtilsMessengerEXT debugMessenger;
 
