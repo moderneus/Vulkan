@@ -12,6 +12,8 @@
 #include <cstdint>
 #include <vulkan/vulkan_core.h>
 
+VkDebugUtilsMessengerEXT debugMessenger;
+
 bool Engine::Utils::checkValidationLayerSupport()
 {
     uint32_t layerCount;
@@ -67,7 +69,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL Engine::Utils::callBack
     return VK_FALSE;
 }
 
-VkDebugUtilsMessengerCreateInfoEXT createDebugMessengerInfo()
+VkDebugUtilsMessengerCreateInfoEXT Engine::Utils::createDebugMessengerInfo()
 {
     VkDebugUtilsMessengerCreateInfoEXT createInfo {};
 
@@ -112,4 +114,6 @@ VkResult Engine::Utils::createDebugMessenger
 
     else
         return VK_ERROR_EXTENSION_NOT_PRESENT;
+
+    return VK_SUCCESS;
 }

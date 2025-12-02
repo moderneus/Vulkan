@@ -10,7 +10,6 @@ namespace Engine
     namespace Utils
     {
         const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
-        VkDebugUtilsMessengerEXT debugMessenger;
 
         bool checkValidationLayerSupport();
 

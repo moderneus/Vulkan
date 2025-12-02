@@ -43,12 +43,13 @@ VkApplicationInfo Engine::Core::Instance::createAppInfo()
     return appInfo;
 }
 
-VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicationInfo* appInfo)
+VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicationInfo* appInfo, VkDebugUtilsMessengerCreateInfoEXT* debugInfo)
 {
     Utils::Logger::get()->info("Creating the Instance Info...");
     
     VkInstanceCreateInfo createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    createInfo.pNext = nullptr;
     createInfo.pApplicationInfo = appInfo;
     
     std::vector<const char*> extensions = getRequiredExtensions();
@@ -61,9 +62,7 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
 
         createInfo.enabledLayerCount = static_cast<uint32_t>(Utils::validationLayers.size());
         createInfo.ppEnabledLayerNames = Utils::validationLayers.data();
-
-        VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = Utils::createDebugMessengerInfo();
-        createInfo.pNext = &debugCreateInfo;
+        createInfo.pNext = debugInfo;
     }
     
     else 
@@ -72,7 +71,6 @@ VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicat
 
         createInfo.enabledLayerCount = 0;
         createInfo.ppEnabledLayerNames = nullptr;
-        createInfo.pNext = nullptr;
     }
     
     Utils::Logger::get()->success("The Instance info was created!");
@@ -85,7 +83,9 @@ void Engine::Core::Instance::create()
     Utils::Logger::get()->info("Creating an Instance...");
 
     VkApplicationInfo appInfo = createAppInfo();
-    VkInstanceCreateInfo createInfo = createInstanceInfo(&appInfo);
+    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = Utils::createDebugMessengerInfo();
+
+    VkInstanceCreateInfo createInfo = createInstanceInfo(&appInfo, &debugCreateInfo);
 
     VkResult res = vkCreateInstance(&createInfo, nullptr, &instance);
         
