@@ -2,6 +2,7 @@
 #include "util/debug/Logger.hpp"
 
 Engine::Core::Instance Engine::Core::Core::vkInstance;
+Engine::Core::PhysicalDevice Engine::Core::Core::vkPhysicalDevice;
 
 void Engine::Core::Core::init()
 {
