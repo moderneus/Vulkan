@@ -5,7 +5,6 @@
 
 ````
 Vulkan
-│
 ├── headers
 │   ├── core
 │   │   ├── Core.hpp
@@ -17,7 +16,8 @@ Vulkan
 │   ├── gfx
 │   │   └── Renderer.hpp
 │   ├── util
-│   │   ├── EventManager.hpp
+│   │   ├── EventManager.hpp
+│   │   ├── Singleton.hpp
 │   │   ├── String.hpp
 │   │   └── debug
 │   │       ├── Logger.hpp
@@ -46,8 +46,8 @@ Vulkan
 │   │       └── ValidationLayers.cpp
 │   └── window
 │       └── Window.cpp
-│
 ├── CMakeLists.txt
 ├── LICENSE
 └── README.md
 ````
+
