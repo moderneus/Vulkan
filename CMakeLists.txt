@@ -7,12 +7,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_COMPILE_FLAGS "-g -std=c++20 -O2 -Wall -Wextra -Wpedantic -frtti -fexceptions")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(TARGET Vulkan)
 
 project(${TARGET} LANGUAGES CXX)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(FMT "libs/fmt")
 set(SDL "libs/SDL")

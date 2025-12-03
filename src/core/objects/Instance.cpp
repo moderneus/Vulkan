@@ -3,8 +3,9 @@
 #include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
 
+#include "SDL3/SDL_vulkan.h"
+
 #include <vulkan/vulkan.h>
-#include <SDL3/SDL_vulkan.h>
 
 #include <cstdint>
 

@@ -11,6 +11,8 @@ namespace Engine
         private:
             VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
+            int ratePhysicalDevice(const VkPhysicalDevice& device);
+
         public:
             void pick();
 

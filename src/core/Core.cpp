@@ -8,6 +8,7 @@ void Engine::Core::Core::init()
     Utils::Logger::get()->info("Initializing a Core...");
     
     vkInstance.create();
+    vkPhysicalDevice.pick();
 
     Utils::Logger::get()->success("The Core was Initialized!");
 }
@@ -24,4 +25,9 @@ void Engine::Core::Core::destroy()
 VkInstance Engine::Core::Core::getInstance()
 {
     return vkInstance.get();
+}
+
+VkPhysicalDevice Engine::Core::Core::getPhysicalDevice()
+{
+    return vkPhysicalDevice.get();
 }
