@@ -23,13 +23,13 @@ int Engine::Core::PhysicalDevice::ratePhysicalDevice(const VkPhysicalDevice& dev
 void Engine::Core::PhysicalDevice::pick()
 {
     uint32_t deviceCount = 0;
-    vkEnumeratePhysicalDevices(Engine::Core::Core::getInstance(), &deviceCount, nullptr);
+    vkEnumeratePhysicalDevices(Core::Core::get()->getInstance(), &deviceCount, nullptr);
 
     if(deviceCount == 0)
         Utils::Logger::get()->critical("Failed to find GPU with Vulkan support!");
 
     std::vector<VkPhysicalDevice> devices(deviceCount);
-    vkEnumeratePhysicalDevices(Engine::Core::Core::getInstance(), &deviceCount, devices.data());
+    vkEnumeratePhysicalDevices(Core::Core::get()->getInstance(), &deviceCount, devices.data());
 
     std::multimap<int, VkPhysicalDevice> candidates;
 

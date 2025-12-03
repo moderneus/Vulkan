@@ -3,24 +3,26 @@
 #include "core/objects/Instance.hpp"
 #include "core/objects/PhysicalDevice.hpp"
 
+#include "util/Singleton.hpp"
+
 #include <vulkan/vulkan.h>
 
 namespace Engine
 {
     namespace Core
     {
-        class Core
+        class Core : public Utils::Singleton<Core>
         {
         private:    
-            static Instance vkInstance;
-            static PhysicalDevice vkPhysicalDevice;
+            Instance vkInstance;
+            PhysicalDevice vkPhysicalDevice;
             
         public: 
             void init();
             void destroy();
             
-            static VkInstance getInstance();
-            static VkPhysicalDevice getPhysicalDevice();
+            VkInstance getInstance();
+            VkPhysicalDevice getPhysicalDevice();
         };
     }
 }

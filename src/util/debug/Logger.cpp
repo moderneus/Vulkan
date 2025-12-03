@@ -14,12 +14,6 @@ Engine::Utils::Logger::Logger()
     openLogFile(path);
 }
 
-Engine::Utils::Logger* Engine::Utils::Logger::get()
-{
-    static Logger instance;
-    return &instance;
-}
-
 void Engine::Utils::Logger::openLogFile(const std::string& path)
 {
     logf.open(path, std::ios::app);

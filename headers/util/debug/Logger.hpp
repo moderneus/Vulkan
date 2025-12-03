@@ -1,5 +1,7 @@
 #pragma once
 
+#include "util/Singleton.hpp"
+
 #include <fstream>
 #include <string>
 #include <vector>
@@ -8,9 +10,11 @@ namespace Engine
 {
     namespace Utils
     {
-        class Logger
+        class Logger : public Singleton<Logger>
         {
         private:
+            friend class Singleton<Logger>;
+            
             enum Level {INFO, ERROR, CRITICAL, SUCCESS};
             std::string path = "logs/log.txt";
             std::ofstream logf;
@@ -19,13 +23,10 @@ namespace Engine
             void write(const std::string& msg, const Level level);
             std::string currentDateTime();
             
-            Logger& operator=(const Logger& other) = delete;
-            Logger(const Logger& other) = delete;
             Logger();
-
+            
         public: 
-            static Logger* get();
-
+            void init();
             void info(const std::string& msg);
             void info(const std::string& msg, const std::vector<std::string>& info);
             void error(const std::string& msg);

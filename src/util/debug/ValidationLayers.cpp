@@ -39,7 +39,7 @@ bool Engine::Utils::checkValidationLayerSupport()
     return true;
 }
 
-static VKAPI_ATTR VkBool32 VKAPI_CALL Engine::Utils::callBack
+VKAPI_ATTR VkBool32 VKAPI_CALL Engine::Utils::callBack
 (
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -104,7 +104,7 @@ void Engine::Utils::setupDebugMessenger()
     VkDebugUtilsMessengerCreateInfoEXT createInfo = createDebugMessengerInfo();
     VkDebugUtilsMessengerEXT debugMessenger;
     
-    if(createDebugMessenger(Engine::Core::Core::getInstance(), &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
+    if(createDebugMessenger(Core::Core::get()->getInstance(), &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
         Utils::Logger::get()->error("Failed to Create the Debug Messenger!");
 
     else
@@ -119,10 +119,10 @@ VkResult Engine::Utils::createDebugMessenger
     VkDebugUtilsMessengerEXT* pDebugMessenger
 )
 {    
-    auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(Engine::Core::Core::getInstance(), "vkCreateDebugUtilsMessengerEXT");
+    auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(Core::Core::get()->getInstance(), "vkCreateDebugUtilsMessengerEXT");
 
     if(func != nullptr)
-        func(Engine::Core::Core::getInstance(), pCreateInfo, pAllocator, pDebugMessenger);
+        func(Core::Core::get()->getInstance(), pCreateInfo, pAllocator, pDebugMessenger);
 
     else
         return VK_ERROR_EXTENSION_NOT_PRESENT;

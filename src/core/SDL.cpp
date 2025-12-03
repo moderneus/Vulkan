@@ -2,7 +2,8 @@
 #include "util/String.hpp"
 #include "util/debug/Logger.hpp"
 
-#include <SDL3/SDL.h>
+#include "SDL3/SDL_init.h"
+
 #include <fmt/core.h>
 
 void Engine::Core::SDL::init()
