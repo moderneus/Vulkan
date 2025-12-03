@@ -4,8 +4,6 @@
 
 #include "SDL3/SDL_init.h"
 
-#include <fmt/core.h>
-
 void Engine::Core::SDL::init()
 {
     Utils::Logger::get()->info("Initializing the SDL...");
