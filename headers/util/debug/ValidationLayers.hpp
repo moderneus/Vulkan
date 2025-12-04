@@ -12,7 +12,7 @@ namespace Engine
 
         bool checkValidationLayerSupport();
 
-        static VKAPI_ATTR VkBool32 VKAPI_CALL callBack
+        VKAPI_ATTR VkBool32 VKAPI_CALL callBack
         (
             VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
             VkDebugUtilsMessageTypeFlagsEXT messageType,
