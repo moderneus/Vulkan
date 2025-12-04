@@ -7,6 +7,7 @@ void Engine::Core::Core::init()
     
     vkInstance.create();
     vkPhysicalDevice.pick();
+    vkLogicalDevice.create(vkPhysicalDevice);
 
     Utils::Logger::get()->success("The Core was Initialized!");
 }
@@ -15,6 +16,7 @@ void Engine::Core::Core::destroy()
 {
     Utils::Logger::get()->info("Destroying the Core...");
     
+    vkLogicalDevice.destroy();
     vkInstance.destroy();
 
     Utils::Logger::get()->success("The Core was Destroyed!");

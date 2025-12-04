@@ -2,6 +2,7 @@
 
 #include "core/objects/Instance.hpp"
 #include "core/objects/PhysicalDevice.hpp"
+#include "core/objects/LogicalDevice.hpp"
 
 #include "util/Singleton.hpp"
 
@@ -16,6 +17,7 @@ namespace Engine
         private:    
             Instance vkInstance;
             PhysicalDevice vkPhysicalDevice;
+            LogicalDevice vkLogicalDevice;
             
         public: 
             void init();

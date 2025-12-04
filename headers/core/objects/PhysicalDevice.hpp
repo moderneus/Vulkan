@@ -1,7 +1,9 @@
 #pragma once
 
-#include <string>
 #include <vulkan/vulkan.h>
+
+#include <string>
+#include <vulkan/vulkan_core.h>
 
 namespace Engine
 {
@@ -19,7 +21,8 @@ namespace Engine
         public:
             void pick();
 
-            VkPhysicalDevice get();
+            VkPhysicalDeviceFeatures features();
+            VkPhysicalDevice get() const;
         };
     }
 }

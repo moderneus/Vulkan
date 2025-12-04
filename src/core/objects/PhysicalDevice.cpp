@@ -73,7 +73,18 @@ void Engine::Core::PhysicalDevice::pick()
     Utils::Logger::get()->info("Selected GPU = ", name(physicalDevice));
 }
 
-VkPhysicalDevice Engine::Core::PhysicalDevice::get()
+VkPhysicalDeviceFeatures Engine::Core::PhysicalDevice::features()
+{
+    VkPhysicalDeviceFeatures deviceFeatures = {};
+    vkGetPhysicalDeviceFeatures(physicalDevice, &deviceFeatures);
+
+    if(deviceFeatures.geometryShader != VK_TRUE)
+        Utils::Logger::get()->critical("The found GPU doesn't have Geometry Shader Feature!");
+
+    return deviceFeatures;
+}
+
+VkPhysicalDevice Engine::Core::PhysicalDevice::get() const
 {
     return physicalDevice;
 }

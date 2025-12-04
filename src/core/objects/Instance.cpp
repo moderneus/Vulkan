@@ -102,14 +102,14 @@ void Engine::Core::Instance::destroy()
     Utils::Logger::get()->info("Destroying the Instance...");
    
     if(instance == VK_NULL_HANDLE)
-        Utils::Logger::get()->critical("Cannot Destroy the Instance::Instance is not Created!");
+        Utils::Logger::get()->error("Cannot Destroy the Instance::Instance is not Created!");
         
     vkDestroyInstance(instance, nullptr);
     
     Utils::Logger::get()->success("The Instance was Destroyed!");
 }
 
-VkInstance Engine::Core::Instance::get()
+VkInstance Engine::Core::Instance::get() const
 {
     return instance;
 }

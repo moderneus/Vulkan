@@ -58,7 +58,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL Engine::Utils::callBack
         break;
         
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
-            color = fmt::color::lime_green;
+            color = fmt::color::blue;
         break;
 
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
@@ -104,7 +104,7 @@ void Engine::Utils::setupDebugMessenger()
     VkDebugUtilsMessengerCreateInfoEXT createInfo = createDebugMessengerInfo();
     VkDebugUtilsMessengerEXT debugMessenger;
     
-    if(createDebugMessenger(Core::Core::get()->getInstance(), &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
+    if(createDebugMessenger(&createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
         Utils::Logger::get()->error("Failed to Create the Debug Messenger!");
 
     else
@@ -113,7 +113,6 @@ void Engine::Utils::setupDebugMessenger()
 
 VkResult Engine::Utils::createDebugMessenger
 (
-    VkInstance instance, 
     const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, 
     const VkAllocationCallbacks* pAllocator, 
     VkDebugUtilsMessengerEXT* pDebugMessenger

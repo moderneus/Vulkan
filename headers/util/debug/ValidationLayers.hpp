@@ -26,7 +26,6 @@ namespace Engine
 
         VkResult createDebugMessenger
         (
-            VkInstance instance, 
             const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, 
             const VkAllocationCallbacks* pAllocator, 
             VkDebugUtilsMessengerEXT* pDebugMessenger
