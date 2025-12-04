@@ -10,7 +10,10 @@ Vulkan
 │   │   ├── Core.hpp
 │   │   ├── SDL.hpp
 │   │   └── objects
-│   │       └── Instance.hpp
+│   │       ├── Instance.hpp
+│   │       ├── LogicalDevice.hpp
+│   │       ├── PhysicalDevice.hpp
+│   │       └── QueueFamily.hpp    
 │   ├── engine
 │   │   └── Engine.hpp
 │   ├── gfx
@@ -33,7 +36,10 @@ Vulkan
 │   │   ├── Core.cpp
 │   │   ├── SDL.cpp
 │   │   └── objects
-│   │       └── Instance.cpp
+│   │       ├── Instance.hpp
+│   │       ├── LogicalDevice.hpp
+│   │       ├── PhysicalDevice.hpp
+│   │       └── QueueFamily.hpp 
 │   ├── engine
 │   │   └── Engine.cpp
 │   ├── gfx
@@ -50,4 +56,5 @@ Vulkan
 ├── LICENSE
 └── README.md
 ````
+
 
