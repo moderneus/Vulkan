@@ -22,25 +22,25 @@ void Engine::Utils::Logger::openLogFile(const std::string& path)
         fmt::print("Failed to open file by path: {}\n", path);
 }
 
-void Engine::Utils::Logger::write(const std::string& msg, const Level level)
+void Engine::Utils::Logger::write(const Level level, const std::string& msg, const std::string& value="")
 {
     switch(level)
     {
         case INFO:
-            logf << currentDateTime() << "INFO::" << msg << std::endl;
+            logf << currentDateTime() << "INFO::" << msg << value << std::endl;
         break;
             
         case ERROR:
-            logf << currentDateTime() << "ERROR::" << msg << std::endl;
+            logf << currentDateTime() << "ERROR::" << msg << value << std::endl;
         break;
 
         case CRITICAL:
-            logf << currentDateTime() << "CRITICAL::" << msg << std::endl;
+            logf << currentDateTime() << "CRITICAL::" << msg << value << std::endl;
             std::exit(-1);
         break;
             
         case SUCCESS:
-            logf << currentDateTime() << "SUCCESS::" << msg << std::endl;
+            logf << currentDateTime() << "SUCCESS::" << msg << value << std::endl;
         break;
     }
     
@@ -55,7 +55,7 @@ std::string Engine::Utils::Logger::currentDateTime()
 
     std::tm tm = {};
 
-#ifdef WIN32
+#ifdef __WIN32__
     localtime_s(&tm, &t);
 #endif 
 
@@ -71,30 +71,35 @@ std::string Engine::Utils::Logger::currentDateTime()
 
 void Engine::Utils::Logger::info(const std::string& msg)
 {
-    write(msg, INFO);
+    write(INFO, msg);
+}
+
+void Engine::Utils::Logger::info(const std::string& msg, const std::string& value)
+{
+    write(INFO, msg, value);
 }
 
 void Engine::Utils::Logger::info(const std::string& msg, const std::vector<std::string>& info)
 {
     std::string tmp = msg;
     
-    for(size_t i = 0; i < info.size(); ++i)
-        tmp += info[i] + " ";
+    for(const auto& s : info)
+        tmp += s + " ";
 
-    write(tmp, INFO);
+    write(INFO, tmp);
 }
     
 void Engine::Utils::Logger::error(const std::string& msg)
 {
-    write(msg, ERROR);
+    write(ERROR, msg);
 }
 
 void Engine::Utils::Logger::critical(const std::string& msg)
 {
-    write(msg, CRITICAL);
+    write(CRITICAL, msg);
 }
 
 void Engine::Utils::Logger::success(const std::string& msg)
 {
-    write(msg, SUCCESS);
+    write(SUCCESS, msg);
 }

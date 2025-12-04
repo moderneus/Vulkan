@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vulkan/vulkan.h>
 
 namespace Engine
@@ -11,7 +12,9 @@ namespace Engine
         private:
             VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
-            int ratePhysicalDevice(const VkPhysicalDevice& device);
+            int rate(const VkPhysicalDevice& device);
+            std::string name(const VkPhysicalDevice& device);
+            bool isSuitable(const VkPhysicalDevice& device);
 
         public:
             void pick();

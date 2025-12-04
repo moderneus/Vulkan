@@ -20,7 +20,7 @@ namespace Engine
             std::ofstream logf;
             
             void openLogFile(const std::string& path);
-            void write(const std::string& msg, const Level level);
+            void write(const Level level, const std::string& msg, const std::string& value);
             std::string currentDateTime();
             
             Logger();
@@ -28,6 +28,7 @@ namespace Engine
         public: 
             void init();
             void info(const std::string& msg);
+            void info(const std::string& msg, const std::string& value);
             void info(const std::string& msg, const std::vector<std::string>& info);
             void error(const std::string& msg);
             void critical(const std::string& msg);

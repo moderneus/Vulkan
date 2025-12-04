@@ -6,7 +6,6 @@ set(CMAKE_C_COMPILER clang)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_COMPILE_FLAGS "-g -std=c++20 -O2 -Wall -Wextra -Wpedantic -frtti -fexceptions")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(TARGET Vulkan)
@@ -25,6 +24,7 @@ file(GLOB_RECURSE SRC "src/*.cpp")
 
 add_executable(${TARGET} ${SRC})
 
+target_compile_options(${TARGET} PRIVATE -g -std=c++20 -O2 -Wall -Wextra -Wpedantic -frtti -fexceptions)
 target_include_directories(${TARGET} PRIVATE headers libs/SDL/include libs/fmt/include)
 target_link_libraries(${TARGET} PRIVATE SDL3::SDL3 fmt::fmt Vulkan::Vulkan)
 
