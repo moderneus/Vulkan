@@ -18,7 +18,7 @@ namespace Engine
             void close();
             bool closed();
                 
-            SDL_Window* get();
+            SDL_Window* get() const;
         };
     }
 }

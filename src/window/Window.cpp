@@ -36,7 +36,7 @@ bool Engine::Window::Window::closed()
     return isClosed;
 }
 
-SDL_Window* Engine::Window::Window::get()
+SDL_Window* Engine::Window::Window::get() const
 {
     return pWindow;
 }
