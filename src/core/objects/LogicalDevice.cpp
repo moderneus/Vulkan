@@ -42,7 +42,9 @@ VkDeviceCreateInfo Engine::Core::LogicalDevice::createInfo(PhysicalDevice& devic
     
     createInfo.pEnabledFeatures = deviceFeatures;
 
-    createInfo.enabledExtensionCount = 0;
+    createInfo.enabledExtensionCount = static_cast<uint32_t>(Core::deviceExtensions.size());
+    createInfo.ppEnabledExtensionNames = Core::deviceExtensions.data();
+
     createInfo.enabledLayerCount = static_cast<uint32_t>(Utils::validationLayers.size());
     createInfo.ppEnabledLayerNames = Utils::validationLayers.data();
 

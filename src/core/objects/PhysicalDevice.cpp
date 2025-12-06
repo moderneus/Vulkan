@@ -1,5 +1,6 @@
 #include "core/objects/PhysicalDevice.hpp"
 #include "core/objects/QueueFamily.hpp"
+#include "core/objects/Swapchain.hpp"
 #include "core/Core.hpp"
 #include "util/debug/Logger.hpp"
 
@@ -8,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 
 int Engine::Core::PhysicalDevice::rate(const VkPhysicalDevice& device)
 {
@@ -31,15 +33,31 @@ std::string Engine::Core::PhysicalDevice::name(const VkPhysicalDevice& device)
     return deviceProperties.deviceName;
 }
 
-bool Engine::Core::PhysicalDevice::isSuitable(const VkPhysicalDevice& device)
+bool Engine::Core::PhysicalDevice::checkExtensionSupport(const VkPhysicalDevice& device)
+{
+    uint32_t extensionCount;
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+
+    std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+
+    std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+
+    for(const auto& extension : availableExtensions)
+        requiredExtensions.erase(extension.extensionName);
+
+    return requiredExtensions.empty();
+}
+
+bool Engine::Core::PhysicalDevice::isSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
 {
     QueueFamily queueFamily;
     queueFamily.find(device);
 
-    return true;
+    return checkExtensionSupport(device) && Swapchain::isAdequate(device, surface);
 }
 
-void Engine::Core::PhysicalDevice::pick()
+void Engine::Core::PhysicalDevice::pick(const Surface& surface)
 {
     Utils::Logger::get()->info("Searching a Suitable GPU...");
 
@@ -63,7 +81,7 @@ void Engine::Core::PhysicalDevice::pick()
     if(candidates.rbegin()->first > 0)
         physicalDevice = candidates.rbegin()->second;
 
-    else if(!isSuitable(physicalDevice))
+    else if(!isSuitable(physicalDevice, surface.get()))
         Utils::Logger::get()->critical("Failed to Find any Suitable GPU!");
 
     else
