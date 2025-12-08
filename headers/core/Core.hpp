@@ -4,6 +4,7 @@
 #include "core/objects/PhysicalDevice.hpp"
 #include "core/objects/LogicalDevice.hpp"
 #include "core/objects/Surface.hpp"
+#include "core/objects/Swapchain.hpp"
 #include "window/Window.hpp"
 #include "util/Singleton.hpp"
 
@@ -20,9 +21,10 @@ namespace Engine
             PhysicalDevice vkPhysicalDevice;
             LogicalDevice vkLogicalDevice;
             Surface vkSurface;
+            Swapchain vkSwapchain;
             
         public: 
-            void init(const Window::Window& window);
+            void init();
             void destroy();
             
             VkInstance getInstance();

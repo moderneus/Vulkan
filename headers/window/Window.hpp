@@ -9,7 +9,10 @@ namespace Engine
         class Window
         {
         private:
-            SDL_Window* pWindow = nullptr;
+            static SDL_Window* pWindow;
+            static int w;
+            static int h;
+
             bool isClosed = false;
             
         public:
@@ -18,7 +21,9 @@ namespace Engine
             void close();
             bool closed();
                 
-            SDL_Window* get() const;
+            static SDL_Window* get();
+            static int width();
+            static int height();
         };
     }
 }

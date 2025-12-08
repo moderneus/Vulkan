@@ -52,7 +52,7 @@ bool Engine::Core::PhysicalDevice::checkExtensionSupport(const VkPhysicalDevice&
 bool Engine::Core::PhysicalDevice::isSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
 {
     QueueFamily queueFamily;
-    queueFamily.find(device);
+    queueFamily.find(device, surface);
 
     return checkExtensionSupport(device) && Swapchain::isAdequate(device, surface);
 }

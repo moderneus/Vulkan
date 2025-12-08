@@ -1,15 +1,16 @@
 #include "core/objects/Surface.hpp"
 #include "core/Core.hpp"
 #include "util/debug/Logger.hpp"
+#include "window/Window.hpp"
 
 #include "SDL3/SDL_error.h"
 #include "SDL3/SDL_vulkan.h"
 
-void Engine::Core::Surface::create(const Window::Window& window)
+void Engine::Core::Surface::create()
 {
     Utils::Logger::get()->info("Creating a Surface...");
 
-    if(!SDL_Vulkan_CreateSurface(window.get(), Core::get()->getInstance(), nullptr, &surface))
+    if(!SDL_Vulkan_CreateSurface(Window::Window::get(), Core::get()->getInstance(), nullptr, &surface))
         Utils::Logger::get()->critical("Failed to Create the Surface::", SDL_GetError()); 
 
     Utils::Logger::get()->success("The Surface was Created!");

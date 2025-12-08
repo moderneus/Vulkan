@@ -2,6 +2,8 @@
 #include "util/String.hpp"
 #include "util/debug/Logger.hpp"
 
+SDL_Window* Engine::Window::Window::pWindow = nullptr;
+
 void Engine::Window::Window::create(const char* title, const unsigned int width, const unsigned int height)
 {
     Utils::Logger::get()->info("Creating a Window...");
@@ -36,7 +38,7 @@ bool Engine::Window::Window::closed()
     return isClosed;
 }
 
-SDL_Window* Engine::Window::Window::get() const
+SDL_Window* Engine::Window::Window::get() 
 {
     return pWindow;
 }

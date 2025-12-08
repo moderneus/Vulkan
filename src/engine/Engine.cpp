@@ -8,7 +8,7 @@ void Engine::Engine::init()
     
     sdlContext.init();
     window.create("Vulkan", 640, 480);
-    Core::Core::get()->init(window);
+    Core::Core::get()->init();
     renderer.init(&window);
 
     Utils::Logger::get()->success("Engine was Initialized!");

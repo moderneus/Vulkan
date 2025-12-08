@@ -1,32 +1,37 @@
 #include "core/objects/QueueFamily.hpp"
-#include "util/debug/Logger.hpp"
 
 #include <vulkan/vulkan.h>
 
 #include <vector>
 #include <cstdint>
 
-uint32_t Engine::Core::QueueFamily::find(const VkPhysicalDevice& device)
+Engine::Core::Indices Engine::Core::QueueFamily::find(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
 {
-    uint32_t queueFamilyCount;
+    Indices indices;
+
+    uint32_t queueFamilyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
-    std::vector<VkQueueFamilyProperties> queueFamilyProperties(queueFamilyCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilyProperties.data());
+    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
 
-    bool found = false;
-    for(size_t i = 0; i < queueFamilyProperties.size(); ++i)
+    int i = 0;
+    for (const auto& queueFamily : queueFamilies) 
     {
-        if(queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
-        {
-            indecies = i;
-            found = true;
+        if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+            indices.graphicsFamily = i;
+
+        VkBool32 presentSupport = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+
+        if (presentSupport)
+            indices.presentFamily = i;
+
+        if (indices.isComplete())
             break;
-        }
+
+        i++;
     }
 
-    if(!found)
-        Utils::Logger::get()->critical("Failed to Find Suitables Queues Families!");
-
-    return indecies;
+    return indices;
 }

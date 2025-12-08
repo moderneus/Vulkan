@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/objects/PhysicalDevice.hpp"
+#include "core/objects/LogicalDevice.hpp"
 #include "core/objects/Surface.hpp"
 
 #include <vulkan/vulkan.h>
@@ -25,15 +26,17 @@ namespace Engine
             
             static SwapchainSupportDetails querySupportDetails(const VkPhysicalDevice& device, const VkSurfaceKHR& surface);
             VkSurfaceFormatKHR chooseFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
-            VkSurfacePresentModeKHR choosePresentMode(const std::vector<VkSurfacePresentModeKHR>& availablePresentModes);
+            VkPresentModeKHR choosePresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+            VkExtent2D chooseExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+            VkSwapchainCreateInfoKHR createInfo(const VkSurfaceKHR& surface, const VkPhysicalDevice& device, const VkSurfaceFormatKHR& format, const VkPresentModeKHR& presentMode, const VkExtent2D& extent, const VkSurfaceCapabilitiesKHR& capabilities, const uint32_t imageCount);
 
         public:
             static bool isAdequate(const VkPhysicalDevice& device, const VkSurfaceKHR& surface);
 
-            void create(const PhysicalDevice& device, const Surface& surface);
-            void destroy();
+            void create(const PhysicalDevice& physicalDevice, const LogicalDevice& device, const Surface& surface);
+            void destroy(const LogicalDevice& device);
 
-            VkSwapchainKHR get() const;
+            static VkSwapchainKHR get();
         };
     }
 }

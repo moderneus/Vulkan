@@ -8,16 +8,18 @@
 
 #include <cstdint>
 
-VkDeviceQueueCreateInfo Engine::Core::LogicalDevice::createQueueInfo(const PhysicalDevice& device)
+VkDeviceQueueCreateInfo Engine::Core::LogicalDevice::createQueueInfo(const PhysicalDevice& device, const Surface& surface)
 {
     Utils::Logger::get()->info("Creating the Queue Info...");
     
-    QueueFamily queueFamily;
-    uint32_t indices = queueFamily.find(device.get());
+    QueueFamily queue;
+
+    Indices indices;
+    indices = queue.find(device.get(), surface.get());
 
     VkDeviceQueueCreateInfo queueCreateInfo = {};
     queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.queueFamilyIndex = indices;
+    queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
     queueCreateInfo.queueCount = 1;
 
     float queuePriority = 1.0f;
@@ -53,13 +55,13 @@ VkDeviceCreateInfo Engine::Core::LogicalDevice::createInfo(PhysicalDevice& devic
     return createInfo;
 }
 
-void Engine::Core::LogicalDevice::create(PhysicalDevice& device)
+void Engine::Core::LogicalDevice::create(PhysicalDevice& device, const Surface& surface)
 {
     Utils::Logger::get()->info("Creating a Logical Device...");
 
     VkPhysicalDeviceFeatures enabledDeviceFeatures = {};
 
-    VkDeviceQueueCreateInfo queueInfo = createQueueInfo(device);
+    VkDeviceQueueCreateInfo queueInfo = createQueueInfo(device, surface);
     VkDeviceCreateInfo logicalDeviceInfo = createInfo(device, queueInfo, &enabledDeviceFeatures);
 
     if(vkCreateDevice(device.get(), &logicalDeviceInfo, nullptr, &logicalDevice) != VK_SUCCESS)

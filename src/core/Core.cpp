@@ -1,14 +1,15 @@
 #include "core/Core.hpp"
 #include "util/debug/Logger.hpp"
 
-void Engine::Core::Core::init(const Window::Window& window)
+void Engine::Core::Core::init()
 {
     Utils::Logger::get()->info("Initializing a Core...");
     
     vkInstance.create();
-    vkPhysicalDevice.pick();
-    vkLogicalDevice.create(vkPhysicalDevice);
-    vkSurface.create(window);
+    vkSurface.create();
+    vkPhysicalDevice.pick(vkSurface);
+    vkLogicalDevice.create(vkPhysicalDevice, vkSurface);
+    vkSwapchain.create(vkPhysicalDevice, vkLogicalDevice, vkSurface);
 
     Utils::Logger::get()->success("The Core was Initialized!");
 }
@@ -17,8 +18,9 @@ void Engine::Core::Core::destroy()
 {
     Utils::Logger::get()->info("Destroying the Core...");
     
-    vkSurface.destroy();
+    vkSwapchain.destroy(vkLogicalDevice);
     vkLogicalDevice.destroy();
+    vkSurface.destroy();
     vkInstance.destroy();
 
     Utils::Logger::get()->success("The Core was Destroyed!");

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/objects/PhysicalDevice.hpp"
+#include "core/objects/Surface.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -13,11 +14,11 @@ namespace Engine
         private:
             VkDevice logicalDevice = VK_NULL_HANDLE;
 
-            VkDeviceQueueCreateInfo createQueueInfo(const PhysicalDevice& device);
+            VkDeviceQueueCreateInfo createQueueInfo(const PhysicalDevice& device, const Surface& surface);
             VkDeviceCreateInfo createInfo(PhysicalDevice& device, const VkDeviceQueueCreateInfo& queueInfo, VkPhysicalDeviceFeatures* deviceFeatures);
 
         public:
-            void create(PhysicalDevice& device);
+            void create(PhysicalDevice& device, const Surface& surface);
             void destroy();
 
             VkDevice get() const;

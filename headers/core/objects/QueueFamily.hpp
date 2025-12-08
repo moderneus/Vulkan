@@ -3,18 +3,29 @@
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
+#include <optional>
 
 namespace Engine
 {
     namespace Core
     {
+        struct Indices
+        {
+            std::optional<uint32_t> graphicsFamily;
+            std::optional<uint32_t> presentFamily;
+
+            bool isComplete()
+            {
+                return graphicsFamily.has_value() && presentFamily.has_value();
+            }
+        };
+        
         class QueueFamily 
         {
         private:
-            uint32_t indecies;
 
         public:
-            uint32_t find(const VkPhysicalDevice& device);
+            Indices find(const VkPhysicalDevice& device, const VkSurfaceKHR& surface);
         };
     }
 }
