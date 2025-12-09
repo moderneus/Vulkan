@@ -1,4 +1,5 @@
 #include "core/objects/ImageView.hpp"
+#include "util/debug/Logger.hpp"
 
 VkImageViewCreateInfo Engine::Core::ImageView::createInfo()
 {
@@ -31,7 +32,9 @@ void Engine::Core::ImageView::create(const LogicalDevice& device)
     for(auto& imageView : swapchainImageViews)
     {
         VkImageViewCreateInfo imageViewInfo = createInfo();
-        vkCreateImageView(device.get(), &imageViewInfo, nullptr, &imageView);
+
+        if(vkCreateImageView(device.get(), &imageViewInfo, nullptr, &imageView) != VK_SUCCESS)
+            Utils::Logger::get()->critical("Failed to Create the ImageView!");
     }
 }
 

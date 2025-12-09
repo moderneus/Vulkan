@@ -94,6 +94,11 @@ void Engine::Utils::Logger::error(const std::string& msg)
     write(ERROR, msg);
 }
 
+void Engine::Utils::Logger::error(const std::string& msg, const std::string& error)
+{
+    write(ERROR, msg, error);
+}
+
 void Engine::Utils::Logger::critical(const std::string& msg)
 {
     write(CRITICAL, msg);

@@ -11,6 +11,7 @@ void Engine::Core::Core::init()
     vkLogicalDevice.create(vkPhysicalDevice, vkSurface);
     vkSwapchain.create(vkPhysicalDevice, vkLogicalDevice, vkSurface);
     vkImageView.create(vkLogicalDevice);
+    vkPipeline.create(vkLogicalDevice);
 
     Utils::Logger::get()->success("The Core was Initialized!");
 }
@@ -19,6 +20,7 @@ void Engine::Core::Core::destroy()
 {
     Utils::Logger::get()->info("Destroying the Core...");
 
+    vkPipeline.destroy(vkLogicalDevice);
     vkImageView.destroy(vkLogicalDevice);
     vkSwapchain.destroy(vkLogicalDevice);
     vkLogicalDevice.destroy();

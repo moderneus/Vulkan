@@ -31,6 +31,7 @@ namespace Engine
             void info(const std::string& msg, const std::string& value);
             void info(const std::string& msg, const std::vector<std::string>& info);
             void error(const std::string& msg);
+            void error(const std::string& msg, const std::string& error);
             void critical(const std::string& msg);
             void critical(const std::string& msg, const std::string& error);
             void success(const std::string& msg);

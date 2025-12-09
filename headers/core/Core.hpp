@@ -6,7 +6,7 @@
 #include "core/objects/Surface.hpp"
 #include "core/objects/Swapchain.hpp"
 #include "core/objects/ImageView.hpp"
-#include "window/Window.hpp"
+#include "core/objects/Pipeline.hpp"
 #include "util/Singleton.hpp"
 
 #include <vulkan/vulkan.h>
@@ -24,6 +24,7 @@ namespace Engine
             Surface vkSurface;
             Swapchain vkSwapchain;
             ImageView vkImageView;
+            Pipeline vkPipeline;
             
         public: 
             void init();
