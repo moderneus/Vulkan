@@ -3,6 +3,8 @@
 
 VkImageViewCreateInfo Engine::Core::ImageView::createInfo()
 {
+    Utils::Logger::get()->info("Creating the Image View Info...");
+    
     swapchainImageViews.resize(swapchainImages.size());
     
     VkImageViewCreateInfo createInfo = {};
@@ -24,11 +26,15 @@ VkImageViewCreateInfo Engine::Core::ImageView::createInfo()
         createInfo.subresourceRange.layerCount = 1;
     }
 
+    Utils::Logger::get()->success("The Image View Info was Created!");
+
     return createInfo;
 }
 
 void Engine::Core::ImageView::create(const LogicalDevice& device)
 {
+    Utils::Logger::get()->info("Creating an Image View...");
+    
     for(auto& imageView : swapchainImageViews)
     {
         VkImageViewCreateInfo imageViewInfo = createInfo();
@@ -36,12 +42,23 @@ void Engine::Core::ImageView::create(const LogicalDevice& device)
         if(vkCreateImageView(device.get(), &imageViewInfo, nullptr, &imageView) != VK_SUCCESS)
             Utils::Logger::get()->critical("Failed to Create the ImageView!");
     }
+
+    Utils::Logger::get()->success("The Image View was Created!");
 }
 
 void Engine::Core::ImageView::destroy(const LogicalDevice& device)
 {
+    Utils::Logger::get()->info("Destroying the Image View...");
+    
     for(auto& imageView : swapchainImageViews)
+    {
+        if(imageView == VK_NULL_HANDLE)
+            Utils::Logger::get()->error("Cannot Destroy the Image View::Image View is not Created!");
+        
         vkDestroyImageView(device.get(), imageView, nullptr);
+    }
+
+    Utils::Logger::get()->success("The Image View was Destroyed!");
 }
 
 VkImageView Engine::Core::ImageView::get() const

@@ -40,3 +40,5 @@ foreach(lib IN LISTS DYNAMIC_LIBS)
         )
     endif()
 endforeach()
+
+file(COPY ${CMAKE_SOURCE_DIR}/shaders DESTINATION ${CMAKE_BINARY_DIR})

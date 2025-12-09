@@ -1,8 +1,11 @@
 #include "core/objects/Pipeline.hpp"
+#include "util/debug/Logger.hpp"
 #include "util/File.hpp"
 
 std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createShaderStageInfo(const LogicalDevice& device)
 {
+    Utils::Logger::get()->info("Creating the Pipeline Shader Stage Info...");
+    
     std::array<VkPipelineShaderStageCreateInfo, 2> shaderStages;
 
     VkPipelineShaderStageCreateInfo vertCreateInfo = {};
@@ -21,22 +24,32 @@ std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createSha
 
     shaderStages[1] = fragCreateInfo;
 
+    Utils::Logger::get()->success("The Pipeline Shader Stage Info was Created!");
+
     return shaderStages;
 }
 
 void Engine::Core::Pipeline::create(const LogicalDevice& device)
 {
+    Utils::Logger::get()->info("Creating a Pipeline...");
+    
     auto vertSrc = Utils::readFile("shaders/vert/VertexShader.spv");
     vertShaderModule.create(device, vertSrc);
 
     auto fragSrc = Utils::readFile("shaders/frag/FragmentShader.spv");
     fragShaderModule.create(device, fragSrc);
+
+    Utils::Logger::get()->success("The Pipeline was Created!");
 }
 
 void Engine::Core::Pipeline::destroy(const LogicalDevice& device)
 {
+    Utils::Logger::get()->info("Destroying the Pipeline...");
+    
     vertShaderModule.destroy(device);
     fragShaderModule.destroy(device);
+
+    Utils::Logger::get()->success("The Pipeline was Destroyed!");
 }
 
 VkPipeline Engine::Core::Pipeline::get() const

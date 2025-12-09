@@ -24,9 +24,9 @@ namespace Engine
             std::string currentDateTime();
             
             Logger();
+            ~Logger();
             
         public: 
-            void init();
             void info(const std::string& msg);
             void info(const std::string& msg, const std::string& value);
             void info(const std::string& msg, const std::vector<std::string>& info);
@@ -35,6 +35,7 @@ namespace Engine
             void critical(const std::string& msg);
             void critical(const std::string& msg, const std::string& error);
             void success(const std::string& msg);
+            void success(const std::string& msg, const std::string& value);
         };
     }
 }

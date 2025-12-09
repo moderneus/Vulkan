@@ -14,6 +14,11 @@ Engine::Utils::Logger::Logger()
     openLogFile(path);
 }
 
+Engine::Utils::Logger::~Logger()
+{
+    logf.close();
+}
+
 void Engine::Utils::Logger::openLogFile(const std::string& path)
 {
     logf.open(path, std::ios::app);
@@ -112,4 +117,9 @@ void Engine::Utils::Logger::critical(const std::string& msg, const std::string& 
 void Engine::Utils::Logger::success(const std::string& msg)
 {
     write(SUCCESS, msg);
+}
+
+void Engine::Utils::Logger::success(const std::string& msg, const std::string& value)
+{
+    write(SUCCESS, msg, value);
 }

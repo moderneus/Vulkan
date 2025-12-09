@@ -41,30 +41,47 @@ bool Engine::Core::Swapchain::isAdequate(const VkPhysicalDevice &device, const V
 
 VkSurfaceFormatKHR Engine::Core::Swapchain::chooseFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 {
+    Utils::Logger::get()->info("Choosing the Swapchain Format...");
+    
     for(const auto& format : availableFormats)
     {
         if(format.format == VK_FORMAT_B8G8R8A8_SRGB && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+        {
+            Utils::Logger::get()->success("The Swapchain Format was Chosen!");
             return format;
+        }
     }
+
+    Utils::Logger::get()->success("The Swapchain Format was Chosen!");
 
     return availableFormats[0];
 }
 
 VkPresentModeKHR Engine::Core::Swapchain::choosePresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
 {
+    Utils::Logger::get()->info("Choosing the Swapchain Present Mode...");
+    
     for(const auto& presentmode : availablePresentModes)
     {
         if(presentmode == VK_PRESENT_MODE_MAILBOX_KHR)
+        {
+            Utils::Logger::get()->success("The Swapchain Present Mode was Chosen! Present Mode = VK_PRESENT_MODE_MAILBOX_KHR");
             return presentmode;
+        }
     }
+
+    Utils::Logger::get()->success("The Swapchain Present Mode was Chosen! Present Mode = VK_PRESENT_MODE_FIFO_KHR");
 
     return VK_PRESENT_MODE_FIFO_KHR;
 }
 
 VkExtent2D Engine::Core::Swapchain::chooseExtent(const VkSurfaceCapabilitiesKHR& capabilities)
 {
+    Utils::Logger::get()->info("Choosing the Swapchain Extent...");
+    
     if(capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
     {
+        Utils::Logger::get()->success("The Swapchain Extent was Chosen!");
         return capabilities.currentExtent;
     }
 
@@ -82,12 +99,16 @@ VkExtent2D Engine::Core::Swapchain::chooseExtent(const VkSurfaceCapabilitiesKHR&
         actualExtent.width = std::clamp(actualExtent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
         actualExtent.height = std::clamp(actualExtent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
 
+        Utils::Logger::get()->success("The Swapchain Extent was Chosen!");
+
         return actualExtent;
     }
 }
 
 VkSwapchainCreateInfoKHR Engine::Core::Swapchain::createInfo(const VkSurfaceKHR& surface, const VkPhysicalDevice& device, const VkSurfaceFormatKHR& format, const VkPresentModeKHR& presentMode, const VkExtent2D& extent, const VkSurfaceCapabilitiesKHR& capabilities, uint32_t imageCount)
 {
+    Utils::Logger::get()->info("Creating the Swapchain Info...");
+
     VkSwapchainCreateInfoKHR createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     createInfo.surface = surface;
@@ -125,11 +146,15 @@ VkSwapchainCreateInfoKHR Engine::Core::Swapchain::createInfo(const VkSurfaceKHR&
     createInfo.clipped = VK_TRUE;
     createInfo.oldSwapchain = VK_NULL_HANDLE;
 
+    Utils::Logger::get()->success("The Swapchain Info was Created!");
+
     return createInfo;
 }
 
 void Engine::Core::Swapchain::create(const PhysicalDevice& physicalDevice, const LogicalDevice& device, const Surface& surface)
 {
+    Utils::Logger::get()->info("Creating a Swapchain...");
+    
     SwapchainSupportDetails details = querySupportDetails(physicalDevice.get(), surface.get());
 
     VkSurfaceFormatKHR surfaceFormat = chooseFormat(details.formats);
@@ -145,9 +170,18 @@ void Engine::Core::Swapchain::create(const PhysicalDevice& physicalDevice, const
 
     if(vkCreateSwapchainKHR(device.get(), &swapchainInfo, nullptr, &swapchain) != VK_SUCCESS)
         Utils::Logger::get()->critical("Failed to Create the Swapchain!");
+
+    Utils::Logger::get()->success("The Swapchain was Created!");
 }
 
 void Engine::Core::Swapchain::destroy(const LogicalDevice& device)
 {
+    Utils::Logger::get()->info("Destroying the Swapchain...");
+    
+    if(swapchain == VK_NULL_HANDLE)
+        Utils::Logger::get()->error("Cannot Destroy the Swapchain::Swapchain is not Created!");
+        
     vkDestroySwapchainKHR(device.get(), swapchain, nullptr);
+
+    Utils::Logger::get()->success("The Swapchain was Destroyed!");
 }

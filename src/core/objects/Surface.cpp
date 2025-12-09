@@ -29,6 +29,6 @@ void Engine::Core::Surface::destroy()
 }
 
 VkSurfaceKHR Engine::Core::Surface::get() const
-{
+{    
     return surface;
 }
