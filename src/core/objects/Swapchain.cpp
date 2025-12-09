@@ -93,6 +93,7 @@ VkSwapchainCreateInfoKHR Engine::Core::Swapchain::createInfo(const VkSurfaceKHR&
     createInfo.surface = surface;
     createInfo.minImageCount = imageCount;
     createInfo.imageColorSpace = format.colorSpace;
+    createInfo.imageFormat = format.format;
     createInfo.imageExtent = extent;
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;

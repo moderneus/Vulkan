@@ -22,7 +22,7 @@ VkDeviceQueueCreateInfo Engine::Core::LogicalDevice::createQueueInfo(const Physi
     queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
     queueCreateInfo.queueCount = 1;
 
-    float queuePriority = 1.0f;
+    const float queuePriority = 1;
     queueCreateInfo.pQueuePriorities = &queuePriority;
 
     Utils::Logger::get()->success("The Queue Info was Created!");

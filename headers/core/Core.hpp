@@ -5,6 +5,7 @@
 #include "core/objects/LogicalDevice.hpp"
 #include "core/objects/Surface.hpp"
 #include "core/objects/Swapchain.hpp"
+#include "core/objects/ImageView.hpp"
 #include "window/Window.hpp"
 #include "util/Singleton.hpp"
 
@@ -22,6 +23,7 @@ namespace Engine
             LogicalDevice vkLogicalDevice;
             Surface vkSurface;
             Swapchain vkSwapchain;
+            ImageView vkImageView;
             
         public: 
             void init();
