@@ -5,16 +5,16 @@ VkImageViewCreateInfo Engine::Core::ImageView::createInfo()
 {
     Utils::Logger::get()->info("Creating the Image View Info...");
     
-    swapchainImageViews.resize(swapchainImages.size());
+    imageViews.resize(images.size());
     
     VkImageViewCreateInfo createInfo = {};
 
-    for(const auto& image : swapchainImages)
+    for(const auto& image : images)
     {
         createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         createInfo.image = image;
         createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        createInfo.format = swapchainImageFormat;
+        createInfo.format = imageFormat;
         createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
         createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
         createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -35,7 +35,7 @@ void Engine::Core::ImageView::create(const LogicalDevice& device)
 {
     Utils::Logger::get()->info("Creating an Image View...");
     
-    for(auto& imageView : swapchainImageViews)
+    for(auto& imageView : imageViews)
     {
         VkImageViewCreateInfo imageViewInfo = createInfo();
 
@@ -50,7 +50,7 @@ void Engine::Core::ImageView::destroy(const LogicalDevice& device)
 {
     Utils::Logger::get()->info("Destroying the Image View...");
     
-    for(auto& imageView : swapchainImageViews)
+    for(auto& imageView : imageViews)
     {
         if(imageView == VK_NULL_HANDLE)
             Utils::Logger::get()->error("Cannot Destroy the Image View::Image View is not Created!");

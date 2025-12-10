@@ -8,14 +8,12 @@
 
 #include <cstdint>
 
-VkDeviceQueueCreateInfo Engine::Core::LogicalDevice::createQueueInfo(const PhysicalDevice& device, const Surface& surface)
+VkDeviceQueueCreateInfo Engine::Core::LogicalDevice::createQueueInfo(const PhysicalDevice& physicalDevice, const Surface& surface)
 {
-    Utils::Logger::get()->info("Creating the Queue Info...");
-    
-    QueueFamily queue;
+    Utils::Logger::get()->info("Creating the Queue Info..."); 
 
     Indices indices;
-    indices = queue.find(device.get(), surface.get());
+    indices = QueueFamily::find(physicalDevice.get(), surface.get());
 
     VkDeviceQueueCreateInfo queueCreateInfo = {};
     queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -30,7 +28,7 @@ VkDeviceQueueCreateInfo Engine::Core::LogicalDevice::createQueueInfo(const Physi
     return queueCreateInfo;
 }
 
-VkDeviceCreateInfo Engine::Core::LogicalDevice::createInfo(PhysicalDevice& device, const VkDeviceQueueCreateInfo& queueInfo, VkPhysicalDeviceFeatures* deviceFeatures)
+VkDeviceCreateInfo Engine::Core::LogicalDevice::createInfo(PhysicalDevice& physicalDevice, const VkDeviceQueueCreateInfo& queueInfo, VkPhysicalDeviceFeatures* physicalDeviceFeatures)
 {
     Utils::Logger::get()->info("Creating the Logical Device Info...");
 
@@ -39,13 +37,13 @@ VkDeviceCreateInfo Engine::Core::LogicalDevice::createInfo(PhysicalDevice& devic
     createInfo.pQueueCreateInfos = &queueInfo;
     createInfo.queueCreateInfoCount = 1;
 
-    VkPhysicalDeviceFeatures physicalDeviceFeatures = device.features();
-    deviceFeatures->geometryShader = physicalDeviceFeatures.geometryShader;
+    VkPhysicalDeviceFeatures features = physicalDevice.features();
+    physicalDeviceFeatures->geometryShader = features.geometryShader;
     
-    createInfo.pEnabledFeatures = deviceFeatures;
+    createInfo.pEnabledFeatures = physicalDeviceFeatures;
 
-    createInfo.enabledExtensionCount = static_cast<uint32_t>(Core::deviceExtensions.size());
-    createInfo.ppEnabledExtensionNames = Core::deviceExtensions.data();
+    createInfo.enabledExtensionCount = static_cast<uint32_t>(Core::physicalDeviceExtensions.size());
+    createInfo.ppEnabledExtensionNames = Core::physicalDeviceExtensions.data();
 
     createInfo.enabledLayerCount = static_cast<uint32_t>(Utils::validationLayers.size());
     createInfo.ppEnabledLayerNames = Utils::validationLayers.data();
@@ -55,16 +53,16 @@ VkDeviceCreateInfo Engine::Core::LogicalDevice::createInfo(PhysicalDevice& devic
     return createInfo;
 }
 
-void Engine::Core::LogicalDevice::create(PhysicalDevice& device, const Surface& surface)
+void Engine::Core::LogicalDevice::create(PhysicalDevice& physicalDevice, const Surface& surface)
 {
     Utils::Logger::get()->info("Creating a Logical Device...");
 
     VkPhysicalDeviceFeatures enabledDeviceFeatures = {};
 
-    VkDeviceQueueCreateInfo queueInfo = createQueueInfo(device, surface);
-    VkDeviceCreateInfo logicalDeviceInfo = createInfo(device, queueInfo, &enabledDeviceFeatures);
+    VkDeviceQueueCreateInfo queueInfo = createQueueInfo(physicalDevice, surface);
+    VkDeviceCreateInfo deviceInfo = createInfo(physicalDevice, queueInfo, &enabledDeviceFeatures);
 
-    if(vkCreateDevice(device.get(), &logicalDeviceInfo, nullptr, &logicalDevice) != VK_SUCCESS)
+    if(vkCreateDevice(physicalDevice.get(), &deviceInfo, nullptr, &device) != VK_SUCCESS)
         Utils::Logger::get()->critical("Failed to Create the Logical Device!");
 
     Utils::Logger::get()->success("The Logical Device was created!");
@@ -74,15 +72,15 @@ void Engine::Core::LogicalDevice::destroy()
 {
     Utils::Logger::get()->info("Destroying the Logical Device...");
 
-    if(logicalDevice == VK_NULL_HANDLE)
+    if(device == VK_NULL_HANDLE)
         Utils::Logger::get()->error("Cannot Destroy the Logical Device::Logical Device is not Created!");
 
-    vkDestroyDevice(logicalDevice, nullptr);
+    vkDestroyDevice(device, nullptr);
 
     Utils::Logger::get()->success("The Logical Device was Destroyed!");
 }
 
 VkDevice Engine::Core::LogicalDevice::get() const
 {
-    return logicalDevice;
+    return device;
 }

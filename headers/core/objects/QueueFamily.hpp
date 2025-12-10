@@ -20,12 +20,9 @@ namespace Engine
             }
         };
         
-        class QueueFamily 
+        struct QueueFamily 
         {
-        private:
-
-        public:
-            Indices find(const VkPhysicalDevice& device, const VkSurfaceKHR& surface);
+            static Indices find(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface);
         };
     }
 }

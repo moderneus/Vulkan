@@ -11,37 +11,37 @@
 #include <map>
 #include <set>
 
-int Engine::Core::PhysicalDevice::rate(const VkPhysicalDevice& device)
+int Engine::Core::PhysicalDevice::rate(const VkPhysicalDevice& physicalDevice)
 {
-    VkPhysicalDeviceProperties deviceProperties;
-    vkGetPhysicalDeviceProperties(device, &deviceProperties);
+    VkPhysicalDeviceProperties physicalDeviceProperties;
+    vkGetPhysicalDeviceProperties(physicalDevice, &physicalDeviceProperties);
     
     int score = 0;
-    if(deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+    if(physicalDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
         score += 1000;
 
-    score += deviceProperties.limits.maxImageDimension2D;
+    score += physicalDeviceProperties.limits.maxImageDimension2D;
     
     return score;
 }
 
-std::string Engine::Core::PhysicalDevice::name(const VkPhysicalDevice& device)
+std::string Engine::Core::PhysicalDevice::name(const VkPhysicalDevice& physicalDevice)
 {
-    VkPhysicalDeviceProperties deviceProperties;
-    vkGetPhysicalDeviceProperties(device, &deviceProperties);
+    VkPhysicalDeviceProperties physicalDeviceProperties;
+    vkGetPhysicalDeviceProperties(physicalDevice, &physicalDeviceProperties);
 
-    return deviceProperties.deviceName;
+    return physicalDeviceProperties.deviceName;
 }
 
-bool Engine::Core::PhysicalDevice::checkExtensionSupport(const VkPhysicalDevice& device)
+bool Engine::Core::PhysicalDevice::checkExtensionSupport(const VkPhysicalDevice& physicalDevice)
 {
     uint32_t extensionCount;
-    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+    vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
 
     std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+    vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, availableExtensions.data());
 
-    std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+    std::set<std::string> requiredExtensions(physicalDeviceExtensions.begin(), physicalDeviceExtensions.end());
 
     for(const auto& extension : availableExtensions)
         requiredExtensions.erase(extension.extensionName);
@@ -49,33 +49,32 @@ bool Engine::Core::PhysicalDevice::checkExtensionSupport(const VkPhysicalDevice&
     return requiredExtensions.empty();
 }
 
-bool Engine::Core::PhysicalDevice::isSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
+bool Engine::Core::PhysicalDevice::isSuitable(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)
 {
-    QueueFamily queueFamily;
-    queueFamily.find(device, surface);
+    QueueFamily::find(physicalDevice, surface);
 
-    return checkExtensionSupport(device) && Swapchain::isAdequate(device, surface);
+    return checkExtensionSupport(physicalDevice) && Swapchain::isAdequate(physicalDevice, surface);
 }
 
 void Engine::Core::PhysicalDevice::pick(const Surface& surface)
 {
     Utils::Logger::get()->info("Searching a Suitable GPU...");
 
-    uint32_t deviceCount = 0;
-    vkEnumeratePhysicalDevices(Core::Core::get()->getInstance(), &deviceCount, nullptr);
+    uint32_t physicalDeviceCount = 0;
+    vkEnumeratePhysicalDevices(Core::Core::get()->getInstance(), &physicalDeviceCount, nullptr);
 
-    if(deviceCount == 0)
+    if(physicalDeviceCount == 0)
         Utils::Logger::get()->critical("Failed to find GPU with Vulkan support!");
 
-    std::vector<VkPhysicalDevice> devices(deviceCount);
-    vkEnumeratePhysicalDevices(Core::Core::get()->getInstance(), &deviceCount, devices.data());
+    std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+    vkEnumeratePhysicalDevices(Core::Core::get()->getInstance(), &physicalDeviceCount, physicalDevices.data());
 
     std::multimap<int, VkPhysicalDevice> candidates;
 
-    for(const VkPhysicalDevice& device : devices)
+    for(const VkPhysicalDevice& physicalDevice : physicalDevices)
     {
-        int score = rate(device);
-        candidates.insert(std::make_pair(score, device));
+        int score = rate(physicalDevice);
+        candidates.insert(std::make_pair(score, physicalDevice));
     }
 
     if(candidates.rbegin()->first > 0)
@@ -93,13 +92,13 @@ void Engine::Core::PhysicalDevice::pick(const Surface& surface)
 
 VkPhysicalDeviceFeatures Engine::Core::PhysicalDevice::features()
 {
-    VkPhysicalDeviceFeatures deviceFeatures = {};
-    vkGetPhysicalDeviceFeatures(physicalDevice, &deviceFeatures);
+    VkPhysicalDeviceFeatures physicalDeviceFeatures = {};
+    vkGetPhysicalDeviceFeatures(physicalDevice, &physicalDeviceFeatures);
 
-    if(deviceFeatures.geometryShader != VK_TRUE)
+    if(physicalDeviceFeatures.geometryShader != VK_TRUE)
         Utils::Logger::get()->critical("The found GPU doesn't have Geometry Shader Feature!");
 
-    return deviceFeatures;
+    return physicalDeviceFeatures;
 }
 
 VkPhysicalDevice Engine::Core::PhysicalDevice::get() const

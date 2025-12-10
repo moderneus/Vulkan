@@ -2,7 +2,7 @@
 #include "util/debug/Logger.hpp"
 #include "util/File.hpp"
 
-std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createShaderStageInfo(const LogicalDevice& device)
+std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createShaderStageInfo()
 {
     Utils::Logger::get()->info("Creating the Pipeline Shader Stage Info...");
     

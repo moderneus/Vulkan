@@ -19,7 +19,7 @@ namespace Engine
             ShaderModule vertShaderModule;
             ShaderModule fragShaderModule;
 
-            std::array<VkPipelineShaderStageCreateInfo, 2> createShaderStageInfo(const LogicalDevice& device);
+            std::array<VkPipelineShaderStageCreateInfo, 2> createShaderStageInfo();
 
         public:
             void create(const LogicalDevice& device);

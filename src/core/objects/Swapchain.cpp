@@ -6,36 +6,36 @@
 #include <limits>
 #include <algorithm>
 
-Engine::Core::SwapchainSupportDetails Engine::Core::Swapchain::querySupportDetails(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
+Engine::Core::SwapchainSupportDetails Engine::Core::Swapchain::querySupportDetails(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)
 {
     SwapchainSupportDetails details;
 
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &details.capabilities);
     
     uint32_t formatsCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatsCount, nullptr);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatsCount, nullptr);
 
     if(formatsCount != 0)
     {
         details.formats.resize(formatsCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatsCount, details.formats.data());
+        vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatsCount, details.formats.data());
     }
 
     uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, nullptr);
+    vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, nullptr);
 
     if(presentModeCount != 0)
     {
         details.presentModes.resize(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, details.presentModes.data());
+        vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, details.presentModes.data());
     }
 
     return details;
 }
 
-bool Engine::Core::Swapchain::isAdequate(const VkPhysicalDevice &device, const VkSurfaceKHR& surface)
+bool Engine::Core::Swapchain::isAdequate(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)
 {
-    SwapchainSupportDetails details = querySupportDetails(device, surface);
+    SwapchainSupportDetails details = querySupportDetails(physicalDevice, surface);
     return !details.formats.empty() && !details.presentModes.empty();
 }
 
@@ -105,7 +105,16 @@ VkExtent2D Engine::Core::Swapchain::chooseExtent(const VkSurfaceCapabilitiesKHR&
     }
 }
 
-VkSwapchainCreateInfoKHR Engine::Core::Swapchain::createInfo(const VkSurfaceKHR& surface, const VkPhysicalDevice& device, const VkSurfaceFormatKHR& format, const VkPresentModeKHR& presentMode, const VkExtent2D& extent, const VkSurfaceCapabilitiesKHR& capabilities, uint32_t imageCount)
+VkSwapchainCreateInfoKHR Engine::Core::Swapchain::createInfo
+(
+        const VkSurfaceKHR& surface, 
+        const VkPhysicalDevice& physicalDevice, 
+        const VkSurfaceFormatKHR& format, 
+        const VkPresentModeKHR& presentMode, 
+        const VkExtent2D& extent, 
+        const VkSurfaceCapabilitiesKHR& capabilities, 
+        uint32_t imageCount
+)
 {
     Utils::Logger::get()->info("Creating the Swapchain Info...");
 
@@ -122,7 +131,7 @@ VkSwapchainCreateInfoKHR Engine::Core::Swapchain::createInfo(const VkSurfaceKHR&
     QueueFamily queue;
 
     Indices indices;
-    indices = queue.find(device, surface);
+    indices = queue.find(physicalDevice, surface);
 
     uint32_t queueFamilyIndices[] = {indices.graphicsFamily.has_value(), indices.presentFamily.has_value()};
 

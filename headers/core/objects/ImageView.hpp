@@ -14,9 +14,10 @@ namespace Engine
         {
         private:
             VkImageView imageView = VK_NULL_HANDLE;
-            std::vector<VkImageView> swapchainImageViews;  
-            std::vector<VkImage> swapchainImages;
-            VkFormat swapchainImageFormat;
+            
+            std::vector<VkImageView> imageViews;  
+            std::vector<VkImage> images;
+            VkFormat imageFormat;
 
             VkImageViewCreateInfo createInfo();
 

@@ -1,37 +1,41 @@
 #include "core/objects/QueueFamily.hpp"
+#include "util/debug/Logger.hpp"
 
 #include <vulkan/vulkan.h>
 
 #include <vector>
 #include <cstdint>
 
-Engine::Core::Indices Engine::Core::QueueFamily::find(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
+Engine::Core::Indices Engine::Core::QueueFamily::find(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)
 {
-    Indices indices;
+    Utils::Logger::get()->info("Seacrhing a Suitable Queue Families...");
 
     uint32_t queueFamilyCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
 
     std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
 
-    int i = 0;
-    for (const auto& queueFamily : queueFamilies) 
+    Indices indices;
+    for (uint32_t i = 0; i < queueFamilyCount; ++i) 
     {
-        if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+        if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
             indices.graphicsFamily = i;
 
         VkBool32 presentSupport = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+        vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, surface, &presentSupport);
 
         if (presentSupport)
             indices.presentFamily = i;
 
         if (indices.isComplete())
             break;
-
-        i++;
     }
+
+    if(!indices.isComplete())
+        Utils::Logger::get()->critical("Failed to Find any Suitable Queue Families!");
+
+    Utils::Logger::get()->success("The Suitable Queue Families was Found!");
 
     return indices;
 }

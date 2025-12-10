@@ -47,8 +47,6 @@ VKAPI_ATTR VkBool32 VKAPI_CALL Engine::Utils::callBack
     void* pUserData
 )
 {
-    fmt::print(fmt::fg(fmt::color::dark_red), "[VULKAN] ");
-
     fmt::color color;
 
     switch(messageSeverity)
@@ -74,8 +72,9 @@ VKAPI_ATTR VkBool32 VKAPI_CALL Engine::Utils::callBack
         break;
     }
 
+    fmt::print(fmt::fg(fmt::color::dark_red), "[VULKAN] ");
     fmt::print(fmt::fg(color), "{}: ", pCallBackData->pMessageIdName);
-    fmt::print(fmt::fg(fmt::color::white), "{}\n", pCallBackData->pMessage);
+    fmt::print(fmt::fg(fmt::color::medium_purple), "{}\n", pCallBackData->pMessage);
 
     return VK_FALSE;
 }

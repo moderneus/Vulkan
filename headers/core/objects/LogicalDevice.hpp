@@ -12,13 +12,13 @@ namespace Engine
         class LogicalDevice
         {
         private:
-            VkDevice logicalDevice = VK_NULL_HANDLE;
+            VkDevice device = VK_NULL_HANDLE;
 
-            VkDeviceQueueCreateInfo createQueueInfo(const PhysicalDevice& device, const Surface& surface);
-            VkDeviceCreateInfo createInfo(PhysicalDevice& device, const VkDeviceQueueCreateInfo& queueInfo, VkPhysicalDeviceFeatures* deviceFeatures);
+            VkDeviceQueueCreateInfo createQueueInfo(const PhysicalDevice& physicalDevice, const Surface& surface);
+            VkDeviceCreateInfo createInfo(PhysicalDevice& physicalDevice, const VkDeviceQueueCreateInfo& queueInfo, VkPhysicalDeviceFeatures* physicalDeviceFeatures);
 
         public:
-            void create(PhysicalDevice& device, const Surface& surface);
+            void create(PhysicalDevice& physicalDevice, const Surface& surface);
             void destroy();
 
             VkDevice get() const;
