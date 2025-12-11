@@ -6,6 +6,7 @@
 #include "core/objects/Surface.hpp"
 #include "core/objects/Swapchain.hpp"
 #include "core/objects/ImageView.hpp"
+#include "core/objects/PipelineLayout.hpp"
 #include "core/objects/Pipeline.hpp"
 #include "util/Singleton.hpp"
 
@@ -24,6 +25,7 @@ namespace Engine
             Surface vkSurface;
             Swapchain vkSwapchain;
             ImageView vkImageView;
+            PipelineLayout vkPipelineLayout;
             Pipeline vkPipeline;
             
         public: 

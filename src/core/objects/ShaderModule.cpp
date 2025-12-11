@@ -1,6 +1,6 @@
 #include "core/objects/ShaderModule.hpp"
 #include "util/debug/Logger.hpp"
-#include "util/debug/Logger.hpp"
+#include "util/File.hpp"
 
 #include <cstdint>
 
@@ -18,11 +18,11 @@ VkShaderModuleCreateInfo Engine::Core::ShaderModule::createInfo(const std::vecto
     return createInfo;
 }
 
-void Engine::Core::ShaderModule::create(const LogicalDevice& device, const std::vector<char>& src)
+void Engine::Core::ShaderModule::create(const LogicalDevice& device, const std::string& path)
 {
     Utils::Logger::get()->info("Creating a Shader Module...");
     
-    VkShaderModuleCreateInfo shaderModuleInfo = createInfo(src);
+    VkShaderModuleCreateInfo shaderModuleInfo = createInfo(Utils::readFile(path));
 
     if(vkCreateShaderModule(device.get(), &shaderModuleInfo, nullptr, &shaderModule) != VK_SUCCESS)
         Utils::Logger::get()->critical("Failed to Create the ShaderModule!");

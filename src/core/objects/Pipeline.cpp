@@ -1,8 +1,59 @@
 #include "core/objects/Pipeline.hpp"
+#include "core/objects/ShaderModule.hpp"
 #include "util/debug/Logger.hpp"
 #include "util/File.hpp"
 
-std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createShaderStageInfo()
+std::array<Engine::Core::ShaderModule, 2> Engine::Core::Pipeline::createShaderModules()
+{
+    
+}
+
+std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::reateShaderStageInfo()
+{
+    
+}
+
+VkPipelineDynamicStateCreateInfo Engine::Core::Pipeline::createDynamicStateInfo()
+{
+    
+}
+
+VkPipelineVertexInputStateCreateInfo Engine::Core::Pipeline::createVertexInputInfo()
+{
+    
+}
+
+VkPipelineInputAssemblyStateCreateInfo createInputAssemblyInfo()
+{
+    
+}
+
+VkPipelineViewportStateCreateInfo createViewportInfo()
+{
+    
+}
+
+VkPipelineRasterizationStateCreateInfo createRasterizationInfo()
+{
+    
+}
+
+VkPipelineMultisampleStateCreateInfo createMultisampleInfo()
+{
+    
+}
+
+VkPipelineDepthStencilStateCreateInfo createDepthStencilInfo()
+{
+    
+}
+
+VkPipelineColorBlendStateCreateInfo createColorBlendInfo()
+{
+    
+}
+
+std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createShaderStageInfo(const std::array<Engine::Core::ShaderModule, 2>& shaderModules)
 {
     Utils::Logger::get()->info("Creating the Pipeline Shader Stage Info...");
     
@@ -11,7 +62,7 @@ std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createSha
     VkPipelineShaderStageCreateInfo vertCreateInfo = {};
     vertCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     vertCreateInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-    vertCreateInfo.module = vertShaderModule.get();
+    vertCreateInfo.module = shaderModules[0].get();
     vertCreateInfo.pName = "main";
 
     shaderStages[0] = vertCreateInfo;
@@ -19,7 +70,7 @@ std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createSha
     VkPipelineShaderStageCreateInfo fragCreateInfo = {};
     fragCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     fragCreateInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    fragCreateInfo.module = fragShaderModule.get();
+    fragCreateInfo.module = shaderModules[1].get();
     fragCreateInfo.pName = "main";
 
     shaderStages[1] = fragCreateInfo;
@@ -31,15 +82,7 @@ std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createSha
 
 void Engine::Core::Pipeline::create(const LogicalDevice& device)
 {
-    Utils::Logger::get()->info("Creating a Pipeline...");
     
-    auto vertSrc = Utils::readFile("shaders/vert/VertexShader.spv");
-    vertShaderModule.create(device, vertSrc);
-
-    auto fragSrc = Utils::readFile("shaders/frag/FragmentShader.spv");
-    fragShaderModule.create(device, fragSrc);
-
-    Utils::Logger::get()->success("The Pipeline was Created!");
 }
 
 void Engine::Core::Pipeline::destroy(const LogicalDevice& device)
