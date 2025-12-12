@@ -12,6 +12,8 @@ namespace Engine
         {
         private:
             VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
+
+            VkPipelineLayoutCreateInfo createInfo();
             
         public:
             void create(const LogicalDevice& device);

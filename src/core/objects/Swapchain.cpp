@@ -194,3 +194,13 @@ void Engine::Core::Swapchain::destroy(const LogicalDevice& device)
 
     Utils::Logger::get()->success("The Swapchain was Destroyed!");
 }
+
+VkExtent2D Engine::Core::Swapchain::extent()
+{
+    return actualExtent;
+}
+
+VkSwapchainKHR Engine::Core::Swapchain::get()
+{
+    return swapchain;
+}

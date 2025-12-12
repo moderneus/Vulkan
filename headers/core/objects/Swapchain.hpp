@@ -23,6 +23,8 @@ namespace Engine
         {
         private:
             VkSwapchainKHR swapchain = VK_NULL_HANDLE;
+
+            VkExtent2D actualExtent;
             
             static SwapchainSupportDetails querySupportDetails(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface);
             VkSurfaceFormatKHR chooseFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
@@ -45,7 +47,8 @@ namespace Engine
             void create(const PhysicalDevice& physicalDevice, const LogicalDevice& device, const Surface& surface);
             void destroy(const LogicalDevice& device);
 
-            static VkSwapchainKHR get();
+            VkExtent2D extent() const;
+            VkSwapchainKHR get() const;
         };
     }
 }

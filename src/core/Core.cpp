@@ -12,7 +12,7 @@ void Engine::Core::Core::init()
     vkSwapchain.create(vkPhysicalDevice, vkLogicalDevice, vkSurface);
     vkImageView.create(vkLogicalDevice);
     vkPipelineLayout.create(vkLogicalDevice);
-    vkPipeline.create(vkLogicalDevice);
+    vkPipeline.create(vkLogicalDevice, vkSwapchain);
 
     Utils::Logger::get()->success("The Core was Initialized!");
 }

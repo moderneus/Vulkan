@@ -2,9 +2,11 @@
 
 #include "core/objects/LogicalDevice.hpp"
 #include "core/objects/ShaderModule.hpp"
+#include "core/objects/Swapchain.hpp"
+
+#include <vulkan/vulkan.h>
 
 #include <array>
-#include <vulkan/vulkan.h>
 
 namespace Engine
 {
@@ -14,6 +16,9 @@ namespace Engine
         {
         private:
             VkPipeline pipeline = VK_NULL_HANDLE;
+
+            ShaderModule vertexShader;
+            ShaderModule fragmentShader;
  
             struct PipelineState
             {
@@ -28,19 +33,21 @@ namespace Engine
                 VkPipelineColorBlendStateCreateInfo colorBlendInfo = {};
             };
             
-            std::array<ShaderModule, 2> createShaderModules();
-            std::array<VkPipelineShaderStageCreateInfo, 2> createShaderStageInfo(const std::array<ShaderModule, 2>& shaderModules);
+            VkViewport createViewport(const Swapchain& swapchain);
+            VkRect2D createScissor(const Swapchain& swapchain);
+            void createShaderModules(const LogicalDevice& device);
+            std::array<VkPipelineShaderStageCreateInfo, 2> createShaderStageInfo();
             VkPipelineDynamicStateCreateInfo createDynamicStateInfo();
             VkPipelineVertexInputStateCreateInfo createVertexInputInfo();
             VkPipelineInputAssemblyStateCreateInfo createInputAssemblyInfo();
-            VkPipelineViewportStateCreateInfo createViewportInfo();
+            VkPipelineViewportStateCreateInfo createViewportInfo(const VkViewport& viewport, const VkRect2D& scissor);
             VkPipelineRasterizationStateCreateInfo createRasterizationInfo();
             VkPipelineMultisampleStateCreateInfo createMultisampleInfo();
             VkPipelineDepthStencilStateCreateInfo createDepthStencilInfo();
             VkPipelineColorBlendStateCreateInfo createColorBlendInfo();
 
         public:
-            void create(const LogicalDevice& device);
+            void create(const LogicalDevice& device, const Swapchain& swapchain);
             void destroy(const LogicalDevice& device);
 
             VkPipeline get() const;
