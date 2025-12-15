@@ -8,108 +8,79 @@
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
+#include <vulkan/vulkan_core.h>
 
-std::vector<const char*> Engine::Core::Instance::getRequiredExtensions()
-{
-    uint32_t extensionsCount = 0;
-    const char* const* extensions;
-    
-    extensions = SDL_Vulkan_GetInstanceExtensions(&extensionsCount);
-
-    std::vector<const char*> extensionsVector(extensions, extensions + extensionsCount);
-
-    extensionsVector.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-
-    Utils::Logger::get()->info("Extensions = ", Utils::cstrVectorToStringVector(extensionsVector));
-    Utils::Logger::get()->info("Extensions count = " + std::to_string(extensionsCount));
-
-    return extensionsVector;
+std::vector<const char*> instance_get_required_exts() {
+    uint32_t exts_count = 0;
+    const char* const* exts;
+    exts = SDL_Vulkan_GetInstanceExtensions(&exts_count);
+    std::vector<const char*> exts_vec(exts, exts + exts_count);
+    exts_vec.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+    Utils::Logger::get()->info("Extensions = ", Utils::cstrVectorToStringVector(exts_vec));
+    Utils::Logger::get()->info("Extensions count = " + std::to_string(exts_count));
+    return exts_vec;
 }
 
-VkApplicationInfo Engine::Core::Instance::createAppInfo()
-{
+VkApplicationInfo instane_create_app_info() {
     Utils::Logger::get()->info("Creating an Application Info...");
-    
-    VkApplicationInfo appInfo = {};
-    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "Vulkan";
-    appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 2);
-    appInfo.pEngineName = "No Engine";
-    appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 2);
-    appInfo.apiVersion = VK_API_VERSION_1_4;
-
+    VkApplicationInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    create_info.pApplicationName = "Vulkan";
+    create_info.applicationVersion = VK_MAKE_VERSION(0, 0, 2);
+    create_info.pEngineName = "No Engine";
+    create_info.engineVersion = VK_MAKE_VERSION(0, 0, 2);
+    create_info.apiVersion = VK_API_VERSION_1_4;
     Utils::Logger::get()->success("The Application Info created!");
-
-    return appInfo;
+    return create_info;
 }
 
-VkInstanceCreateInfo Engine::Core::Instance::createInstanceInfo(const VkApplicationInfo* appInfo, const VkDebugUtilsMessengerCreateInfoEXT* debugInfo, const std::vector<const char*>& extensions)
+VkInstanceCreateInfo instance_create_info(
+    const VkApplicationInfo* app_info, 
+    const VkDebugUtilsMessengerCreateInfoEXT* debug_info, 
+    const std::vector<const char*>& exts
+) 
 {
     Utils::Logger::get()->info("Creating the Instance Info...");
-    
-    VkInstanceCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    createInfo.pNext = nullptr;
-    createInfo.pApplicationInfo = appInfo;
-    
-    createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-    createInfo.ppEnabledExtensionNames = reinterpret_cast<const char* const*>(extensions.data());
+    VkInstanceCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    create_info.pNext = nullptr;
+    create_info.pApplicationInfo = app_info;
+    create_info.enabledExtensionCount = static_cast<uint32_t>(exts.size());
+    create_info.ppEnabledExtensionNames = reinterpret_cast<const char* const*>(exts.data());
     
     Utils::Logger::get()->info("Checking Valiation Layers Support...");
-    
-    if(Utils::checkValidationLayerSupport())
-    {
+    if(Utils::checkValidationLayerSupport()) {
         Utils::Logger::get()->success("Validation layers is support!");
-
-        createInfo.enabledLayerCount = static_cast<uint32_t>(Utils::validationLayers.size());
-        createInfo.ppEnabledLayerNames = Utils::validationLayers.data();
-        createInfo.pNext = debugInfo;
+        create_info.enabledLayerCount = static_cast<uint32_t>(Utils::validationLayers.size());
+        create_info.ppEnabledLayerNames = Utils::validationLayers.data();
+        create_info.pNext = debug_info;
     }
-    
-    else 
-    {
+    else  {
         Utils::Logger::get()->error("Validation Layers doesn't support!");
-
-        createInfo.enabledLayerCount = 0;
-        createInfo.ppEnabledLayerNames = nullptr;
+        create_info.enabledLayerCount = 0;
+        create_info.ppEnabledLayerNames = nullptr;
     }
     
     Utils::Logger::get()->success("The Instance info was created!");
-
-    return createInfo;
+    return create_info;
 }
 
-void Engine::Core::Instance::create()
-{
+void instance_create(Instance* instance) {
     Utils::Logger::get()->info("Creating an Instance...");
-
-    VkApplicationInfo appInfo = createAppInfo();
-    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = Utils::createDebugMessengerInfo();
-    std::vector<const char*> extensions = getRequiredExtensions();
-
-    VkInstanceCreateInfo createInfo = createInstanceInfo(&appInfo, &debugCreateInfo, extensions);
-
-    VkResult res = vkCreateInstance(&createInfo, nullptr, &instance);
-        
+    VkApplicationInfo app_info = instance_create_app_info();
+    VkDebugUtilsMessengerCreateInfoEXT debug_info = Utils::createDebugMessengerInfo();
+    std::vector<const char*> exts = instance_get_required_exts();
+    VkInstanceCreateInfo instance_info = instance_create_info(&app_info, &debug_info, exts);
+    VkResult res = vkCreateInstance(&instance_info, nullptr, &instance->handle);
     if(res != VK_SUCCESS)
         Engine::Utils::Logger::get()->critical("The Instance creation Failed::" + std::to_string(res));
-
     Utils::Logger::get()->success("The Instance was Created!");
 }
 
-void Engine::Core::Instance::destroy()
-{
+void instance_destroy(const Instance& instance) {
     Utils::Logger::get()->info("Destroying the Instance...");
-   
-    if(instance == VK_NULL_HANDLE)
+    if(instance.handle == VK_NULL_HANDLE)
         Utils::Logger::get()->error("Cannot Destroy the Instance::Instance is not Created!");
-        
-    vkDestroyInstance(instance, nullptr);
-    
+    vkDestroyInstance(instance.handle, nullptr);
     Utils::Logger::get()->success("The Instance was Destroyed!");
-}
-
-VkInstance Engine::Core::Instance::get() const
-{
-    return instance;
 }

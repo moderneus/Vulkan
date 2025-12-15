@@ -6,36 +6,33 @@
 #include <vector>
 #include <cstdint>
 
-Engine::Core::Indices Engine::Core::QueueFamily::find(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)
-{
+bool queue_family_is_complete(const QueueFamily& queue_family) {
+    return queue_family.graphics.has_value() && queue_family.present.has_value();
+}
+
+QueueFamily queue_family_find(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) {
     Utils::Logger::get()->info("Seacrhing a Suitable Queue Families...");
+    uint32_t queue_family_count = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(phys_device, &queue_family_count, nullptr);
+    std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
+    vkGetPhysicalDeviceQueueFamilyProperties(phys_device, &queue_family_count, queue_families.data());
 
-    uint32_t queueFamilyCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
-
-    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
-
-    Indices indices;
-    for (uint32_t i = 0; i < queueFamilyCount; ++i) 
-    {
-        if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
-            indices.graphicsFamily = i;
-
-        VkBool32 presentSupport = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, surface, &presentSupport);
-
-        if (presentSupport)
-            indices.presentFamily = i;
-
-        if (indices.isComplete())
+    QueueFamily queue_family;
+    for (uint32_t i = 0; i < queue_family_count ; ++i) {
+        if (queue_families[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
+            queue_family.graphics = i;
+        
+        VkBool32 present_support = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(phys_device, i, surface, &present_support);
+        
+        if(present_support)
+            queue_family.present = i;
+        else if(queue_family_is_complete(queue_family))
             break;
     }
-
-    if(!indices.isComplete())
+    
+    if(queue_family_is_complete(queue_family))
         Utils::Logger::get()->critical("Failed to Find any Suitable Queue Families!");
-
     Utils::Logger::get()->success("The Suitable Queue Families was Found!");
-
-    return indices;
+    return queue_family;
 }

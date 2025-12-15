@@ -4,22 +4,12 @@
 
 #include <vulkan/vulkan.h>
 
-namespace Engine
-{
-    namespace Core
-    {
-        class PipelineLayout
-        {
-        private:
-            VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
+struct PipelineLayout {
+    VkPipelineLayout handle = VK_NULL_HANDLE;
+};
 
-            VkPipelineLayoutCreateInfo createInfo();
-            
-        public:
-            void create(const LogicalDevice& device);
-            void destroy(const LogicalDevice& device);
+VkPipelineLayoutCreateInfo pipeline_layout_create_info();
 
-            VkPipelineLayout get() const;
-        };
-    }
-}
+void pipeline_layout_create(const LogicalDevice& device);
+
+void pipeline_layout_destroy(const LogicalDevice& device);

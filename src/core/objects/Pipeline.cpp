@@ -2,160 +2,127 @@
 #include "core/objects/ShaderModule.hpp"
 #include "util/debug/Logger.hpp"
 
-VkViewport Engine::Core::Pipeline::createViewport(const Swapchain& swapchain)
-{
+VkViewport pipeline_create_viewport(const Swapchain& swapchain) {
     VkViewport viewport = {};
     viewport.x = 0.0f;
     viewport.y = 0.0f;
-    viewport.width = static_cast<float>(swapchain.extent().width);
-    viewport.height = static_cast<float>(swapchain.extent().height);
+    viewport.width = static_cast<float>(swapchain.extent.width);
+    viewport.height = static_cast<float>(swapchain.extent.height);
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
-
     return viewport;
 }
 
-VkRect2D Engine::Core::Pipeline::createScissor(const Swapchain& swapchain)
-{
+VkRect2D pipeline_create_scissor(const Swapchain& swapchain) {
     VkRect2D scissor = {};
     scissor.offset = {0, 0};
-    scissor.extent = swapchain.extent();
-    
+    scissor.extent = swapchain.extent;
     return scissor;
 }
 
-void Engine::Core::Pipeline::createShaderModules(const LogicalDevice& device)
-{
-    vertexShader.create(device, "shaders/vert/VertexShader.spv");
-    fragmentShader.create(device, "shaders/frag/FragmentShader.spv");
+void pipeline_create_shader_modules(const Pipeline& pipeline, const LogicalDevice& device) {
+    shader_module_create(device, "shaders/vert/VertexShader.spv");
+    shader_module_create(device, "shaders/frag/FragmentShader.spv");
 }
 
-std::array<VkPipelineShaderStageCreateInfo, 2> Engine::Core::Pipeline::createShaderStageInfo()
-{
-    VkPipelineShaderStageCreateInfo vertexShaderStageInfo = {};
-    vertexShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    vertexShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-    vertexShaderStageInfo.module = vertexShader.get();
-    vertexShaderStageInfo.pName = "main";
-
-    VkPipelineShaderStageCreateInfo fragmentShaderStageInfo = {};
-    fragmentShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    fragmentShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    fragmentShaderStageInfo.module = fragmentShader.get();
-    fragmentShaderStageInfo.pName = "main";
-
-    return {vertexShaderStageInfo, fragmentShaderStageInfo};
+std::array<VkPipelineShaderStageCreateInfo, 2> pipeline_create_shader_stage_info(const Pipeline& pipeline) {
+    VkPipelineShaderStageCreateInfo vertex_shader_stage_create_info = {};
+    vertex_shader_stage_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    vertex_shader_stage_create_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
+    vertex_shader_stage_create_info.module = pipeline.vertex_shader.handle;
+    vertex_shader_stage_create_info.pName = "main";
+    VkPipelineShaderStageCreateInfo fragment_shader_stage_create_info = {};
+    fragment_shader_stage_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    fragment_shader_stage_create_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    fragment_shader_stage_create_info.module = pipeline.fragment_shader.handle;
+    fragment_shader_stage_create_info.pName = "main";
+    return {vertex_shader_stage_create_info, fragment_shader_stage_create_info};
 }
 
-VkPipelineDynamicStateCreateInfo Engine::Core::Pipeline::createDynamicStateInfo()
-{
-    std::vector<VkDynamicState> dynamicState = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+VkPipelineDynamicStateCreateInfo pipeline_create_dynamic_state_info() {
+    std::vector<VkDynamicState> dynamic_state = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+    VkPipelineDynamicStateCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    create_info.dynamicStateCount = static_cast<uint32_t>(dynamic_state.size());
+    create_info.pDynamicStates = dynamic_state.data();
+    return create_info;
+}
 
-    VkPipelineDynamicStateCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    createInfo.dynamicStateCount = static_cast<uint32_t>(dynamicState.size());
-    createInfo.pDynamicStates = dynamicState.data();
+VkPipelineVertexInputStateCreateInfo pipeline_create_vertex_input_info() {
+    VkPipelineVertexInputStateCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    create_info.vertexBindingDescriptionCount = 0;
+    create_info.pVertexBindingDescriptions = nullptr;
+    create_info.vertexAttributeDescriptionCount = 0;
+    create_info.pVertexAttributeDescriptions = nullptr;
+    return create_info;
+}
+
+VkPipelineInputAssemblyStateCreateInfo pipeline_create_input_assembly_info() {
+    VkPipelineInputAssemblyStateCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    create_info.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    create_info.primitiveRestartEnable = VK_FALSE;
+    return create_info;
+}
+
+VkPipelineViewportStateCreateInfo pipeline_create_viewport_info(const VkViewport& viewport, const VkRect2D& scissor) {
+    VkPipelineViewportStateCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    create_info.viewportCount = 1;
+    create_info.pViewports = &viewport;
+    create_info.scissorCount = 1;
+    create_info.pScissors = &scissor;
+    return create_info;
+}
+
+VkPipelineRasterizationStateCreateInfo pipeline_create_rasterization_info() {
+    VkPipelineRasterizationStateCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    create_info.depthClampEnable = VK_FALSE;
+    create_info.rasterizerDiscardEnable = VK_FALSE;
+    create_info.polygonMode = VK_POLYGON_MODE_FILL;
+    create_info.lineWidth = 1.0f;
+    create_info.cullMode = VK_CULL_MODE_BACK_BIT;
+    create_info.frontFace = VK_FRONT_FACE_CLOCKWISE;
+    create_info.depthBiasEnable = VK_FALSE;
+    create_info.depthBiasConstantFactor = 0.0f;
+    create_info.depthBiasClamp = 0.0f;
+    create_info.depthBiasSlopeFactor = 0.0f;
+    return create_info;
+}
+
+VkPipelineMultisampleStateCreateInfo pipeline_create_multisample_info() {
+    VkPipelineMultisampleStateCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+    create_info.sampleShadingEnable = VK_FALSE;
+    create_info.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+    return create_info;
+}
+
+VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info() {
     
-    return createInfo;
 }
 
-VkPipelineVertexInputStateCreateInfo Engine::Core::Pipeline::createVertexInputInfo()
-{
-    VkPipelineVertexInputStateCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    createInfo.vertexBindingDescriptionCount = 0;
-    createInfo.pVertexBindingDescriptions = nullptr;
-    createInfo.vertexAttributeDescriptionCount = 0;
-    createInfo.pVertexAttributeDescriptions = nullptr;
-
-    return createInfo;
-}
-
-VkPipelineInputAssemblyStateCreateInfo createInputAssemblyInfo()
-{
-    VkPipelineInputAssemblyStateCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    createInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    createInfo.primitiveRestartEnable = VK_FALSE;
-
-    return createInfo;
-}
-
-VkPipelineViewportStateCreateInfo createViewportInfo(const VkViewport& viewport, const VkRect2D& scissor)
-{
-    VkPipelineViewportStateCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    createInfo.viewportCount = 1;
-    createInfo.pViewports = &viewport;
-    createInfo.scissorCount = 1;
-    createInfo.pScissors = &scissor;
-
-    return createInfo;
-}
-
-VkPipelineRasterizationStateCreateInfo createRasterizationInfo()
-{
-    VkPipelineRasterizationStateCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    createInfo.depthClampEnable = VK_FALSE;
-    createInfo.rasterizerDiscardEnable = VK_FALSE;
-    createInfo.polygonMode = VK_POLYGON_MODE_FILL;
-    createInfo.lineWidth = 1.0f;
-    createInfo.cullMode = VK_CULL_MODE_BACK_BIT;
-    createInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
-    createInfo.depthBiasEnable = VK_FALSE;
-    createInfo.depthBiasConstantFactor = 0.0f;
-    createInfo.depthBiasClamp = 0.0f;
-    createInfo.depthBiasSlopeFactor = 0.0f;
-
-    return createInfo;
-}
-
-VkPipelineMultisampleStateCreateInfo createMultisampleInfo()
-{
-    VkPipelineMultisampleStateCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-    createInfo.sampleShadingEnable = VK_FALSE;
-    createInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-    return createInfo;
-}
-
-VkPipelineDepthStencilStateCreateInfo createDepthStencilInfo()
-{
-}
-
-VkPipelineColorBlendStateCreateInfo createColorBlendInfo()
-{
+VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info() {
     VkPipelineColorBlendAttachmentState attachment = {};
     attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     attachment.blendEnable = VK_FALSE;
-    
-    VkPipelineColorBlendStateCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    createInfo.logicOpEnable = VK_FALSE;
-    createInfo.attachmentCount = 1;
-    createInfo.pAttachments = &attachment;
-
-    return createInfo;
+    VkPipelineColorBlendStateCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    create_info.logicOpEnable = VK_FALSE;
+    create_info.attachmentCount = 1;
+    create_info.pAttachments = &attachment;
+    return create_info;
 }
 
-void Engine::Core::Pipeline::create(const LogicalDevice& device, const Swapchain& swapchain)
-{
+void pipeline_create(const LogicalDevice& device, const Swapchain& swapchain) {
     
 }
 
-void Engine::Core::Pipeline::destroy(const LogicalDevice& device)
-{
+void pipeline_destroy(const LogicalDevice& device) {
     Utils::Logger::get()->info("Destroying the Pipeline...");
-    
-    vertexShader.destroy(device);
-    fragmentShader.destroy(device);
-
+    shader_module_destroy(device);
+    shader_module_destroy(device);
     Utils::Logger::get()->success("The Pipeline was Destroyed!");
-}
-
-VkPipeline Engine::Core::Pipeline::get() const
-{
-    return pipeline;
 }

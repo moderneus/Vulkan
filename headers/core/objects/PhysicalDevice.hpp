@@ -4,31 +4,24 @@
 
 #include <vulkan/vulkan.h>
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
-namespace Engine
-{
-    namespace Core
-    {
-        const std::vector<const char*> physicalDeviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+struct PhysicalDevice {
+    VkPhysicalDevice handle = VK_NULL_HANDLE;
+};
 
-        class PhysicalDevice
-        {
-        private:
-            VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+const std::vector<const char*> phys_device_exts = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
 
-            int rate(const VkPhysicalDevice& physicalDevice);
-            std::string name(const VkPhysicalDevice& physicalDevice);
-            bool checkExtensionSupport(const VkPhysicalDevice& physicalDevice);
-            bool isSuitable(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface);
+uint32_t phys_device_rate(const VkPhysicalDevice& phys_device);
 
-        public:
-            void pick(const Surface& surface);
+std::string phys_device_get_name(const VkPhysicalDevice& phys_device);
 
-            VkPhysicalDeviceFeatures features();
-            VkPhysicalDevice get() const;
-        };
-    }
-}
+bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device);
 
+bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
+
+void phys_device_pick(const Surface& surface);
+
+VkPhysicalDeviceFeatures phys_device_get_features();

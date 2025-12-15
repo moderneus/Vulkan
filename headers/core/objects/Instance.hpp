@@ -4,24 +4,20 @@
 
 #include <vector>
 
-namespace Engine
-{
-    namespace Core
-    {
-        class Instance
-        {
-        private: 
-            VkInstance instance = VK_NULL_HANDLE;
+struct Instance {
+    VkInstance handle = VK_NULL_HANDLE;
+};
 
-            VkApplicationInfo createAppInfo();
-            VkInstanceCreateInfo createInstanceInfo(const VkApplicationInfo* appInfo, const VkDebugUtilsMessengerCreateInfoEXT* debugInfo, const std::vector<const char*>& extensions);
-            std::vector<const char*> getRequiredExtensions();
+VkApplicationInfo instance_create_app_info();
 
-        public: 
-            void create();
-            void destroy();
-            
-            VkInstance get() const;
-        };
-    }
-}
+VkInstanceCreateInfo instance_create_info(
+    const VkApplicationInfo* app_info, 
+    const VkDebugUtilsMessengerCreateInfoEXT* debug_info, 
+    const std::vector<const char*>& exts
+);
+
+std::vector<const char*> instance_get_required_exts();
+
+void instance_create(Instance* instance);
+
+void instance_destroy(const Instance& instance);

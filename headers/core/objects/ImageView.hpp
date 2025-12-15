@@ -6,26 +6,13 @@
 
 #include <vector>
 
-namespace Engine
-{
-    namespace Core
-    {
-        class ImageView
-        {
-        private:
-            VkImageView imageView = VK_NULL_HANDLE;
-            
-            std::vector<VkImageView> imageViews;  
-            std::vector<VkImage> images;
-            VkFormat imageFormat;
+struct ImageView {
+    VkImageView handle = VK_NULL_HANDLE;
+    std::vector<VkImageView> views; 
+    std::vector<VkImage> images;
+    VkFormat format;
+};
 
-            VkImageViewCreateInfo createInfo();
+void image_view_create(ImageView* image_view, const LogicalDevice& device);
 
-        public:
-            void create(const LogicalDevice& device);
-            void destroy(const LogicalDevice& device);
-
-            VkImageView get() const;
-        };
-    }
-}
+void image_view_destroy(ImageView* image_view, const LogicalDevice& device);

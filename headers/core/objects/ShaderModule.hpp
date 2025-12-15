@@ -7,22 +7,12 @@
 #include <string>
 #include <vector>
 
-namespace Engine
-{
-    namespace Core
-    {
-        class ShaderModule 
-        {
-        private:
-            VkShaderModule shaderModule = VK_NULL_HANDLE;
+struct ShaderModule { 
+    VkShaderModule handle = VK_NULL_HANDLE;
+};
 
-            VkShaderModuleCreateInfo createInfo(const std::vector<char>& src);
+VkShaderModuleCreateInfo shader_module_create_info(const std::vector<char>& src);
 
-        public:
-            void create(const LogicalDevice& device, const std::string& path);
-            void destroy(const LogicalDevice& device);
+void shader_module_create(const LogicalDevice& device, const std::string& path);
 
-            VkShaderModule get() const;
-        };
-    }
-}
+void shader_module_destroy(const LogicalDevice& device);

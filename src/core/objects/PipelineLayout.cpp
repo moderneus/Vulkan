@@ -3,37 +3,27 @@
 
 #include <vulkan/vulkan.h>
 
-VkPipelineLayoutCreateInfo Engine::Core::PipelineLayout::createInfo()
-{
-    VkPipelineLayoutCreateInfo createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    createInfo.setLayoutCount = 0;
-    createInfo.pSetLayouts = nullptr;
-    createInfo.pushConstantRangeCount = 0;
-
-    return createInfo;
+VkPipelineLayoutCreateInfo pipeline_layout_create_info() {
+    VkPipelineLayoutCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    create_info.setLayoutCount = 0;
+    create_info.pSetLayouts = nullptr;
+    create_info.pushConstantRangeCount = 0;
+    return create_info;
 }
 
-void Engine::Core::PipelineLayout::create(const LogicalDevice& device)
-{
+void pipeline_layout_create(PipelineLayout* pipeline_layout, const LogicalDevice& device) {
     Utils::Logger::get()->info("Creating a Pipeline Layout...");
-
-    VkPipelineLayoutCreateInfo pipelineLayoutInfo = createInfo();
-
-    if(vkCreatePipelineLayout(device.get(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo = pipeline_layout_create_info();
+    if(vkCreatePipelineLayout(device.handle, &pipelineLayoutInfo, nullptr, &pipeline_layout->handle) != VK_SUCCESS)
         Utils::Logger::get()->critical("Failed to Create the Pipeline Layout!");
-
     Utils::Logger::get()->success("The Pipeline Layout was Created!");
 }
 
-void Engine::Core::PipelineLayout::destroy(const LogicalDevice& device)
-{
+void pipeline_layout_destroy(const PipelineLayout& pipeline_layout, const LogicalDevice& device) {
     Utils::Logger::get()->info("Destroying the Pipeline Layout...");
-    
-    if(pipelineLayout == VK_NULL_HANDLE)
+    if(pipeline_layout.handle == VK_NULL_HANDLE)
         Utils::Logger::get()->error("Cannot Destroy the Pipeline Layout::Pipeline Layout is not Created!");
-    
-    vkDestroyPipelineLayout(device.get(), pipelineLayout, nullptr);
-
+    vkDestroyPipelineLayout(device.handle, pipeline_layout.handle, nullptr);
     Utils::Logger::get()->success("The Pipeline Layout was Destroyed!");
 }

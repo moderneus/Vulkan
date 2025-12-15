@@ -5,23 +5,18 @@
 
 #include <vulkan/vulkan.h>
 
-namespace Engine 
-{
-    namespace Core
-    {
-        class LogicalDevice
-        {
-        private:
-            VkDevice device = VK_NULL_HANDLE;
+struct LogicalDevice {
+    VkDevice handle = VK_NULL_HANDLE;
+};
 
-            VkDeviceQueueCreateInfo createQueueInfo(const PhysicalDevice& physicalDevice, const Surface& surface);
-            VkDeviceCreateInfo createInfo(PhysicalDevice& physicalDevice, const VkDeviceQueueCreateInfo& queueInfo, VkPhysicalDeviceFeatures* physicalDeviceFeatures);
+VkDeviceQueueCreateInfo device_create_queue_info(const PhysicalDevice& phys_device, const Surface& surface);
 
-        public:
-            void create(PhysicalDevice& physicalDevice, const Surface& surface);
-            void destroy();
+VkDeviceCreateInfo device_create_info(
+    PhysicalDevice& phys_device, 
+    const VkDeviceQueueCreateInfo& queue_info, 
+    VkPhysicalDeviceFeatures* phys_device_features
+);
 
-            VkDevice get() const;
-        };
-    }
-}
+void device_create(LogicalDevice* device, PhysicalDevice& phys_device, const Surface& surface);
+
+void device_destroy(const LogicalDevice& device);

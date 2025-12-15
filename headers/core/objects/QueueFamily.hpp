@@ -5,24 +5,10 @@
 #include <cstdint>
 #include <optional>
 
-namespace Engine
-{
-    namespace Core
-    {
-        struct Indices
-        {
-            std::optional<uint32_t> graphicsFamily;
-            std::optional<uint32_t> presentFamily;
+struct QueueFamily {
+    std::optional<uint32_t> graphics;
+    std::optional<uint32_t> present;
+};
 
-            bool isComplete()
-            {
-                return graphicsFamily.has_value() && presentFamily.has_value();
-            }
-        };
-        
-        struct QueueFamily 
-        {
-            static Indices find(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface);
-        };
-    }
-}
+bool queue_family_is_complete();
+QueueFamily queue_family_find(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);

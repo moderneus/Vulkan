@@ -2,20 +2,10 @@
 
 #include <vulkan/vulkan.h>
 
-namespace Engine
-{
-    namespace Core
-    {
-        class Surface 
-        {
-        private:
-            VkSurfaceKHR surface = VK_NULL_HANDLE;
+struct Surface {
+    VkSurfaceKHR handle = VK_NULL_HANDLE;
+};
 
-        public:
-            void create();
-            void destroy();
+void surface_create();
 
-            VkSurfaceKHR get() const;
-        };
-    }
-}
+void surface_destroy();
