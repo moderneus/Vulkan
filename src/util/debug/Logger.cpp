@@ -3,6 +3,7 @@
 #include "fmt/core.h"
 
 #include <ctime>
+#include <fstream>
 #include <filesystem>
 #include <chrono>
 #include <sstream>
@@ -57,7 +58,6 @@ void log_write(const Level level, const std::string& msg, const std::string& val
             log_file << log_get_time() << "SUCCESS::" << msg << value << std::endl;
         break;
     }
-    
     log_file.flush();
     log_file.close();
 }

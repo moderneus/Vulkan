@@ -8,10 +8,10 @@ struct Renderer {
     EventManager event_manager;
 };
 
-void renderer_init(Renderer* renderer);
+void renderer_init(Renderer* renderer, Window* pwindow);
 
 void renderer_destroy(Renderer* renderer);
 
-void renderer_loop(const Renderer& renderer);
+void renderer_loop(Renderer* renderer);
 
-void renderer_draw(const Renderer& renderer);
+void renderer_draw(Renderer* renderer);

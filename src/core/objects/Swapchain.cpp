@@ -54,7 +54,7 @@ VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKH
     return VK_PRESENT_MODE_FIFO_KHR;
 }
 
-VkExtent2D swapchain_choose_extent(const VkSurfaceCapabilitiesKHR& capabilities) {
+VkExtent2D swapchain_choose_extent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities) {
     log_info("Choosing the Swapchain Extent..."); 
     if(capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
         log_success("The Swapchain Extent was Chosen!");
@@ -62,7 +62,7 @@ VkExtent2D swapchain_choose_extent(const VkSurfaceCapabilitiesKHR& capabilities)
     }
     else {
         int width, height;
-        SDL_GetWindowSizeInPixels(Window::Window::get(), &width, &height); 
+        SDL_GetWindowSizeInPixels(window.pwindow, &width, &height); 
         
         VkExtent2D extent {
             static_cast<uint32_t>(width),
@@ -121,13 +121,13 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
     return create_info;
 }
 
-void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, const LogicalDevice& device, const Surface& surface) {
+void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, const LogicalDevice& device, const Window& window, const Surface& surface) {
     log_info("Creating a Swapchain...");
     
     SwapchainSupportDetails details = swapchain_query_support_details(phys_device.handle, surface.handle);
     VkSurfaceFormatKHR format = swapchain_choose_format(details.formats);
     VkPresentModeKHR present_mode = swapchain_choose_present_mode(details.present_modes);
-    VkExtent2D extent = swapchain_choose_extent(details.capabilities);
+    VkExtent2D extent = swapchain_choose_extent(window, details.capabilities);
     
     uint32_t image_count = details.capabilities.minImageCount + 1;
     if(details.capabilities.maxImageCount > 0 && image_count > details.capabilities.maxImageCount) {

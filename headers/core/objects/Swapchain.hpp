@@ -25,7 +25,7 @@ VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>
 
 VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKHR>& present_modes);
 
-VkExtent2D swapchain_choose_extent(const VkSurfaceCapabilitiesKHR& capabilities);
+VkExtent2D swapchain_choose_extent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities);
 
 VkSwapchainCreateInfoKHR swapchain_create_info(
         const VkSurfaceKHR& surface, 
@@ -37,8 +37,8 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
         uint32_t image_count
 );
 
-bool swachain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
+bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
 
-void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, const LogicalDevice& device, const Surface& surface);
+void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, const LogicalDevice& device, const Window& window, const Surface& surface);
 
 void swapchain_destroy(const Swapchain& swapchain, const LogicalDevice& device);

@@ -15,4 +15,4 @@ struct ImageView {
 
 void image_view_create(ImageView* image_view, const LogicalDevice& device);
 
-void image_view_destroy(ImageView* image_view, const LogicalDevice& device);
+void image_view_destroy(const ImageView& image_view, const LogicalDevice& device);

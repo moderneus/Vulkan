@@ -35,7 +35,7 @@ VkDeviceCreateInfo device_create_info(
     create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     create_info.pQueueCreateInfos = &queue_info;
     create_info.queueCreateInfoCount = 1;
-    phys_device_features->geometryShader = phys_device_get_features().geometryShader;
+    phys_device_features->geometryShader = phys_device_get_features(phys_device).geometryShader;
     create_info.pEnabledFeatures = phys_device_features;
     create_info.enabledExtensionCount = static_cast<uint32_t>(phys_device_exts.size());
     create_info.ppEnabledExtensionNames = phys_device_exts.data();

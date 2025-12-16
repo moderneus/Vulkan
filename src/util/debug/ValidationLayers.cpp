@@ -10,6 +10,7 @@
 #include <vector>
 #include <cstring>
 #include <cstdint>
+#include <vulkan/vulkan_core.h>
 
 bool check_validation_layers_support() {
     uint32_t layer_count;
@@ -64,7 +65,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL callback(
     }
     fmt::print(fmt::fg(fmt::color::dark_red), "[VULKAN] ");
     fmt::print(fmt::fg(color), "{}: ", pcallback_data->pMessageIdName);
-    fmt::print(fmt::fg(fmt::color::medium_purple), "{}\n", pcallback_data->pMessage);
+    fmt::print(fmt::fg(fmt::color::white), "{}\n", pcallback_data->pMessage);
     return VK_FALSE;
 }
 
@@ -92,14 +93,15 @@ VkDebugUtilsMessengerCreateInfoEXT debug_msgr_create_info() {
 }
 
 VkResult debug_msgr_create(
-    const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, 
-    const VkAllocationCallbacks* pAllocator, 
-    VkDebugUtilsMessengerEXT* pDebugMessenger
+    const Instance& instance,
+    const VkDebugUtilsMessengerCreateInfoEXT* pcreate_info, 
+    const VkAllocationCallbacks* pallocator, 
+    DebugMessenger* debug_msgr 
 )
 {    
-    auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(Core::Core::get()->getInstance(), "vkCreateDebugUtilsMessengerEXT");
+    auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.handle, "vkCreateDebugUtilsMessengerEXT");
     if(func != nullptr) {
-        func(Core::Core::get()->getInstance(), pCreateInfo, pAllocator, pDebugMessenger);
+        func(instance.handle, pcreate_info, pallocator, &debug_msgr->msgr);
     }
     else {
         return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -107,16 +109,25 @@ VkResult debug_msgr_create(
     return VK_SUCCESS;
 }
 
-void debug_messenger_setup() {
+VkResult debug_msgr_destroy(DebugMessenger* debug_msgr, const Instance& instance) {
+    auto cleanup_func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.handle, "vkDestroyDebugUtilsMessengerEXT");
+    if(cleanup_func != nullptr) {
+        cleanup_func(instance.handle, debug_msgr->msgr, nullptr);
+    }
+    else {
+        return VK_ERROR_EXTENSION_NOT_PRESENT;
+    }
+    return VK_SUCCESS;
+}
+
+void debug_msgr_setup(DebugMessenger* debug_msgr, const Instance& instance) {
     log_info("Creating a Debug Messenger...");
     
     VkDebugUtilsMessengerCreateInfoEXT debug_msgr_info = debug_msgr_create_info();
-    VkDebugUtilsMessengerEXT debug_msgr;
-    if(debug_msgr_create(&debug_msgr_info, nullptr, &debug_msgr) != VK_SUCCESS) {
+    if(debug_msgr_create(instance, &debug_msgr_info, nullptr, debug_msgr) != VK_SUCCESS) {
         log_error("Failed to Create the Debug Messenger!");
     }
     else {
         log_success("The Debug Messenger was Created!");
     }
-    return debug_msgr_info;
 }

@@ -15,11 +15,11 @@ void renderer_destroy(Renderer* renderer) {
 }
 
 void renderer_loop(Renderer* renderer) {
-    while(renderer->pwindow->is_closed) {
+    while(!renderer->pwindow->is_closed) {
         event_manager_poll_events(&renderer->event_manager, renderer->pwindow);
     }
 }
 
-void renderer_draw(const Renderer& renderer) {
+void renderer_draw(Renderer* renderer) {
     renderer_loop(renderer);
 }

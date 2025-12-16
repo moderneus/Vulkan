@@ -18,7 +18,7 @@ void SDL_context_init() {
 void SDL_context_destroy() {
     log_info("Quitting SDL...");
     if(!is_init) {
-        log_critical("Cannot free the SDL memory::SDL initialiazed.");
+        log_critical("Cannot free the SDL memory::SDL is not Initialiazed.");
     }
     SDL_Quit();
     is_init = false;

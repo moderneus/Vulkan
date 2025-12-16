@@ -7,20 +7,20 @@ void engine_init(Engine* engine) {
     log_info("Initializing Engine...");
     SDL_context_init();
     window_create(&engine->window, "Vulkan", 640, 480);
-    vk_core_init();
-    renderer_init(&engine->renderer);
+    vk_core_init(&engine->vk_core, engine->window);
+    renderer_init(&engine->renderer, &engine->window);
     log_success("Engine was Initialized!");
 }
 
 void engine_destroy(Engine* engine) {
     log_info("Destroying Engine...");
     renderer_destroy(&engine->renderer);
-    vk_core_destroy();
-    window_destroy();
+    vk_core_destroy(&engine->vk_core);
+    window_destroy(engine->window);
     SDL_context_destroy();
     log_success("Engine was Destroyed!");
 }
 
-void engine_run(const Engine& engine) {
-    renderer_draw(engine.renderer);
+void engine_run(Engine* engine) {
+    renderer_draw(&engine->renderer);
 }

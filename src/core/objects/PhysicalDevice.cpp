@@ -44,10 +44,10 @@ bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device) {
 
 bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) {
     queue_family_find(phys_device, surface);
-    return phys_device_check_ext_support(phys_device) && swachain_is_adequate(phys_device, surface);
+    return phys_device_check_ext_support(phys_device) && swapchain_is_adequate(phys_device, surface);
 }
 
-void phys_device_pick(const Instance& instance, PhysicalDevice* phys_device, const Surface& surface) {
+void phys_device_pick(PhysicalDevice* phys_device, const Instance& instance, const Surface& surface) {
     log_info("Searching a Suitable GPU...");
     uint32_t phys_device_count = 0;
     vkEnumeratePhysicalDevices(instance.handle, &phys_device_count, nullptr);

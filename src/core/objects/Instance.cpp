@@ -23,7 +23,7 @@ std::vector<const char*> instance_get_required_exts() {
     return exts_vec;
 }
 
-VkApplicationInfo instane_create_app_info() {
+VkApplicationInfo instance_create_app_info() {
     log_info("Creating an Application Info...");
     
     VkApplicationInfo create_info = {};
@@ -74,7 +74,7 @@ void instance_create(Instance* instance) {
     log_info("Creating an Instance...");
     
     VkApplicationInfo app_info = instance_create_app_info();
-    VkDebugUtilsMessengerCreateInfoEXT debug_info = debug_msgr_setup();
+    VkDebugUtilsMessengerCreateInfoEXT debug_info = debug_msgr_create_info();
     std::vector<const char*> exts = instance_get_required_exts();
     VkInstanceCreateInfo instance_info = instance_create_info(&app_info, &debug_info, exts);
     

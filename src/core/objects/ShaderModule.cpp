@@ -16,7 +16,7 @@ VkShaderModuleCreateInfo shader_module_create_info(const std::vector<char>& src)
     return create_info;
 }
 
-void shader_module_create_info(ShaderModule* shader_module, const LogicalDevice& device, const std::string& path) {
+void shader_module_create(ShaderModule* shader_module, const LogicalDevice& device, const std::string& path) {
     log_info("Creating a Shader Module...");
     VkShaderModuleCreateInfo shader_module_info = shader_module_create_info(read_file(path));
     if(vkCreateShaderModule(device.handle, &shader_module_info, nullptr, &shader_module->handle) != VK_SUCCESS) {

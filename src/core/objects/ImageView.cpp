@@ -43,7 +43,7 @@ void image_view_destroy(const ImageView& image_view, const LogicalDevice& device
         if(image_view.handle == VK_NULL_HANDLE) {
             log_error("Cannot Destroy the Image View::Image View is not Created!");
         }
-        vkDestroyImageView(device.handle, image_view.handle, nullptr);
+        vkDestroyImageView(device.handle, view, nullptr);
     }
     log_success("The Image View was Destroyed!");
 }

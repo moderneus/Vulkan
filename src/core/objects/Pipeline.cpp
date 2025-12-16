@@ -20,9 +20,9 @@ VkRect2D pipeline_create_scissor(const Swapchain& swapchain) {
     return scissor;
 }
 
-void pipeline_create_shader_modules(const Pipeline& pipeline, const LogicalDevice& device) {
-    shader_module_create(device, "shaders/vert/VertexShader.spv");
-    shader_module_create(device, "shaders/frag/FragmentShader.spv");
+void pipeline_create_shader_modules(Pipeline* pipeline, const LogicalDevice& device) {
+    shader_module_create(&pipeline->vert_shader, device, "shaders/vert/VertexShader.spv");
+    shader_module_create(&pipeline->frag_shader, device, "shaders/frag/FragmentShader.spv");
 }
 
 std::array<VkPipelineShaderStageCreateInfo, 2> pipeline_create_shader_stage_info(const Pipeline& pipeline) {
@@ -122,9 +122,9 @@ void pipeline_create(const LogicalDevice& device, const Swapchain& swapchain) {
     
 }
 
-void pipeline_destroy(const LogicalDevice& device) {
+void pipeline_destroy(const Pipeline& pipeline, const LogicalDevice& device) {
     log_info("Destroying the Pipeline...");
-    shader_module_destroy(device);
-    shader_module_destroy(device);
+    shader_module_destroy(pipeline.vert_shader, device);
+    shader_module_destroy(pipeline.frag_shader, device);
     log_success("The Pipeline was Destroyed!");
 }

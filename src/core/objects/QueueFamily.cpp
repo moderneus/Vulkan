@@ -31,11 +31,11 @@ QueueFamily queue_family_find(const VkPhysicalDevice& phys_device, const VkSurfa
         if(present_support) {
             queue_family.present = i;
         }
-        else if(queue_family_is_complete(queue_family)) {
+        if(queue_family_is_complete(queue_family)) {
             break;
         }
     }
-    if(queue_family_is_complete(queue_family)) {
+    if(!queue_family_is_complete(queue_family)) {
         log_critical("Failed to Find any Suitable Queue Families!");
     }
     log_success("The Suitable Queue Families was Found!");

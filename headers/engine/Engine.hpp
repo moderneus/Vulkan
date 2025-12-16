@@ -14,4 +14,4 @@ void engine_init(Engine* engine);
 
 void engine_destroy(Engine* engine);
 
-void engine_run(const Engine& engine);
+void engine_run(Engine* engine);
