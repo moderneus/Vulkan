@@ -1,41 +1,30 @@
 #pragma once
 
-#include "util/Singleton.hpp"
-
-#include <fstream>
 #include <string>
 #include <vector>
 
-namespace Engine 
-{
-    namespace Utils
-    {
-        class Logger : public Singleton<Logger>
-        {
-        private:
-            friend class Singleton<Logger>;
-            
-            enum Level {INFO, ERROR, CRITICAL, SUCCESS};
-            std::string path = "logs/log.txt";
-            std::ofstream logf;
-            
-            void openLogFile(const std::string& path);
-            void write(const Level level, const std::string& msg, const std::string& value);
-            std::string currentDateTime();
-            
-            Logger();
-            ~Logger();
-            
-        public: 
-            void info(const std::string& msg);
-            void info(const std::string& msg, const std::string& value);
-            void info(const std::string& msg, const std::vector<std::string>& info);
-            void error(const std::string& msg);
-            void error(const std::string& msg, const std::string& error);
-            void critical(const std::string& msg);
-            void critical(const std::string& msg, const std::string& error);
-            void success(const std::string& msg);
-            void success(const std::string& msg, const std::string& value);
-        };
-    }
-}
+enum Level { INFO, ERROR, CRITICAL, SUCCESS };
+    
+std::string log_get_time();
+
+void log_open_file(const std::string& path);
+
+void log_write(const Level level, const std::string& msg, const std::string& value);
+
+void log_info(const std::string& msg);
+
+void log_info(const std::string& msg, const std::string& value);
+
+void log_info(const std::string& msg, const std::vector<std::string>& info);
+
+void log_error(const std::string& msg);
+
+void log_error(const std::string& msg, const std::string& error);
+
+void log_critical(const std::string& msg);
+
+void log_critical(const std::string& msg, const std::string& error);
+
+void log_success(const std::string& msg);
+
+void log_success(const std::string& msg, const std::string& value);

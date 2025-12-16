@@ -3,10 +3,4 @@
 #include <vector>
 #include <string>
 
-namespace Engine
-{
-    namespace Utils
-    {
-        std::vector<char> readFile(const std::string& path);
-    }
-}
+std::vector<char> read_file(const std::string& path);

@@ -10,8 +10,8 @@
 
 struct Pipeline {
     VkPipeline handle = VK_NULL_HANDLE;
-    ShaderModule vertexShader;
-    ShaderModule fragmentShader;
+    ShaderModule vert_shader;
+    ShaderModule frag_shader;
 };
 
 struct PipelineState {

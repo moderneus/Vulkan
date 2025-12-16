@@ -3,12 +3,6 @@
 #include <string>
 #include <vector>
 
-namespace Engine
-{
-    namespace Utils
-    {
-        std::vector<std::string> cstrVectorToStringVector(const std::vector<const char*> cstrs);
+std::vector<std::string> cstr_vec_to_str_vec(const std::vector<const char*> cstrs);
 
-        std::string cstrToString(const char* cstr);
-    }
-}
+std::string cstr_to_str(const char* cstr);

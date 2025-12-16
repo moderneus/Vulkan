@@ -2,8 +2,10 @@
 #include "util/debug/Logger.hpp"
 
 VkImageViewCreateInfo image_view_create_info(ImageView* image_view) {
-    Utils::Logger::get()->info("Creating the Image View Info...");
+    log_info("Creating the Image View Info...");
+    
     image_view->views.resize(image_view->images.size());
+    
     VkImageViewCreateInfo create_info = {};
     for(const auto& image : image_view->images) {
         create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -20,26 +22,28 @@ VkImageViewCreateInfo image_view_create_info(ImageView* image_view) {
         create_info.subresourceRange.baseArrayLayer = 0;
         create_info.subresourceRange.layerCount = 1;
     }
-    Utils::Logger::get()->success("The Image View Info was Created!");
+    log_success("The Image View Info was Created!");
     return create_info;
 }
 
 void image_view_create(ImageView* image_view, const LogicalDevice& device) {
-    Utils::Logger::get()->info("Creating an Image View...");
+    log_info("Creating an Image View...");
     for(auto& view : image_view->views) {
         VkImageViewCreateInfo image_view_info = image_view_create_info(image_view);
-        if(vkCreateImageView(device.handle, &image_view_info, nullptr, &view) != VK_SUCCESS)
-            Utils::Logger::get()->critical("Failed to Create the ImageView!");
+        if(vkCreateImageView(device.handle, &image_view_info, nullptr, &view) != VK_SUCCESS) {
+            log_critical("Failed to Create the ImageView!");
+        }
     }
-    Utils::Logger::get()->success("The Image View was Created!");
+    log_success("The Image View was Created!");
 }
 
 void image_view_destroy(const ImageView& image_view, const LogicalDevice& device) {
-    Utils::Logger::get()->info("Destroying the Image View...");
+    log_info("Destroying the Image View...");
     for(auto& view : image_view.views) {
-        if(image_view.handle == VK_NULL_HANDLE)
-            Utils::Logger::get()->error("Cannot Destroy the Image View::Image View is not Created!");
+        if(image_view.handle == VK_NULL_HANDLE) {
+            log_error("Cannot Destroy the Image View::Image View is not Created!");
+        }
         vkDestroyImageView(device.handle, image_view.handle, nullptr);
     }
-    Utils::Logger::get()->success("The Image View was Destroyed!");
+    log_success("The Image View was Destroyed!");
 }

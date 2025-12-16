@@ -29,13 +29,15 @@ std::array<VkPipelineShaderStageCreateInfo, 2> pipeline_create_shader_stage_info
     VkPipelineShaderStageCreateInfo vertex_shader_stage_create_info = {};
     vertex_shader_stage_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     vertex_shader_stage_create_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
-    vertex_shader_stage_create_info.module = pipeline.vertex_shader.handle;
+    vertex_shader_stage_create_info.module = pipeline.vert_shader.handle;
     vertex_shader_stage_create_info.pName = "main";
+    
     VkPipelineShaderStageCreateInfo fragment_shader_stage_create_info = {};
     fragment_shader_stage_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     fragment_shader_stage_create_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    fragment_shader_stage_create_info.module = pipeline.fragment_shader.handle;
+    fragment_shader_stage_create_info.module = pipeline.frag_shader.handle;
     fragment_shader_stage_create_info.pName = "main";
+    
     return {vertex_shader_stage_create_info, fragment_shader_stage_create_info};
 }
 
@@ -121,8 +123,8 @@ void pipeline_create(const LogicalDevice& device, const Swapchain& swapchain) {
 }
 
 void pipeline_destroy(const LogicalDevice& device) {
-    Utils::Logger::get()->info("Destroying the Pipeline...");
+    log_info("Destroying the Pipeline...");
     shader_module_destroy(device);
     shader_module_destroy(device);
-    Utils::Logger::get()->success("The Pipeline was Destroyed!");
+    log_success("The Pipeline was Destroyed!");
 }

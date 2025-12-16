@@ -4,31 +4,23 @@
 
 #include <vector>
 
-namespace Engine
-{
-    namespace Utils
-    {
-        const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
-        bool checkValidationLayerSupport();
+bool check_validation_layers_support();
 
-        VKAPI_ATTR VkBool32 VKAPI_CALL callBack
-        (
-            VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-            VkDebugUtilsMessageTypeFlagsEXT messageType,
-            const VkDebugUtilsMessengerCallbackDataEXT* pCallBackData,
-            void* pUserData
-        );
+VKAPI_ATTR VkBool32 VKAPI_CALL callback(
+    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+    VkDebugUtilsMessageTypeFlagsEXT messageType,
+    const VkDebugUtilsMessengerCallbackDataEXT* pCallBackData,
+    void* pUserData
+);
 
-        VkDebugUtilsMessengerCreateInfoEXT createDebugMessengerInfo();
+VkDebugUtilsMessengerCreateInfoEXT debug_msgr_create_info();
 
-        void setupDebugMessenger();
+VkResult debug_msgr_create(
+    const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, 
+    const VkAllocationCallbacks* pAllocator, 
+    VkDebugUtilsMessengerEXT* pDebugMessenger
+);
 
-        VkResult createDebugMessenger
-        (
-            const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, 
-            const VkAllocationCallbacks* pAllocator, 
-            VkDebugUtilsMessengerEXT* pDebugMessenger
-        );
-    }
-}
+VkDebugUtilsMessengerCreateInfoEXT debug_msgr_setup();

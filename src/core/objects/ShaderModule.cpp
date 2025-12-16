@@ -5,25 +5,31 @@
 #include <cstdint>
 
 VkShaderModuleCreateInfo shader_module_create_info(const std::vector<char>& src) {
-    Utils::Logger::get()->info("Creating the Shader Module Info..."); 
+    log_info("Creating the Shader Module Info..."); 
+    
     VkShaderModuleCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     create_info.codeSize = src.size();
     create_info.pCode = reinterpret_cast<const uint32_t*>(src.data());
-    Utils::Logger::get()->success("The Shader Module Info was Created!");
+    
+    log_success("The Shader Module Info was Created!");
     return create_info;
 }
 
 void shader_module_create_info(ShaderModule* shader_module, const LogicalDevice& device, const std::string& path) {
-    Utils::Logger::get()->info("Creating a Shader Module...");
-    VkShaderModuleCreateInfo shader_module_info = shader_module_create_info();
-    if(vkCreateShaderModule(device.handle, &shader_module_info, nullptr, &shader_module->handle) != VK_SUCCESS)
-        Utils::Logger::get()->critical("Failed to Create the ShaderModule!");
-    Utils::Logger::get()->success("The Shader Module was Created!");
+    log_info("Creating a Shader Module...");
+    VkShaderModuleCreateInfo shader_module_info = shader_module_create_info(read_file(path));
+    if(vkCreateShaderModule(device.handle, &shader_module_info, nullptr, &shader_module->handle) != VK_SUCCESS) {
+        log_critical("Failed to Create the ShaderModule!");
+    }
+    log_success("The Shader Module was Created!");
 }
 
-void Engine::Core::ShaderModule::destroy(const ShaderModule& shader_module, const LogicalDevice& device) {
-    Utils::Logger::get()->info("Destroying the Shader Module...");
+void shader_module_destroy(const ShaderModule& shader_module, const LogicalDevice& device) {
+    log_info("Destroying the Shader Module...");
+    if(shader_module.handle == VK_NULL_HANDLE) {
+        log_error("Cannot Destroy the Shader Module::Shader Module is not Created!");
+    }
     vkDestroyShaderModule(device.handle, shader_module.handle, nullptr);
-    Utils::Logger::get()->success("The Shader Module was Destroyed!");
+    log_success("The Shader Module was Destroyed!");
 }

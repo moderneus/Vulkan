@@ -13,17 +13,19 @@ VkPipelineLayoutCreateInfo pipeline_layout_create_info() {
 }
 
 void pipeline_layout_create(PipelineLayout* pipeline_layout, const LogicalDevice& device) {
-    Utils::Logger::get()->info("Creating a Pipeline Layout...");
+    log_info("Creating a Pipeline Layout...");
     VkPipelineLayoutCreateInfo pipelineLayoutInfo = pipeline_layout_create_info();
-    if(vkCreatePipelineLayout(device.handle, &pipelineLayoutInfo, nullptr, &pipeline_layout->handle) != VK_SUCCESS)
-        Utils::Logger::get()->critical("Failed to Create the Pipeline Layout!");
-    Utils::Logger::get()->success("The Pipeline Layout was Created!");
+    if(vkCreatePipelineLayout(device.handle, &pipelineLayoutInfo, nullptr, &pipeline_layout->handle) != VK_SUCCESS) {
+        log_critical("Failed to Create the Pipeline Layout!");
+    }
+    log_success("The Pipeline Layout was Created!");
 }
 
 void pipeline_layout_destroy(const PipelineLayout& pipeline_layout, const LogicalDevice& device) {
-    Utils::Logger::get()->info("Destroying the Pipeline Layout...");
-    if(pipeline_layout.handle == VK_NULL_HANDLE)
-        Utils::Logger::get()->error("Cannot Destroy the Pipeline Layout::Pipeline Layout is not Created!");
+    log_info("Destroying the Pipeline Layout...");
+    if(pipeline_layout.handle == VK_NULL_HANDLE) {
+        log_error("Cannot Destroy the Pipeline Layout::Pipeline Layout is not Created!");
+    }
     vkDestroyPipelineLayout(device.handle, pipeline_layout.handle, nullptr);
-    Utils::Logger::get()->success("The Pipeline Layout was Destroyed!");
+    log_success("The Pipeline Layout was Destroyed!");
 }

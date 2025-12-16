@@ -8,56 +8,12 @@
 #include <sstream>
 #include <iomanip>
 
-Engine::Utils::Logger::Logger()
-{
-    std::filesystem::create_directories("logs");
-    openLogFile(path);
-}
+std::string path = "logs/log.txt";
+std::ofstream log_file;
 
-Engine::Utils::Logger::~Logger()
-{
-    logf.close();
-}
-
-void Engine::Utils::Logger::openLogFile(const std::string& path)
-{
-    logf.open(path, std::ios::app);
-    
-    if(!logf.is_open())
-        fmt::print("Failed to open file by path: {}\n", path);
-}
-
-void Engine::Utils::Logger::write(const Level level, const std::string& msg, const std::string& value="")
-{
-    switch(level)
-    {
-        case INFO:
-            logf << currentDateTime() << "INFO::" << msg << value << std::endl;
-        break;
-            
-        case ERROR:
-            logf << currentDateTime() << "ERROR::" << msg << value << std::endl;
-        break;
-
-        case CRITICAL:
-            logf << currentDateTime() << "CRITICAL::" << msg << value << std::endl;
-            std::exit(-1);
-        break;
-            
-        case SUCCESS:
-            logf << currentDateTime() << "SUCCESS::" << msg << value << std::endl;
-        break;
-    }
-    
-    logf.flush();
-}
-
-std::string Engine::Utils::Logger::currentDateTime()
-{
+std::string log_get_time() {
     auto now = std::chrono::system_clock::now();
-
     std::time_t t = std::chrono::system_clock::to_time_t(now);
-
     std::tm tm = {};
 
 #ifdef __WIN32__
@@ -70,56 +26,77 @@ std::string Engine::Utils::Logger::currentDateTime()
 
     std::ostringstream oss;
     oss << '[' << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "] ";
-
     return oss.str();
 }
 
-void Engine::Utils::Logger::info(const std::string& msg)
-{
-    write(INFO, msg);
+void log_open_file(const std::string& path) {
+    log_file.open(path, std::ios::app);
+    if(!log_file.is_open())
+        fmt::print("Failed to open file by path: {}\n", path);
 }
 
-void Engine::Utils::Logger::info(const std::string& msg, const std::string& value)
-{
-    write(INFO, msg, value);
-}
-
-void Engine::Utils::Logger::info(const std::string& msg, const std::vector<std::string>& info)
-{
-    std::string tmp = msg;
+void log_write(const Level level, const std::string& msg, const std::string& value="") {
+    std::filesystem::create_directories("logs");
+    log_open_file(path);
     
+    switch(level) {
+        case INFO:
+            log_file << log_get_time() << "INFO::" << msg << value << std::endl;
+        break;
+            
+        case ERROR:
+            log_file << log_get_time() << "ERROR::" << msg << value << std::endl;
+        break;
+
+        case CRITICAL:
+            log_file << log_get_time() << "CRITICAL::" << msg << value << std::endl;
+            std::abort();
+        break;
+            
+        case SUCCESS:
+            log_file << log_get_time() << "SUCCESS::" << msg << value << std::endl;
+        break;
+    }
+    
+    log_file.flush();
+    log_file.close();
+}
+
+void log_info(const std::string& msg) {
+    log_write(INFO, msg);
+}
+
+void log_info(const std::string& msg, const std::string& value) {
+    log_write(INFO, msg, value);
+}
+
+void log_info(const std::string& msg, const std::vector<std::string>& info) {
+    std::string tmp = msg;
     for(const auto& s : info)
         tmp += s + " ";
-
-    write(INFO, tmp);
+    log_write(INFO, tmp);
 }
     
-void Engine::Utils::Logger::error(const std::string& msg)
-{
-    write(ERROR, msg);
+void log_error(const std::string& msg) {
+    log_write(ERROR, msg);
 }
 
-void Engine::Utils::Logger::error(const std::string& msg, const std::string& error)
-{
-    write(ERROR, msg, error);
+void log_error(const std::string& msg, const std::string& error) {
+    log_write(ERROR, msg, error);
 }
 
-void Engine::Utils::Logger::critical(const std::string& msg)
-{
-    write(CRITICAL, msg);
+void log_critical(const std::string& msg) {
+    log_write(CRITICAL, msg);
 }
 
-void Engine::Utils::Logger::critical(const std::string& msg, const std::string& error)
-{
-    write(CRITICAL, msg, error);
+void log_critical(const std::string& msg, const std::string& error) {
+    log_write(CRITICAL, msg, error);
 }
 
-void Engine::Utils::Logger::success(const std::string& msg)
-{
-    write(SUCCESS, msg);
+void log_success(const std::string& msg) {
+    log_write(SUCCESS, msg);
 }
 
-void Engine::Utils::Logger::success(const std::string& msg, const std::string& value)
-{
-    write(SUCCESS, msg, value);
+void log_success(const std::string& msg, const std::string& value) {
+    log_write(SUCCESS, msg, value);
 }
