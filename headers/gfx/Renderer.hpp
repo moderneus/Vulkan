@@ -1,26 +1,17 @@
 #pragma once
 
+#include "window/Window.hpp"
 #include "util/EventManager.hpp"
 
-namespace Engine
-{
-    class Engine;
+struct Renderer {
+    Window* pwindow;
+    EventManager event_manager;
+};
 
-    namespace gfx
-    {
-        class Renderer
-        {
-            friend class ::Engine::Engine;
-            
-            Window::Window* window = nullptr;
-            Utils::EventManager e;
-            
-            void init(Window::Window* window);
-            void destroy();
-            void loop();
-            void draw();
-            
-            Renderer() = default;
-        };
-    }
-}
+void renderer_init(Renderer* renderer);
+
+void renderer_destroy(Renderer* renderer);
+
+void renderer_loop(const Renderer& renderer);
+
+void renderer_draw(const Renderer& renderer);

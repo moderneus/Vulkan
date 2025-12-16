@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/objects/Surface.hpp"
+#include "core/objects/Instance.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -22,6 +23,6 @@ bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device);
 
 bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
 
-void phys_device_pick(const Surface& surface);
+void phys_device_pick(const Instance& instance, PhysicalDevice* phys_device, const Surface& surface);
 
 VkPhysicalDeviceFeatures phys_device_get_features();

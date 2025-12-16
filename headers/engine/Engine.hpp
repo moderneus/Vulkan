@@ -1,21 +1,17 @@
 #pragma once
 
-#include "core/SDL.hpp"
+#include "core/Core.hpp"
 #include "window/Window.hpp"
 #include "gfx/Renderer.hpp"
 
-namespace Engine
-{
-    class Engine
-    {
-    private: 
-        Core::SDL sdlContext;
-        Window::Window window;
-        gfx::Renderer renderer;
-        
-    public:
-        void init();
-        void destroy();
-        void run();
-    };
-}
+struct Engine {
+    Core vk_core;
+    Window window;
+    Renderer renderer;
+};
+
+void engine_init(Engine* engine);
+
+void engine_destroy(Engine* engine);
+
+void engine_run(const Engine& engine);

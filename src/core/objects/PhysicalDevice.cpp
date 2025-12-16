@@ -47,16 +47,16 @@ bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const VkSurfac
     return phys_device_check_ext_support(phys_device) && swachain_is_adequate(phys_device, surface);
 }
 
-void phys_device_pick(PhysicalDevice* phys_device, const Surface& surface) {
+void phys_device_pick(const Instance& instance, PhysicalDevice* phys_device, const Surface& surface) {
     log_info("Searching a Suitable GPU...");
     uint32_t phys_device_count = 0;
-    vkEnumeratePhysicalDevices(Core::Core::get()->getInstance(), &phys_device_count, nullptr);
+    vkEnumeratePhysicalDevices(instance.handle, &phys_device_count, nullptr);
     
     if(phys_device_count == 0) {
         log_critical("Failed to find GPU with Vulkan support!");
     }
     std::vector<VkPhysicalDevice> phys_devices(phys_device_count);
-    vkEnumeratePhysicalDevices(Core::Core::get()->getInstance(), &phys_device_count, phys_devices.data());
+    vkEnumeratePhysicalDevices(instance.handle, &phys_device_count, phys_devices.data());
     
     std::multimap<int, VkPhysicalDevice> candidates;
     for(const VkPhysicalDevice& phys_device : phys_devices) {

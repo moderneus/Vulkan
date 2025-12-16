@@ -1,13 +1,10 @@
 #include "util/EventManager.hpp"
 
-void Engine::Utils::EventManager::pollEvents(Engine::Window::Window& window)
-{
-    while(SDL_PollEvent(&event))
-    {
-        switch(event.type)
-        {
+void event_manager_poll_events(EventManager* event_manager, Window* window) {
+    while(SDL_PollEvent(&event_manager->event)) {
+        switch(event_manager->event.type) {
             case SDL_EVENT_QUIT:
-                window.close();
+                window->is_closed = true;
             break;
         }
     }

@@ -2,43 +2,20 @@
 #include "util/String.hpp"
 #include "util/debug/Logger.hpp"
 
-SDL_Window* Engine::Window::Window::pWindow = nullptr;
-
-void Engine::Window::Window::create(const char* title, const unsigned int width, const unsigned int height)
-{
-    Utils::Logger::get()->info("Creating a Window...");
-    
-    pWindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_VULKAN);
-
-    if(!pWindow)
-        Utils::Logger::get()->critical("Failed to create the Window::" + Utils::cstrToString(SDL_GetError()));
-
-    Utils::Logger::get()->success("The Window was Created!");
+void window_create(Window* window, const char* title, const uint32_t width, const uint32_t height) {
+    log_info("Creating a Window...");
+    window->pwindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_VULKAN);
+    if(!window->pwindow) {
+        log_critical("Failed to create the Window::" + cstr_to_str(SDL_GetError()));
+    }
+    log_success("The Window was Created!");
 }
 
-void Engine::Window::Window::destroy()
-{
-    Utils::Logger::get()->info("Destroying the Window...");
-    
-    if(pWindow == nullptr)
-        Utils::Logger::get()->critical("Cannot Destroy the Window::Window is not Created!");
-        
-    SDL_DestroyWindow(pWindow);
-    
-    Utils::Logger::get()->success("The Window was Destroyed!");
-}
-
-void Engine::Window::Window::close()
-{
-    isClosed = true;
-}
-
-bool Engine::Window::Window::closed()
-{
-    return isClosed;
-}
-
-SDL_Window* Engine::Window::Window::get() 
-{
-    return pWindow;
+void window_destroy(const Window& window) {
+    log_info("Destroying the Window...");
+    if(window.pwindow == nullptr) {
+        log_critical("Cannot Destroy the Window::Window is not Created!");
+    }
+    SDL_DestroyWindow(window.pwindow);
+    log_success("The Window was Destroyed!");
 }

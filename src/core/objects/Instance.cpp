@@ -87,11 +87,9 @@ void instance_create(Instance* instance) {
 
 void instance_destroy(const Instance& instance) {
     log_info("Destroying the Instance...");
-    
     if(instance.handle == VK_NULL_HANDLE) {
         log_error("Cannot Destroy the Instance::Instance is not Created!");
     }
     vkDestroyInstance(instance.handle, nullptr);
-    
     log_success("The Instance was Destroyed!");
 }

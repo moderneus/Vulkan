@@ -1,43 +1,27 @@
 #include "core/Core.hpp"
 #include "util/debug/Logger.hpp"
 
-void Engine::Core::Core::init()
-{
-    Utils::Logger::get()->info("Initializing a Core...");
-    
-    vkInstance.create();
-    vkSurface.create();
-    vkPhysicalDevice.pick(vkSurface);
-    vkLogicalDevice.create(vkPhysicalDevice, vkSurface);
-    vkSwapchain.create(vkPhysicalDevice, vkLogicalDevice, vkSurface);
-    vkImageView.create(vkLogicalDevice);
-    vkPipelineLayout.create(vkLogicalDevice);
-    vkPipeline.create(vkLogicalDevice, vkSwapchain);
-
-    Utils::Logger::get()->success("The Core was Initialized!");
+void vk_core_init(Core* vk_core) {
+    log_info("Initializing a Core...");
+    instance_create(&vk_core->instance);
+    surface_create();
+    phys_device_pick(vk_core->surface);
+    device_create(&vk_core->device, vk_core->phys_device, vk_core->surface);
+    swapchain_create(&vk_core->swapchain, vk_core->phys_device, vk_core->device, vk_core->surface);
+    image_view_create(&vk_core->image_view, vk_core->device);
+    pipeline_layout_create(vk_core->device);
+    pipeline_create(vk_core->device, vk_core->swapchain);
+    log_success("The Core was Initialized!");
 }
 
-void Engine::Core::Core::destroy()
-{
-    Utils::Logger::get()->info("Destroying the Core...");
-
-    vkPipeline.destroy(vkLogicalDevice);
-    vkPipelineLayout.destroy(vkLogicalDevice);
-    vkImageView.destroy(vkLogicalDevice);
-    vkSwapchain.destroy(vkLogicalDevice);
-    vkLogicalDevice.destroy();
-    vkSurface.destroy();
-    vkInstance.destroy();
-
-    Utils::Logger::get()->success("The Core was Destroyed!");
-}
-
-VkInstance Engine::Core::Core::getInstance()
-{
-    return vkInstance.get();
-}
-
-VkPhysicalDevice Engine::Core::Core::getPhysicalDevice()
-{
-    return vkPhysicalDevice.get();
+void vk_core_destroy(Core* vk_core) {
+    log_info("Destroying the Core...");
+    pipeline_destroy(vk_core->device);
+    pipeline_layout_destroy(vk_core->device);
+    image_view_destroy(&vk_core->image_view, vk_core->device);
+    swapchain_destroy(vk_core->swapchain, vk_core->device);
+    device_destroy(vk_core->device);
+    surface_destroy();
+    instance_destroy(vk_core->instance);
+    log_success("The Core was Destroyed!");
 }

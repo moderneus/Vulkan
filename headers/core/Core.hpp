@@ -8,32 +8,19 @@
 #include "core/objects/ImageView.hpp"
 #include "core/objects/PipelineLayout.hpp"
 #include "core/objects/Pipeline.hpp"
-#include "util/Singleton.hpp"
 
 #include <vulkan/vulkan.h>
 
-namespace Engine
-{
-    namespace Core
-    {
-        class Core : public Utils::Singleton<Core>
-        {
-        private:    
-            Instance vkInstance;
-            PhysicalDevice vkPhysicalDevice;
-            LogicalDevice vkLogicalDevice;
-            Surface vkSurface;
-            Swapchain vkSwapchain;
-            ImageView vkImageView;
-            PipelineLayout vkPipelineLayout;
-            Pipeline vkPipeline;
-            
-        public: 
-            void init();
-            void destroy();
-            
-            VkInstance getInstance();
-            VkPhysicalDevice getPhysicalDevice();
-        };
-    }
-}
+struct Core {
+    Instance instance;
+    PhysicalDevice phys_device;
+    LogicalDevice device;
+    Surface surface;
+    Swapchain swapchain;
+    ImageView image_view;
+    PipelineLayout pipeline_layout;
+    Pipeline pipeline;
+};
+
+void vk_core_init();
+void vk_core_destroy();

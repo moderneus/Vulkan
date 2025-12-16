@@ -4,17 +4,8 @@
 
 #include "SDL3/SDL_events.h"
 
-namespace Engine
-{
-    namespace Utils
-    {
-        class EventManager
-        {
-        private:
-            SDL_Event event;
+struct EventManager {
+    SDL_Event event;
+};
 
-        public:
-            void pollEvents(Engine::Window::Window& window);
-        };
-    }
-}
+void event_manager_poll_events(EventManager* event_manager, Window* window);
