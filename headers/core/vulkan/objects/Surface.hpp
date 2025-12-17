@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/objects/Instance.hpp"
-#include "window/Window.hpp"
+#include "core/vulkan/objects/Instance.hpp"
+#include "engine/window/Window.hpp"
 
 #include <vulkan/vulkan.h>
 

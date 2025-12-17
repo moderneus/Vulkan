@@ -1,4 +1,4 @@
-#include "core/SDL.hpp"
+#include "core/SDL/SDL.hpp"
 #include "util/String.hpp"
 #include "util/debug/Logger.hpp"
 

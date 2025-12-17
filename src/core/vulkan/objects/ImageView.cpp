@@ -1,4 +1,4 @@
-#include "core/objects/ImageView.hpp"
+#include "core/vulkan/objects/ImageView.hpp"
 #include "util/debug/Logger.hpp"
 
 VkImageViewCreateInfo image_view_create_info(ImageView* image_view) {

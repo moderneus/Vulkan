@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/objects/Surface.hpp"
-#include "core/objects/Instance.hpp"
+#include "core/vulkan/objects/Surface.hpp"
+#include "core/vulkan/objects/Instance.hpp"
 
 #include <vulkan/vulkan.h>
 

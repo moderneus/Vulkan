@@ -1,13 +1,13 @@
 #pragma once
 
-#include "core/objects/Instance.hpp"
-#include "core/objects/PhysicalDevice.hpp"
-#include "core/objects/LogicalDevice.hpp"
-#include "core/objects/Surface.hpp"
-#include "core/objects/Swapchain.hpp"
-#include "core/objects/ImageView.hpp"
-#include "core/objects/PipelineLayout.hpp"
-#include "core/objects/Pipeline.hpp"
+#include "core/vulkan/objects/Instance.hpp"
+#include "core/vulkan/objects/PhysicalDevice.hpp"
+#include "core/vulkan/objects/LogicalDevice.hpp"
+#include "core/vulkan/objects/Surface.hpp"
+#include "core/vulkan/objects/Swapchain.hpp"
+#include "core/vulkan/objects/ImageView.hpp"
+#include "core/vulkan/objects/PipelineLayout.hpp"
+#include "core/vulkan/objects/Pipeline.hpp"
 #include "util/debug/ValidationLayers.hpp"
 
 #include <vulkan/vulkan.h>

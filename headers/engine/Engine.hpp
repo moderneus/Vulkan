@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/Core.hpp"
-#include "window/Window.hpp"
-#include "gfx/Renderer.hpp"
+#include "core/vulkan/Core.hpp"
+#include "engine/window/Window.hpp"
+#include "engine/gfx/Renderer.hpp"
 
 struct Engine {
     Core vk_core;

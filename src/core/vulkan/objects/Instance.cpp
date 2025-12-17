@@ -1,4 +1,4 @@
-#include "core/objects/Instance.hpp"
+#include "core/vulkan/objects/Instance.hpp"
 #include "util/String.hpp"
 #include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
@@ -8,7 +8,6 @@
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
-#include <vulkan/vulkan_core.h>
 
 std::vector<const char*> instance_get_required_exts() {
     uint32_t exts_count = 0;

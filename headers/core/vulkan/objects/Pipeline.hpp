@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/objects/LogicalDevice.hpp"
-#include "core/objects/ShaderModule.hpp"
-#include "core/objects/Swapchain.hpp"
+#include "core/vulkan/objects/LogicalDevice.hpp"
+#include "core/vulkan/objects/ShaderModule.hpp"
+#include "core/vulkan/objects/Swapchain.hpp"
 
 #include <vulkan/vulkan.h>
 

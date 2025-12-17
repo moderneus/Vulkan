@@ -1,5 +1,5 @@
-#include "core/objects/Pipeline.hpp"
-#include "core/objects/ShaderModule.hpp"
+#include "core/vulkan/objects/Pipeline.hpp"
+#include "core/vulkan/objects/ShaderModule.hpp"
 #include "util/debug/Logger.hpp"
 
 VkViewport pipeline_create_viewport(const Swapchain& swapchain) {

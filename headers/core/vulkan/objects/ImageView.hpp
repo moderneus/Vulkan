@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/objects/LogicalDevice.hpp"
+#include "core/vulkan/objects/LogicalDevice.hpp"
 
 #include <vulkan/vulkan.h>
 

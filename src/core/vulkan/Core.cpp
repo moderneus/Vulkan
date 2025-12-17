@@ -1,5 +1,5 @@
-#include "core/Core.hpp"
-#include "core/objects/PhysicalDevice.hpp"
+#include "core/vulkan/Core.hpp"
+#include "core/vulkan/objects/PhysicalDevice.hpp"
 #include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
 

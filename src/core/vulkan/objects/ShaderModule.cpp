@@ -1,4 +1,4 @@
-#include "core/objects/ShaderModule.hpp"
+#include "core/vulkan/objects/ShaderModule.hpp"
 #include "util/debug/Logger.hpp"
 #include "util/File.hpp"
 

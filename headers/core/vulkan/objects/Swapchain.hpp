@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/objects/PhysicalDevice.hpp"
-#include "core/objects/LogicalDevice.hpp"
-#include "core/objects/Surface.hpp"
+#include "core/vulkan/objects/PhysicalDevice.hpp"
+#include "core/vulkan/objects/LogicalDevice.hpp"
+#include "core/vulkan/objects/Surface.hpp"
 
 #include <vulkan/vulkan.h>
 

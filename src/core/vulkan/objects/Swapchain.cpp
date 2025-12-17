@@ -1,7 +1,7 @@
-#include "core/objects/Swapchain.hpp"
-#include "core/objects/QueueFamily.hpp"
+#include "core/vulkan/objects/Swapchain.hpp"
+#include "core/vulkan/objects/QueueFamily.hpp"
+#include "engine/window/Window.hpp"
 #include "util/debug/Logger.hpp"
-#include "window/Window.hpp"
 
 #include <limits>
 #include <algorithm>

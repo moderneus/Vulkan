@@ -1,7 +1,6 @@
-#include "core/objects/PhysicalDevice.hpp"
-#include "core/objects/QueueFamily.hpp"
-#include "core/objects/Swapchain.hpp"
-#include "core/Core.hpp"
+#include "core/vulkan/objects/PhysicalDevice.hpp"
+#include "core/vulkan/objects/QueueFamily.hpp"
+#include "core/vulkan/objects/Swapchain.hpp"
 #include "util/debug/Logger.hpp"
 
 #include <vulkan/vulkan.h>

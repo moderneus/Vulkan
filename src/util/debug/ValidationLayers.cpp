@@ -1,6 +1,6 @@
 #include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
-#include "core/Core.hpp"
+#include "core/vulkan/Core.hpp"
 
 #include "fmt/core.h"
 #include "fmt/color.h"
@@ -10,7 +10,6 @@
 #include <vector>
 #include <cstring>
 #include <cstdint>
-#include <vulkan/vulkan_core.h>
 
 bool check_validation_layers_support() {
     uint32_t layer_count;

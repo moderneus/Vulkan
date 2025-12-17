@@ -1,6 +1,6 @@
 #pragma once
 
-#include "window/Window.hpp"
+#include "engine/window/Window.hpp"
 
 #include "SDL3/SDL_events.h"
 

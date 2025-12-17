@@ -1,6 +1,6 @@
 #include "engine/Engine.hpp"
-#include "core/Core.hpp"
-#include "core/SDL.hpp"
+#include "core/vulkan/Core.hpp"
+#include "core/SDL/SDL.hpp"
 #include "util/debug/Logger.hpp"
 
 void engine_init(Engine* engine) {

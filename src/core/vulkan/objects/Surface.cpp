@@ -1,7 +1,7 @@
-#include "core/objects/Surface.hpp"
-#include "core/objects/Instance.hpp"
+#include "core/vulkan/objects/Surface.hpp"
+#include "core/vulkan/objects/Instance.hpp"
+#include "engine/window/Window.hpp"
 #include "util/debug/Logger.hpp"
-#include "window/Window.hpp"
 
 #include "SDL3/SDL_error.h"
 #include "SDL3/SDL_vulkan.h"
