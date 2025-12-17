@@ -1,60 +1,96 @@
-# What's that?
-**This is a self-study project ─ graphics Engine on C++ and the Vulkan API.**
-
 # Architecture
 
 ````
 Vulkan
-├── headers
-│   ├── core
-│   │   ├── Core.hpp
-│   │   ├── SDL.hpp
-│   │   └── objects
-│   │       ├── Instance.hpp
-│   │       ├── LogicalDevice.hpp
-│   │       ├── PhysicalDevice.hpp
-│   │       ├── QueueFamily.hpp 
-│   │       └── Surface.hpp
-│   ├── engine
-│   │   └── Engine.hpp
-│   ├── gfx
-│   │   └── Renderer.hpp
-│   ├── util
-│   │   ├── EventManager.hpp
-│   │   ├── Singleton.hpp
-│   │   ├── String.hpp
-│   │   └── debug
-│   │       ├── Logger.hpp
-│   │       └── ValidationLayers.hpp
-│   └── window
-│       └── Window.hpp
-├── libs
-│   ├── SDL
-│   └── fmt
-├── src
-│   ├── Vulkan.cpp
-│   ├── core
-│   │   ├── Core.cpp
-│   │   ├── SDL.cpp
-│   │   └── objects
-│   │       ├── Instance.cpp
-│   │       ├── LogicalDevice.cpp
-│   │       ├── PhysicalDevice.cpp
-│   │       ├── QueueFamily.cpp
-│   │       └── Surface.cpp
-│   ├── engine
-│   │   └── Engine.cpp
-│   ├── gfx
-│   │   └── Renderer.cpp
-│   ├── util
-│   │   ├── EventManager.cpp
-│   │   ├── String.cpp
-│   │   └── debug
-│   │       ├── Logger.cpp
-│   │       └── ValidationLayers.cpp
-│   └── window
-│       └── Window.cpp
 ├── CMakeLists.txt
 ├── LICENSE
-└── README.md
+├── README.md
+├── docs
+│   └── Fundamentals
+│       └── Vulkan Objects
+│           ├── README.md
+│           └── topics
+│               ├── Buffer.md
+│               ├── CommandBuffer.md
+│               ├── Image.md
+│               ├── Instance.md
+│               ├── Logicalevice.md
+│               ├── PhysicalDevice.md
+│               ├── Pipeline.md
+│               ├── Queue.md
+│               ├── RenderPass.md
+│               ├── Sampler.md
+│               ├── Surface.md
+│               └── Swapchain.md
+├── headers
+│   ├── core
+│   │   ├── SDL
+│   │   │   └── SDL.hpp
+│   │   └── vulkan
+│   │       ├── Core.hpp
+│   │       └── objects
+│   │           ├── ImageView.hpp
+│   │           ├── Instance.hpp
+│   │           ├── LogicalDevice.hpp
+│   │           ├── PhysicalDevice.hpp
+│   │           ├── Pipeline.hpp
+│   │           ├── PipelineLayout.hpp
+│   │           ├── QueueFamily.hpp
+│   │           ├── ShaderModule.hpp
+│   │           ├── Surface.hpp
+│   │           └── Swapchain.hpp
+│   ├── engine
+│   │   ├── Engine.hpp
+│   │   ├── gfx
+│   │   │   └── Renderer.hpp
+│   │   └── window
+│   │       └── Window.hpp
+│   └── util
+│       ├── debug
+│       │   ├── Logger.hpp
+│       │   └── ValidationLayers.hpp
+│       ├── EventManager.hpp
+│       ├── File.hpp
+│       └── String.hpp
+├── libs
+│   ├── SDL
+│   └── fmt
+├── shaders
+│   ├── frag
+│   │   ├── FragmentShader.frag
+│   │   └── FragmentShader.spv
+│   └── vert
+│       ├── VertexShader.spv
+│       └── VertexShader.vert
+└── src
+    ├── core
+    │   ├── SDL
+    │   │   └── SDL.cpp
+    │   └── vulkan
+    │       ├── Core.cpp
+    │       └── objects
+    │           ├── ImageView.cpp
+    │           ├── Instance.cpp
+    │           ├── LogicalDevice.cpp
+    │           ├── PhysicalDevice.cpp
+    │           ├── Pipeline.cpp
+    │           ├── PipelineLayout.cpp
+    │           ├── QueueFamily.cpp
+    │           ├── ShaderModule.cpp
+    │           ├── Surface.cpp
+    │           └── Swapchain.cpp
+    ├── engine
+    │   ├── Engine.cpp
+    │   ├── gfx
+    │   │   └── Renderer.cpp
+    │   └── window
+    │       └── Window.cpp
+    ├── util
+    │   ├── debug
+    │   │   ├── Logger.cpp
+    │   │   └── ValidationLayers.cpp
+    │   ├── EventManager.cpp
+    │   ├── File.cpp
+    │   └── String.cpp
+    └── Vulkan.cpp
 ````
