@@ -3,6 +3,8 @@
 #include "core/vulkan/objects/LogicalDevice.hpp"
 #include "core/vulkan/objects/ShaderModule.hpp"
 #include "core/vulkan/objects/Swapchain.hpp"
+#include "core/vulkan/objects/PipelineLayout.hpp"
+#include "core/vulkan/objects/RenderPass.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -50,6 +52,8 @@ VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info();
 
 VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info();
 
-void pipeline_create(const LogicalDevice& device, const Swapchain& swapchain);
+VkGraphicsPipelineCreateInfo pipeline_create_info(const PipelineState& state, const PipelineLayout& layout, const RenderPass& render_pass);
+
+void pipeline_create(Pipeline* pipeline, const LogicalDevice& device, const Swapchain& swapchain, const PipelineLayout& layout, const RenderPass& render_pass);
 
 void pipeline_destroy(const Pipeline& pipeline, const LogicalDevice& device);

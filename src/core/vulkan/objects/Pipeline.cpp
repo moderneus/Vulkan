@@ -1,6 +1,7 @@
 #include "core/vulkan/objects/Pipeline.hpp"
 #include "core/vulkan/objects/ShaderModule.hpp"
 #include "util/debug/Logger.hpp"
+#include <vulkan/vulkan_core.h>
 
 VkViewport pipeline_create_viewport(const Swapchain& swapchain) {
     VkViewport viewport = {};
@@ -102,9 +103,11 @@ VkPipelineMultisampleStateCreateInfo pipeline_create_multisample_info() {
     return create_info;
 }
 
+#if 0
 VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info() {
     
 }
+#endif
 
 VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info() {
     VkPipelineColorBlendAttachmentState attachment = {};
@@ -118,13 +121,53 @@ VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info() {
     return create_info;
 }
 
-void pipeline_create(const LogicalDevice& device, const Swapchain& swapchain) {
+VkGraphicsPipelineCreateInfo pipeline_create_info(const PipelineState &state, const PipelineLayout& layout, const RenderPass& render_pass) {
+    VkGraphicsPipelineCreateInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    create_info.stageCount = 2;
+    create_info.pStages = state.shaderStages.data();
+    create_info.pVertexInputState = &state.vertexInputInfo;
+    create_info.pInputAssemblyState = &state.inputAssemblyInfo;
+    create_info.pViewportState = &state.viewportInfo;
+    create_info.pRasterizationState = &state.rasterizationInfo;
+    create_info.pMultisampleState = &state.multisampleInfo;
+    create_info.pDepthStencilState = nullptr;
+    create_info.pColorBlendState = &state.colorBlendInfo;
+    create_info.pDynamicState = &state.dynamicStateInfo;
+    create_info.layout = layout.handle;
+    create_info.renderPass = render_pass.handle;
+    create_info.subpass = 0;
+    return create_info;
+}
+
+void pipeline_create(Pipeline* pipeline, const LogicalDevice& device, const Swapchain& swapchain, const PipelineLayout& layout, const RenderPass& render_pass) {
+    pipeline_create_shader_modules(pipeline, device);
     
+    PipelineState state = {};
+    state.shaderStages = pipeline_create_shader_stage_info(*pipeline);
+    state.vertexInputInfo = pipeline_create_vertex_input_info();
+    state.inputAssemblyInfo = pipeline_create_input_assembly_info();
+    VkViewport viewport = pipeline_create_viewport(swapchain);
+    VkRect2D scissor = pipeline_create_scissor(swapchain);
+    state.viewportInfo = pipeline_create_viewport_info(viewport, scissor);
+    state.rasterizationInfo = pipeline_create_rasterization_info();
+    state.multisampleInfo = pipeline_create_multisample_info();
+    state.colorBlendInfo = pipeline_create_color_blend_info();
+    state.dynamicStateInfo = pipeline_create_dynamic_state_info();
+
+    VkGraphicsPipelineCreateInfo pipeline_info = pipeline_create_info(state, layout, render_pass);
+    if(vkCreateGraphicsPipelines(device.handle, VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &pipeline->handle) != VK_SUCCESS) {
+        log_critical("Failed to Create the Graphics Pipeline!");
+    }
 }
 
 void pipeline_destroy(const Pipeline& pipeline, const LogicalDevice& device) {
     log_info("Destroying the Pipeline...");
     shader_module_destroy(pipeline.vert_shader, device);
     shader_module_destroy(pipeline.frag_shader, device);
+    if(pipeline.handle == VK_NULL_HANDLE) {
+        log_error("Cannot Destroy the Graphics Pipeline::Graphics Pipeline is not Created!");
+    }
+    vkDestroyPipeline(device.handle, pipeline.handle, nullptr);
     log_success("The Pipeline was Destroyed!");
 }

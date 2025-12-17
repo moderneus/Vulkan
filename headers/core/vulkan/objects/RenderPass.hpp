@@ -16,6 +16,6 @@ VkSubpassDescription render_pass_create_subpass_description();
 
 VkRenderPassCreateInfo render_pass_create_info();
 
-void render_pass_create(RenderPass* render_pass, const ImageView& image_view);
-
-void render_pass_destroy(RenderPass* render_pass);
+void render_pass_create(RenderPass* render_pass, const LogicalDevice& device, const ImageView& image_view);
+    
+void render_pass_destroy(RenderPass* render_pass, const LogicalDevice& device);
