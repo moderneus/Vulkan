@@ -1,9 +1,9 @@
 #include "core/vulkan/objects/RenderPass.hpp"
 #include "util/debug/Logger.hpp"
 
-VkAttachmentDescription render_pass_create_attachment_description(const ImageView& image_view) {
+VkAttachmentDescription render_pass_create_attachment_description(const Swapchain& swapchain) {
     VkAttachmentDescription description = {};
-    description.format = image_view.format;
+    description.format = swapchain.format;
     description.samples = VK_SAMPLE_COUNT_1_BIT;
     description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -39,8 +39,8 @@ VkRenderPassCreateInfo render_pass_create_info(VkAttachmentDescription* pattache
     return create_info;
 }
 
-void render_pass_create(RenderPass* render_pass, const LogicalDevice& device, const ImageView& image_view) {
-    VkAttachmentDescription color_attachment = render_pass_create_attachment_description(image_view);
+void render_pass_create(RenderPass* render_pass, const LogicalDevice& device, const Swapchain& swapchain) {
+    VkAttachmentDescription color_attachment = render_pass_create_attachment_description(swapchain);
     VkAttachmentReference color_attachment_ref = render_pass_create_attachment_reference();
     VkSubpassDescription subpass = render_pass_create_subpass_description(&color_attachment_ref);
     VkRenderPassCreateInfo render_pass_info = render_pass_create_info(&color_attachment, &subpass);

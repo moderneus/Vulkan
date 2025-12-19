@@ -16,7 +16,11 @@ struct SwapchainSupportDetails {
 
 struct Swapchain {
     VkSwapchainKHR handle = VK_NULL_HANDLE;
-    VkExtent2D extent;
+    VkExtent2D extent = {};
+    VkFormat format = VK_FORMAT_UNDEFINED;
+    VkColorSpaceKHR color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    std::vector<VkImageView> views; 
+    std::vector<VkImage> images;
 };
 
 SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);

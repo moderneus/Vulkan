@@ -1,7 +1,6 @@
 #include "core/vulkan/objects/Pipeline.hpp"
 #include "core/vulkan/objects/ShaderModule.hpp"
 #include "util/debug/Logger.hpp"
-#include <vulkan/vulkan_core.h>
 
 VkViewport pipeline_create_viewport(const Swapchain& swapchain) {
     VkViewport viewport = {};
@@ -24,6 +23,14 @@ VkRect2D pipeline_create_scissor(const Swapchain& swapchain) {
 void pipeline_create_shader_modules(Pipeline* pipeline, const LogicalDevice& device) {
     shader_module_create(&pipeline->vert_shader, device, "shaders/vert/VertexShader.spv");
     shader_module_create(&pipeline->frag_shader, device, "shaders/frag/FragmentShader.spv");
+}
+
+VkPipelineColorBlendAttachmentState pipeline_create_color_blend_attachment() {
+    VkPipelineColorBlendAttachmentState attachment = {};
+    attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    attachment.blendEnable = VK_FALSE;
+    attachment.alphaBlendOp = VK_BLEND_OP_ADD;
+    return attachment;
 }
 
 std::array<VkPipelineShaderStageCreateInfo, 2> pipeline_create_shader_stage_info(const Pipeline& pipeline) {
@@ -109,15 +116,12 @@ VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info() {
 }
 #endif
 
-VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info() {
-    VkPipelineColorBlendAttachmentState attachment = {};
-    attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    attachment.blendEnable = VK_FALSE;
+VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info(const VkPipelineColorBlendAttachmentState* attachment) {
     VkPipelineColorBlendStateCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     create_info.logicOpEnable = VK_FALSE;
     create_info.attachmentCount = 1;
-    create_info.pAttachments = &attachment;
+    create_info.pAttachments = attachment;
     return create_info;
 }
 
@@ -152,7 +156,8 @@ void pipeline_create(Pipeline* pipeline, const LogicalDevice& device, const Swap
     state.viewportInfo = pipeline_create_viewport_info(viewport, scissor);
     state.rasterizationInfo = pipeline_create_rasterization_info();
     state.multisampleInfo = pipeline_create_multisample_info();
-    state.colorBlendInfo = pipeline_create_color_blend_info();
+    VkPipelineColorBlendAttachmentState attachment = pipeline_create_color_blend_attachment();
+    state.colorBlendInfo = pipeline_create_color_blend_info(&attachment);
     state.dynamicStateInfo = pipeline_create_dynamic_state_info();
 
     VkGraphicsPipelineCreateInfo pipeline_info = pipeline_create_info(state, layout, render_pass);

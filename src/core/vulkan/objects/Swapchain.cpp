@@ -32,6 +32,12 @@ bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceK
 
 VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>& formats) {
     log_info("Choosing the Swapchain Format...");
+
+    if(formats.size() == 1 && formats[0].format == VK_FORMAT_UNDEFINED) {
+        log_success("The Swapchain Format Was Chosen!");
+        return {VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
+    }
+    
     for(const auto& format : formats) {
         if(format.format == VK_FORMAT_B8G8R8A8_SRGB && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
             log_success("The Swapchain Format was Chosen!");
@@ -128,6 +134,7 @@ void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, c
     VkSurfaceFormatKHR format = swapchain_choose_format(details.formats);
     VkPresentModeKHR present_mode = swapchain_choose_present_mode(details.present_modes);
     VkExtent2D extent = swapchain_choose_extent(window, details.capabilities);
+    swapchain->format = format.format;
     
     uint32_t image_count = details.capabilities.minImageCount + 1;
     if(details.capabilities.maxImageCount > 0 && image_count > details.capabilities.maxImageCount) {

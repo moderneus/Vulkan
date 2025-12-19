@@ -5,7 +5,6 @@
 #include "core/vulkan/objects/LogicalDevice.hpp"
 #include "core/vulkan/objects/Surface.hpp"
 #include "core/vulkan/objects/Swapchain.hpp"
-#include "core/vulkan/objects/ImageView.hpp"
 #include "core/vulkan/objects/PipelineLayout.hpp"
 #include "core/vulkan/objects/Pipeline.hpp"
 #include "core/vulkan/objects/RenderPass.hpp"
@@ -20,7 +19,6 @@ struct Core {
     LogicalDevice device;
     Surface surface;
     Swapchain swapchain;
-    ImageView image_view;
     PipelineLayout pipeline_layout;
     Pipeline pipeline;
     RenderPass render_pass;

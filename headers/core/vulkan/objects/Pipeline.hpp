@@ -32,6 +32,10 @@ VkViewport pipeline_create_viewport(const Swapchain& swapchain);
 
 VkRect2D pipeline_create_scissor(const Swapchain& swapchain);
 
+VkPipelineColorBlendAttachmentState pipeline_create_color_blend_attachment();
+
+VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info();
+
 void pipeline_create_shader_modules(Pipeline* pipeline, const LogicalDevice& device);
 
 std::array<VkPipelineShaderStageCreateInfo, 2> pipeline_create_shader_stage_info();
@@ -48,9 +52,7 @@ VkPipelineRasterizationStateCreateInfo pipeline_create_rasterization_info();
 
 VkPipelineMultisampleStateCreateInfo pipeline_create_multisample_info();
 
-VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info();
-
-VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info();
+VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info(const VkPipelineColorBlendAttachmentState* attachment);
 
 VkGraphicsPipelineCreateInfo pipeline_create_info(const PipelineState& state, const PipelineLayout& layout, const RenderPass& render_pass);
 
