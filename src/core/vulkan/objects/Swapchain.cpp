@@ -135,6 +135,7 @@ void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, c
     VkPresentModeKHR present_mode = swapchain_choose_present_mode(details.present_modes);
     VkExtent2D extent = swapchain_choose_extent(window, details.capabilities);
     swapchain->format = format.format;
+    swapchain->extent = extent;
     
     uint32_t image_count = details.capabilities.minImageCount + 1;
     if(details.capabilities.maxImageCount > 0 && image_count > details.capabilities.maxImageCount) {

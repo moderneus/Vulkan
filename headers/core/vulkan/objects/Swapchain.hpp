@@ -19,6 +19,7 @@ struct Swapchain {
     VkExtent2D extent = {};
     VkFormat format = VK_FORMAT_UNDEFINED;
     VkColorSpaceKHR color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    std::vector<VkFramebuffer> frame_buffers;
     std::vector<VkImageView> views; 
     std::vector<VkImage> images;
 };

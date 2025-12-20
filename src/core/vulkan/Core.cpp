@@ -3,6 +3,7 @@
 #include "core/vulkan/objects/Pipeline.hpp"
 #include "core/vulkan/objects/ImageView.hpp"
 #include "core/vulkan/objects/RenderPass.hpp"
+#include "core/vulkan/objects/Framebuffer.hpp"
 #include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
 
@@ -18,11 +19,13 @@ void vk_core_init(Core* vk_core, const Window& window) {
     pipeline_layout_create(&vk_core->pipeline_layout, vk_core->device);
     render_pass_create(&vk_core->render_pass, vk_core->device, vk_core->swapchain);
     pipeline_create(&vk_core->pipeline, vk_core->device, vk_core->swapchain, vk_core->pipeline_layout, vk_core->render_pass);
+    framebuffer_create(&vk_core->swapchain, vk_core->device, vk_core->render_pass);
     log_success("The Core was Initialized!");
 }
 
 void vk_core_destroy(Core* vk_core) {
     log_info("Destroying the Core...");
+    framebuffer_destroy(vk_core->swapchain, vk_core->device);
     pipeline_destroy(vk_core->pipeline, vk_core->device);
     render_pass_destroy(&vk_core->render_pass, vk_core->device);
     pipeline_layout_destroy(vk_core->pipeline_layout, vk_core->device);
