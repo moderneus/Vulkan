@@ -12,11 +12,8 @@ set(TARGET Vulkan)
 
 project(${TARGET} LANGUAGES CXX)
 
-set(FMT "libs/fmt")
-set(SDL "libs/SDL")
-
-add_subdirectory(${FMT})
-add_subdirectory(${SDL})
+add_subdirectory("libs/fmt")
+add_subdirectory("libs/SDL")
 
 find_package(Vulkan REQUIRED)
 
