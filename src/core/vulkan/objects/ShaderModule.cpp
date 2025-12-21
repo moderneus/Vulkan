@@ -6,12 +6,10 @@
 
 VkShaderModuleCreateInfo shader_module_create_info(const std::vector<char>& src) {
     log_info("Creating the Shader Module Info..."); 
-    
     VkShaderModuleCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     create_info.codeSize = src.size();
     create_info.pCode = reinterpret_cast<const uint32_t*>(src.data());
-    
     log_success("The Shader Module Info was Created!");
     return create_info;
 }

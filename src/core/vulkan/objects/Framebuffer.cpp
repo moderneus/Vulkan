@@ -14,6 +14,7 @@ VkFramebufferCreateInfo framebuffer_create_info(const Swapchain& swapchain, cons
 }
 
 void framebuffer_create(Swapchain* swapchain, const LogicalDevice& device, const RenderPass& render_pass) {
+    log_info("Creating a Framebuffers...");
     swapchain->frame_buffers.resize(swapchain->views.size());
     for(uint32_t i = 0; i < swapchain->views.size(); ++i) {
         VkImageView attachments[] = {swapchain->views[i]};
@@ -22,10 +23,13 @@ void framebuffer_create(Swapchain* swapchain, const LogicalDevice& device, const
             log_critical("Failed to Create the Framebuffers!");
         }
     }
+    log_success("The Framebuffers were Created!");
 }
 
 void framebuffer_destroy(const Swapchain& swapchain, const LogicalDevice& device) {
+    log_info("Destroying the Framebuffers...");
     for(auto& framebuffer : swapchain.frame_buffers) {
         vkDestroyFramebuffer(device.handle, framebuffer, nullptr);
     }
+    log_success("The Framebuffers were Destroyed!");
 }

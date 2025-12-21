@@ -4,11 +4,13 @@
 #include <vulkan/vulkan.h>
 
 VkPipelineLayoutCreateInfo pipeline_layout_create_info() {
+    log_info("Creating the Pipeline Layout Info...");
     VkPipelineLayoutCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     create_info.setLayoutCount = 0;
     create_info.pSetLayouts = nullptr;
     create_info.pushConstantRangeCount = 0;
+    log_success("The Pipeline Layout Info was Created!");
     return create_info;
 }
 

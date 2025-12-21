@@ -2,8 +2,6 @@
 #include "util/debug/Logger.hpp"
 
 VkImageViewCreateInfo image_view_create_info(const VkImage& image, const VkFormat& format) {
-    log_info("Creating the Image View Info...");
-    
     VkImageViewCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     create_info.image = image;
@@ -18,13 +16,11 @@ VkImageViewCreateInfo image_view_create_info(const VkImage& image, const VkForma
     create_info.subresourceRange.levelCount = 1;
     create_info.subresourceRange.baseArrayLayer = 0;
     create_info.subresourceRange.layerCount = 1;
-        
-    log_success("The Image View Info was Created!");
     return create_info;
 }
 
 void image_view_create(Swapchain* swapchain, const LogicalDevice& device) {
-    log_info("Creating an Image View...");
+    log_info("Creating an Image Views...");
     
     uint32_t image_count = 0;
     vkGetSwapchainImagesKHR(device.handle, swapchain->handle, &image_count, nullptr);
@@ -39,13 +35,13 @@ void image_view_create(Swapchain* swapchain, const LogicalDevice& device) {
             log_critical("Failed to Create the ImageView!");
         }
     }
-    log_success("The Image View was Created!");
+    log_success("The Image Views were Created!");
 }
 
 void image_view_destroy(const Swapchain& swapchain, const LogicalDevice& device) {
-    log_info("Destroying the Image View...");
+    log_info("Destroying the Image Views...");
     for(auto& view : swapchain.views) {
         vkDestroyImageView(device.handle, view, nullptr);
     }
-    log_success("The Image View was Destroyed!");
+    log_success("The Image Views were Destroyed!");
 }
