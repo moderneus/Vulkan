@@ -20,11 +20,13 @@ void vk_core_init(Core* vk_core, const Window& window) {
     render_pass_create(&vk_core->render_pass, vk_core->device, vk_core->swapchain);
     pipeline_create(&vk_core->pipeline, vk_core->device, vk_core->swapchain, vk_core->pipeline_layout, vk_core->render_pass);
     framebuffer_create(&vk_core->swapchain, vk_core->device, vk_core->render_pass);
+    command_pool_create(&vk_core->command_pool, vk_core->device, vk_core->phys_device, vk_core->surface);
     log_success("The Core was Initialized!");
 }
 
 void vk_core_destroy(Core* vk_core) {
     log_info("Destroying the Core...");
+    command_pool_destroy(vk_core->command_pool, vk_core->device);
     framebuffer_destroy(vk_core->swapchain, vk_core->device);
     pipeline_destroy(vk_core->pipeline, vk_core->device);
     render_pass_destroy(&vk_core->render_pass, vk_core->device);

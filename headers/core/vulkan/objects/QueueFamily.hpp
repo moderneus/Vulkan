@@ -11,4 +11,5 @@ struct QueueFamily {
 };
 
 bool queue_family_is_complete();
+
 QueueFamily queue_family_find(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
