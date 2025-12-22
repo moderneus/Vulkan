@@ -1,6 +1,19 @@
 #include "core/vulkan/objects/RenderPass.hpp"
 #include "util/debug/Logger.hpp"
 
+VkRenderPassBeginInfo render_pass_create_begin_info(const RenderPass &render_pass, const Swapchain &swapchain, uint32_t img_idx) {
+    VkRenderPassBeginInfo create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    create_info.renderPass = render_pass.handle;
+    create_info.framebuffer = swapchain.frame_buffers[img_idx];
+    create_info.renderArea.offset = {0, 0};
+    create_info.renderArea.extent = swapchain.extent;
+    VkClearValue clear_color = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+    create_info.clearValueCount = 1;
+    create_info.pClearValues = &clear_color;
+    return create_info;
+}
+
 VkAttachmentDescription render_pass_create_attachment_description(const Swapchain& swapchain) {
     log_info("Creating an Attachment Description...");
     VkAttachmentDescription description = {};
