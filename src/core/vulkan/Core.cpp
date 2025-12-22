@@ -21,6 +21,7 @@ void vk_core_init(Core* vk_core, const Window& window) {
     pipeline_create(&vk_core->pipeline, vk_core->device, vk_core->swapchain, vk_core->pipeline_layout, vk_core->render_pass);
     framebuffer_create(&vk_core->swapchain, vk_core->device, vk_core->render_pass);
     command_pool_create(&vk_core->command_pool, vk_core->device, vk_core->phys_device, vk_core->surface);
+    command_buffer_create(&vk_core->command_buffer, vk_core->device, vk_core->command_pool);
     log_success("The Core was Initialized!");
 }
 
