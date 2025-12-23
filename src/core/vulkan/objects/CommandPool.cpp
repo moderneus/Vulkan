@@ -2,20 +2,19 @@
 #include "core/vulkan/objects/QueueFamily.hpp"
 #include "util/debug/Logger.hpp"
 
-VkCommandPoolCreateInfo command_pool_create_info(const PhysicalDevice& phys_device, const Surface& surface) {
+VkCommandPoolCreateInfo command_pool_create_info(const QueueFamily& queue_family) {
     log_info("Creating the Command Pool Info...");
     VkCommandPoolCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     create_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    QueueFamily queue_family = queue_family_find(phys_device.handle, surface.handle);
     create_info.queueFamilyIndex = queue_family.graphics.value();
     log_success("The Command Pool Info was Created!");
     return create_info;
 }
 
-void command_pool_create(CommandPool* command_pool, const LogicalDevice& device, const PhysicalDevice& phys_device, const Surface& surface) {
+void command_pool_create(CommandPool* command_pool, const LogicalDevice& device, const QueueFamily& queue_family) {
     log_info("Creating a Command Pool...");
-    VkCommandPoolCreateInfo command_pool_info = command_pool_create_info(phys_device, surface);
+    VkCommandPoolCreateInfo command_pool_info = command_pool_create_info(queue_family);
     if(vkCreateCommandPool(device.handle, &command_pool_info, nullptr, &command_pool->handle) != VK_SUCCESS) {
         log_critical("Failed to Create the Command Pool!");
     }

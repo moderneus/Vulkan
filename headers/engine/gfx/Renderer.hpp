@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/vulkan/Core.hpp"
 #include "engine/window/Window.hpp"
 #include "util/EventManager.hpp"
 
@@ -12,6 +13,6 @@ void renderer_init(Renderer* renderer, Window* pwindow);
 
 void renderer_destroy(Renderer* renderer);
 
-void renderer_loop(Renderer* renderer);
+void renderer_loop(Renderer* renderer, const Core* vk_core);
 
-void renderer_draw();
+void renderer_draw(const Core* vk_core);

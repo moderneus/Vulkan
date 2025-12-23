@@ -1,7 +1,8 @@
 #pragma once
 
+#include "core/vulkan/objects/QueueFamily.hpp"
+#include "core/vulkan/objects/Queue.hpp"
 #include "core/vulkan/objects/PhysicalDevice.hpp"
-#include "core/vulkan/objects/Surface.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -9,14 +10,10 @@ struct LogicalDevice {
     VkDevice handle = VK_NULL_HANDLE;
 };
 
-VkDeviceQueueCreateInfo device_create_queue_info(const PhysicalDevice& phys_device, const Surface& surface);
+VkDeviceQueueCreateInfo device_create_queue_info(const QueueFamily& queue_family);
 
-VkDeviceCreateInfo device_create_info(
-    PhysicalDevice& phys_device, 
-    const VkDeviceQueueCreateInfo& queue_info, 
-    VkPhysicalDeviceFeatures* phys_device_features
-);
+VkDeviceCreateInfo device_create_info(const PhysicalDevice& phys_device, const VkDeviceQueueCreateInfo& queue_info, VkPhysicalDeviceFeatures* phys_device_features);
 
-void device_create(LogicalDevice* device, PhysicalDevice& phys_device, const Surface& surface);
+void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device);
 
 void device_destroy(const LogicalDevice& device);

@@ -1,5 +1,4 @@
 #include "core/vulkan/objects/PhysicalDevice.hpp"
-#include "core/vulkan/objects/QueueFamily.hpp"
 #include "core/vulkan/objects/Swapchain.hpp"
 #include "util/debug/Logger.hpp"
 
@@ -42,7 +41,6 @@ bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device) {
 }
 
 bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) {
-    queue_family_find(phys_device, surface);
     return phys_device_check_ext_support(phys_device) && swapchain_is_adequate(phys_device, surface);
 }
 

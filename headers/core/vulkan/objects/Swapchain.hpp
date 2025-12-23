@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/vulkan/objects/QueueFamily.hpp"
 #include "core/vulkan/objects/PhysicalDevice.hpp"
 #include "core/vulkan/objects/LogicalDevice.hpp"
 #include "core/vulkan/objects/Surface.hpp"
@@ -33,8 +34,8 @@ VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKH
 VkExtent2D swapchain_choose_extent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities);
 
 VkSwapchainCreateInfoKHR swapchain_create_info(
-        const VkSurfaceKHR& surface, 
-        const VkPhysicalDevice& phys_device, 
+        const QueueFamily& queue_family,
+        const Surface& surface,
         const VkSurfaceFormatKHR& format, 
         const VkPresentModeKHR& present_mode, 
         const VkExtent2D& extent, 
@@ -44,6 +45,6 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
 
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
 
-void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, const LogicalDevice& device, const Window& window, const Surface& surface);
+void swapchain_create(Swapchain* swapchain, const LogicalDevice& device, const PhysicalDevice& phys_device, const QueueFamily& queue_family, const Window& window, const Surface& surface);
 
 void swapchain_destroy(const Swapchain& swapchain, const LogicalDevice& device);

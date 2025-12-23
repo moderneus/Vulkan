@@ -8,29 +8,21 @@
 
 #include <cstdint>
 
-VkDeviceQueueCreateInfo device_create_queue_info(const PhysicalDevice& phys_device, const Surface& surface) {
+VkDeviceQueueCreateInfo device_create_queue_info(const QueueFamily& queue_family) {
     log_info("Creating the Queue Info..."); 
-    
     VkDeviceQueueCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    QueueFamily queue_family = queue_family_find(phys_device.handle, surface.handle);
     create_info.queueFamilyIndex = queue_family.graphics.value();
     create_info.queueCount = 1;
     const float queuePriority = 1.0f;
     create_info.pQueuePriorities = &queuePriority;
-    
     log_success("The Queue Info was Created!");
     return create_info;
 }
 
-VkDeviceCreateInfo device_create_info(
-    PhysicalDevice& phys_device, 
-    const VkDeviceQueueCreateInfo& queue_info, 
-    VkPhysicalDeviceFeatures* phys_device_features
-) 
+VkDeviceCreateInfo device_create_info(const PhysicalDevice& phys_device, const VkDeviceQueueCreateInfo& queue_info, VkPhysicalDeviceFeatures* phys_device_features) 
 {
     log_info("Creating the Logical Device Info...");
-    
     VkDeviceCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     create_info.pQueueCreateInfos = &queue_info;
@@ -41,21 +33,21 @@ VkDeviceCreateInfo device_create_info(
     create_info.ppEnabledExtensionNames = phys_device_exts.data();
     create_info.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
     create_info.ppEnabledLayerNames = validationLayers.data();
-    
     log_success("The Logical Device Info was Created!");
     return create_info;
 }
 
-void device_create(LogicalDevice* device, PhysicalDevice& phys_device, const Surface& surface) {
+void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device) {
     log_info("Creating a Logical Device...");
-    
     VkPhysicalDeviceFeatures features = {};
-    VkDeviceQueueCreateInfo queue_info = device_create_queue_info(phys_device, surface);
+    VkDeviceQueueCreateInfo queue_info = device_create_queue_info(queue_family);
     VkDeviceCreateInfo device_info = device_create_info(phys_device, queue_info, &features);
     
     if(vkCreateDevice(phys_device.handle, &device_info, nullptr, &device->handle) != VK_SUCCESS) {
         log_critical("Failed to Create the Logical Device!");
     }
+    vkGetDeviceQueue(device->handle, queue_family.graphics.value(), 0, &queue->graphics);
+    vkGetDeviceQueue(device->handle, queue_family.present.value(), 0, &queue->present);
     log_success("The Logical Device was created!");
 }
 

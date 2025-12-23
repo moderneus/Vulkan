@@ -12,24 +12,27 @@ void vk_core_init(Core* vk_core, const Window& window) {
     debug_msgr_setup(&vk_core->debug_msgr, vk_core->instance);
     surface_create(&vk_core->surface, vk_core->instance, window);
     phys_device_pick(&vk_core->phys_device, vk_core->instance, vk_core->surface);
-    device_create(&vk_core->device, vk_core->phys_device, vk_core->surface);
-    swapchain_create(&vk_core->swapchain, vk_core->phys_device, vk_core->device, window, vk_core->surface);
+    queue_family_find(&vk_core->queue_family, vk_core->phys_device, vk_core->surface);
+    device_create(&vk_core->device, &vk_core->queue, vk_core->queue_family, vk_core->phys_device);
+    swapchain_create(&vk_core->swapchain, vk_core->device, vk_core->phys_device, vk_core->queue_family, window, vk_core->surface);
     image_view_create(&vk_core->swapchain, vk_core->device);
     pipeline_layout_create(&vk_core->pipeline_layout, vk_core->device);
     render_pass_create(&vk_core->render_pass, vk_core->device, vk_core->swapchain);
     pipeline_create(&vk_core->pipeline, vk_core->device, vk_core->swapchain, vk_core->pipeline_layout, vk_core->render_pass);
     framebuffer_create(&vk_core->swapchain, vk_core->device, vk_core->render_pass);
-    command_pool_create(&vk_core->command_pool, vk_core->device, vk_core->phys_device, vk_core->surface);
+    command_pool_create(&vk_core->command_pool, vk_core->device, vk_core->queue_family);
     command_buffer_create(&vk_core->command_buffer, vk_core->device, vk_core->command_pool);
-    semaphore_create(&vk_core->semaphore, vk_core->device);
-    fence_create(&vk_core->fence, vk_core->device);
+    semaphore_create(&vk_core->img_available_semaphore, vk_core->device);
+    semaphore_create(&vk_core->render_finished_semaphore, vk_core->device);
+    fence_create(&vk_core->in_flight_fence, vk_core->device);
     log_success("The Core was Initialized!");
 }
 
 void vk_core_destroy(Core* vk_core) {
     log_info("Destroying the Core...");
-    fence_destroy(vk_core->fence, vk_core->device);
-    semaphore_destroy(vk_core->semaphore, vk_core->device);
+    fence_destroy(vk_core->in_flight_fence, vk_core->device);
+    semaphore_destroy(vk_core->render_finished_semaphore, vk_core->device);
+    semaphore_destroy(vk_core->img_available_semaphore, vk_core->device);
     command_pool_destroy(vk_core->command_pool, vk_core->device);
     framebuffer_destroy(vk_core->swapchain, vk_core->device);
     pipeline_destroy(vk_core->pipeline, vk_core->device);

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "core/vulkan/objects/Instance.hpp"
-#include "core/vulkan/objects/PhysicalDevice.hpp"
+#include "core/vulkan/objects/QueueFamily.hpp"
+#include "core/vulkan/objects/PhysicalDevice.hpp" 
 #include "core/vulkan/objects/LogicalDevice.hpp"
 #include "core/vulkan/objects/Surface.hpp"
 #include "core/vulkan/objects/Swapchain.hpp"
@@ -18,6 +19,8 @@
 struct Core {
     Instance instance;
     DebugMessenger debug_msgr;
+    QueueFamily queue_family;
+    Queue queue;
     PhysicalDevice phys_device;
     LogicalDevice device;
     Surface surface;
@@ -27,8 +30,9 @@ struct Core {
     RenderPass render_pass;
     CommandPool command_pool;
     CommandBuffer command_buffer;
-    Semaphore semaphore;
-    Fence fence;
+    Semaphore img_available_semaphore;
+    Semaphore render_finished_semaphore;
+    Fence in_flight_fence;
 };
 
 void vk_core_init(Core* vk_core, const Window& window);

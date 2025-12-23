@@ -1,5 +1,8 @@
 #pragma once
 
+#include "core/vulkan/objects/PhysicalDevice.hpp"
+#include "core/vulkan/objects/Surface.hpp"
+
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
@@ -12,4 +15,4 @@ struct QueueFamily {
 
 bool queue_family_is_complete();
 
-QueueFamily queue_family_find(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
+void queue_family_find(QueueFamily* queue_family, const PhysicalDevice& phys_device, const Surface& surface);

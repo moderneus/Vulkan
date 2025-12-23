@@ -10,34 +10,32 @@ bool queue_family_is_complete(const QueueFamily& queue_family) {
     return queue_family.graphics.has_value() && queue_family.present.has_value();
 }
 
-QueueFamily queue_family_find(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) {
+void queue_family_find(QueueFamily* queue_family, const PhysicalDevice& phys_device, const Surface& surface) {
     log_info("Seacrhing a Suitable Queue Families...");
     
     uint32_t queue_family_count = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(phys_device, &queue_family_count, nullptr);
+    vkGetPhysicalDeviceQueueFamilyProperties(phys_device.handle, &queue_family_count, nullptr);
     
     std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
-    vkGetPhysicalDeviceQueueFamilyProperties(phys_device, &queue_family_count, queue_families.data());
+    vkGetPhysicalDeviceQueueFamilyProperties(phys_device.handle, &queue_family_count, queue_families.data());
 
-    QueueFamily queue_family;
     for (uint32_t i = 0; i < queue_family_count ; ++i) {
         if (queue_families[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-            queue_family.graphics = i;
+            queue_family->graphics = i;
         }
         
         VkBool32 present_support = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(phys_device, i, surface, &present_support);
+        vkGetPhysicalDeviceSurfaceSupportKHR(phys_device.handle, i, surface.handle, &present_support);
         
         if(present_support) {
-            queue_family.present = i;
+            queue_family->present = i;
         }
-        if(queue_family_is_complete(queue_family)) {
+        if(queue_family_is_complete(*queue_family)) {
             break;
         }
     }
-    if(!queue_family_is_complete(queue_family)) {
+    if(!queue_family_is_complete(*queue_family)) {
         log_critical("Failed to Find any Suitable Queue Families!");
     }
     log_success("The Suitable Queue Families was Found!");
-    return queue_family;
 }

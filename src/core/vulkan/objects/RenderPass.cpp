@@ -48,7 +48,18 @@ VkSubpassDescription render_pass_create_subpass_description(VkAttachmentReferenc
     return description;
 }
 
-VkRenderPassCreateInfo render_pass_create_info(VkAttachmentDescription* pattachemnt_description, VkSubpassDescription* psubpass) {
+VkSubpassDependency render_pass_create_subpass_dependency() {
+    VkSubpassDependency dependency = {};
+    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    dependency.dstSubpass = 0;
+    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.srcAccessMask = 0;
+    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    return dependency;
+}
+
+VkRenderPassCreateInfo render_pass_create_info(VkAttachmentDescription* pattachemnt_description, VkSubpassDescription* psubpass, VkSubpassDependency* subpass_dependency) {
     log_info("Creating the Render Pass Info...");
     VkRenderPassCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -56,6 +67,8 @@ VkRenderPassCreateInfo render_pass_create_info(VkAttachmentDescription* pattache
     create_info.pAttachments = pattachemnt_description;
     create_info.subpassCount = 1;
     create_info.pSubpasses = psubpass;
+    create_info.dependencyCount = 1;
+    create_info.pDependencies = subpass_dependency;
     log_success("The Render Pass Info was Created!");
     return create_info;
 }
@@ -65,7 +78,8 @@ void render_pass_create(RenderPass* render_pass, const LogicalDevice& device, co
     VkAttachmentDescription color_attachment = render_pass_create_attachment_description(swapchain);
     VkAttachmentReference color_attachment_ref = render_pass_create_attachment_reference();
     VkSubpassDescription subpass = render_pass_create_subpass_description(&color_attachment_ref);
-    VkRenderPassCreateInfo render_pass_info = render_pass_create_info(&color_attachment, &subpass);
+    VkSubpassDependency subpass_dependency = render_pass_create_subpass_dependency();
+    VkRenderPassCreateInfo render_pass_info = render_pass_create_info(&color_attachment, &subpass, &subpass_dependency);
     if(vkCreateRenderPass(device.handle, &render_pass_info, nullptr, &render_pass->handle) != VK_SUCCESS) {
         log_critical("Failed to Create the Render Pass!");
     }

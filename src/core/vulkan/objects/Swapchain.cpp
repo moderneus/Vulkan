@@ -1,5 +1,4 @@
 #include "core/vulkan/objects/Swapchain.hpp"
-#include "core/vulkan/objects/QueueFamily.hpp"
 #include "engine/window/Window.hpp"
 #include "util/debug/Logger.hpp"
 
@@ -83,8 +82,8 @@ VkExtent2D swapchain_choose_extent(const Window& window, const VkSurfaceCapabili
 }
 
 VkSwapchainCreateInfoKHR swapchain_create_info(
-        const VkSurfaceKHR& surface, 
-        const VkPhysicalDevice& phys_device, 
+        const QueueFamily& queue_family,
+        const Surface& surface,
         const VkSurfaceFormatKHR& format, 
         const VkPresentModeKHR& present_mode, 
         const VkExtent2D& extent, 
@@ -96,7 +95,7 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
     
     VkSwapchainCreateInfoKHR create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    create_info.surface = surface;
+    create_info.surface = surface.handle;
     create_info.minImageCount = image_count;
     create_info.imageColorSpace = format.colorSpace;
     create_info.imageFormat = format.format;
@@ -104,13 +103,12 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
     create_info.imageArrayLayers = 1;
     create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     
-    QueueFamily queue_family = queue_family_find(phys_device, surface);
-    uint32_t queueFamilyIndices[] = {queue_family.graphics.has_value(), queue_family.present.has_value()};
+    uint32_t queue_family_indices[] = {queue_family.graphics.has_value(), queue_family.present.has_value()};
     
     if(queue_family.graphics != queue_family.present) {
         create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
         create_info.queueFamilyIndexCount = 2;
-        create_info.pQueueFamilyIndices = queueFamilyIndices;
+        create_info.pQueueFamilyIndices = queue_family_indices;
     }
     else {
         create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -127,7 +125,7 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
     return create_info;
 }
 
-void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, const LogicalDevice& device, const Window& window, const Surface& surface) {
+void swapchain_create(Swapchain* swapchain, const LogicalDevice& device, const PhysicalDevice& phys_device, const QueueFamily& queue_family, const Window& window, const Surface& surface) {
     log_info("Creating a Swapchain...");
     
     SwapchainSupportDetails details = swapchain_query_support_details(phys_device.handle, surface.handle);
@@ -141,7 +139,7 @@ void swapchain_create(Swapchain* swapchain, const PhysicalDevice& phys_device, c
     if(details.capabilities.maxImageCount > 0 && image_count > details.capabilities.maxImageCount) {
         image_count = details.capabilities.maxImageCount;
     }
-    VkSwapchainCreateInfoKHR swapchain_info = swapchain_create_info(surface.handle, phys_device.handle, format, present_mode, extent, details.capabilities, image_count);
+    VkSwapchainCreateInfoKHR swapchain_info = swapchain_create_info(queue_family, surface, format, present_mode, extent, details.capabilities, image_count);
     if(vkCreateSwapchainKHR(device.handle, &swapchain_info, nullptr, &swapchain->handle) != VK_SUCCESS) {
         log_critical("Failed to Create the Swapchain!");
     }
