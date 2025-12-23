@@ -9,6 +9,8 @@
 #include "core/vulkan/objects/Pipeline.hpp"
 #include "core/vulkan/objects/RenderPass.hpp"
 #include "core/vulkan/objects/CommandBuffer.hpp"
+#include "core/vulkan/objects/Semaphore.hpp"
+#include "core/vulkan/objects/Fence.hpp"
 #include "util/debug/ValidationLayers.hpp"
 
 #include <vulkan/vulkan.h>
@@ -25,6 +27,8 @@ struct Core {
     RenderPass render_pass;
     CommandPool command_pool;
     CommandBuffer command_buffer;
+    Semaphore semaphore;
+    Fence fence;
 };
 
 void vk_core_init(Core* vk_core, const Window& window);

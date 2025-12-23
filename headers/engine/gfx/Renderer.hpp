@@ -14,4 +14,4 @@ void renderer_destroy(Renderer* renderer);
 
 void renderer_loop(Renderer* renderer);
 
-void renderer_draw(Renderer* renderer);
+void renderer_draw();

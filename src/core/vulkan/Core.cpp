@@ -4,7 +4,6 @@
 #include "core/vulkan/objects/ImageView.hpp"
 #include "core/vulkan/objects/RenderPass.hpp"
 #include "core/vulkan/objects/Framebuffer.hpp"
-#include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
 
 void vk_core_init(Core* vk_core, const Window& window) {
@@ -22,11 +21,15 @@ void vk_core_init(Core* vk_core, const Window& window) {
     framebuffer_create(&vk_core->swapchain, vk_core->device, vk_core->render_pass);
     command_pool_create(&vk_core->command_pool, vk_core->device, vk_core->phys_device, vk_core->surface);
     command_buffer_create(&vk_core->command_buffer, vk_core->device, vk_core->command_pool);
+    semaphore_create(&vk_core->semaphore, vk_core->device);
+    fence_create(&vk_core->fence, vk_core->device);
     log_success("The Core was Initialized!");
 }
 
 void vk_core_destroy(Core* vk_core) {
     log_info("Destroying the Core...");
+    fence_destroy(vk_core->fence, vk_core->device);
+    semaphore_destroy(vk_core->semaphore, vk_core->device);
     command_pool_destroy(vk_core->command_pool, vk_core->device);
     framebuffer_destroy(vk_core->swapchain, vk_core->device);
     pipeline_destroy(vk_core->pipeline, vk_core->device);
