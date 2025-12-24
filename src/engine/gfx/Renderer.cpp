@@ -21,6 +21,7 @@ void renderer_loop(Renderer* renderer, const Core* vk_core) {
         event_manager_poll_events(&renderer->event_manager, renderer->pwindow);
         renderer_draw(vk_core);
     }
+    vkDeviceWaitIdle(vk_core->device.handle);
 }
 
 void renderer_draw(const Core* vk_core) {
@@ -32,7 +33,7 @@ void renderer_draw(const Core* vk_core) {
 
     vkResetCommandBuffer(vk_core->command_buffer.handle, 0);
     command_buffer_record(vk_core->command_buffer, vk_core->pipeline, vk_core->render_pass, vk_core->swapchain, img_idx);
-
+    
     VkSubmitInfo submit_info = {};
     submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
