@@ -103,7 +103,7 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
     create_info.imageArrayLayers = 1;
     create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     
-    uint32_t queue_family_indices[] = {queue_family.graphics.has_value(), queue_family.present.has_value()};
+    uint32_t queue_family_indices[] = {queue_family.graphics.value(), queue_family.present.value()};
     
     if(queue_family.graphics != queue_family.present) {
         create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
