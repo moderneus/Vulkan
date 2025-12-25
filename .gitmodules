@@ -1,6 +1,6 @@
-[submodule "code/libs/fmt"]
-	path = code/libs/fmt
-	url = https://github.com/fmtlib/fmt.git
 [submodule "code/libs/SDL"]
 	path = code/libs/SDL
 	url = https://github.com/libsdl-org/SDL.git
+[submodule "code/libs/fmt"]
+	path = code/libs/fmt
+	url = https://github.com/fmtlib/fmt.git
