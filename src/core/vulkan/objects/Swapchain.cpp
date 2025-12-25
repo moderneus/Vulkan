@@ -88,7 +88,7 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
         const VkPresentModeKHR& present_mode, 
         const VkExtent2D& extent, 
         const VkSurfaceCapabilitiesKHR& capabilities, 
-        uint32_t image_count
+        uint32_t img_count
 )
 {
     log_info("Creating the Swapchain Info...");
@@ -96,7 +96,7 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
     VkSwapchainCreateInfoKHR create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     create_info.surface = surface.handle;
-    create_info.minImageCount = image_count;
+    create_info.minImageCount = img_count;
     create_info.imageColorSpace = format.colorSpace;
     create_info.imageFormat = format.format;
     create_info.imageExtent = extent;
@@ -135,11 +135,11 @@ void swapchain_create(Swapchain* swapchain, const LogicalDevice& device, const P
     swapchain->format = format.format;
     swapchain->extent = extent;
     
-    uint32_t image_count = details.capabilities.minImageCount + 1;
-    if(details.capabilities.maxImageCount > 0 && image_count > details.capabilities.maxImageCount) {
-        image_count = details.capabilities.maxImageCount;
+    uint32_t img_count = details.capabilities.minImageCount + 1;
+    if(details.capabilities.maxImageCount > 0 && img_count > details.capabilities.maxImageCount) {
+        img_count = details.capabilities.maxImageCount;
     }
-    VkSwapchainCreateInfoKHR swapchain_info = swapchain_create_info(queue_family, surface, format, present_mode, extent, details.capabilities, image_count);
+    VkSwapchainCreateInfoKHR swapchain_info = swapchain_create_info(queue_family, surface, format, present_mode, extent, details.capabilities, img_count);
     if(vkCreateSwapchainKHR(device.handle, &swapchain_info, nullptr, &swapchain->handle) != VK_SUCCESS) {
         log_critical("Failed to Create the Swapchain!");
     }

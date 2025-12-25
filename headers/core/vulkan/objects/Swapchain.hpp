@@ -22,7 +22,7 @@ struct Swapchain {
     VkColorSpaceKHR color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
     std::vector<VkFramebuffer> frame_buffers;
     std::vector<VkImageView> views; 
-    std::vector<VkImage> images;
+    std::vector<VkImage> imgs;
 };
 
 SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
@@ -40,7 +40,7 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
         const VkPresentModeKHR& present_mode, 
         const VkExtent2D& extent, 
         const VkSurfaceCapabilitiesKHR& capabilities, 
-        uint32_t image_count
+        uint32_t img_count
 );
 
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);

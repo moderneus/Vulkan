@@ -5,8 +5,8 @@
 
 #include <vulkan/vulkan.h>
 
-VkImageViewCreateInfo image_view_create_info(const VkImage& image, const VkFormat& format);
+VkImageViewCreateInfo img_view_create_info(const VkImage& img, const VkFormat& format);
 
-void image_view_create(Swapchain* swapchain, const LogicalDevice& device);
+void img_view_create(Swapchain* swapchain, const LogicalDevice& device);
 
-void image_view_destroy(const Swapchain& swapchain, const LogicalDevice& device);
+void img_view_destroy(const Swapchain& swapchain, const LogicalDevice& device);

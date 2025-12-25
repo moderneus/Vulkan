@@ -15,7 +15,7 @@ void vk_core_init(Core* vk_core, const Window& window) {
     queue_family_find(&vk_core->queue_family, vk_core->phys_device, vk_core->surface);
     device_create(&vk_core->device, &vk_core->queue, vk_core->queue_family, vk_core->phys_device);
     swapchain_create(&vk_core->swapchain, vk_core->device, vk_core->phys_device, vk_core->queue_family, window, vk_core->surface);
-    image_view_create(&vk_core->swapchain, vk_core->device);
+    img_view_create(&vk_core->swapchain, vk_core->device);
     pipeline_layout_create(&vk_core->pipeline_layout, vk_core->device);
     render_pass_create(&vk_core->render_pass, vk_core->device, vk_core->swapchain);
     pipeline_create(&vk_core->pipeline, vk_core->device, vk_core->swapchain, vk_core->pipeline_layout, vk_core->render_pass);
@@ -38,7 +38,7 @@ void vk_core_destroy(Core* vk_core) {
     pipeline_destroy(vk_core->pipeline, vk_core->device);
     render_pass_destroy(&vk_core->render_pass, vk_core->device);
     pipeline_layout_destroy(vk_core->pipeline_layout, vk_core->device);
-    image_view_destroy(vk_core->swapchain, vk_core->device);
+    img_view_destroy(vk_core->swapchain, vk_core->device);
     swapchain_destroy(vk_core->swapchain, vk_core->device);
     device_destroy(vk_core->device);
     surface_destroy(vk_core->surface, vk_core->instance);

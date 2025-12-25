@@ -3,7 +3,6 @@
 #include "util/debug/Logger.hpp"
 
 VkViewport pipeline_create_viewport(const Swapchain& swapchain) {
-    log_info("Creating a Viewport...");
     VkViewport viewport = {};
     viewport.x = 0.0f;
     viewport.y = 0.0f;
@@ -11,16 +10,13 @@ VkViewport pipeline_create_viewport(const Swapchain& swapchain) {
     viewport.height = static_cast<float>(swapchain.extent.height);
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
-    log_success("The Viewport was created!");
     return viewport;
 }
 
 VkRect2D pipeline_create_scissor(const Swapchain& swapchain) {
-    log_info("Creating a Scissor...");
     VkRect2D scissor = {};
     scissor.offset = {0, 0};
     scissor.extent = swapchain.extent;
-    log_success("The Scissor was Created!");
     return scissor;
 }
 
