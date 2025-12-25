@@ -68,6 +68,6 @@ void renderer_draw(const Core* vk_core) {
     present_info.pResults = nullptr;
 
     vkQueuePresentKHR(vk_core->queue.present, &present_info);
-
+    
     current_frame = (current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
 }

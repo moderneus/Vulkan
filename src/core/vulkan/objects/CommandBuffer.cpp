@@ -15,7 +15,8 @@ void command_buffer_record(const CommandBuffer& command_buffer, const Pipeline& 
     if(vkBeginCommandBuffer(command_buffer.handle, &command_buffer_begin_info) != VK_SUCCESS) {
         log_critical("Failed to Begin Recording Command Buffer!");
     }
-    VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, swapchain, img_idx);
+    VkClearValue clear_color = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+    VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, swapchain, img_idx, clear_color);
     vkCmdBeginRenderPass(command_buffer.handle, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
         vkCmdBindPipeline(command_buffer.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);

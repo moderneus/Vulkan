@@ -8,7 +8,7 @@ struct RenderPass {
     VkRenderPass handle = VK_NULL_HANDLE;
 };
 
-VkRenderPassBeginInfo render_pass_create_begin_info(const RenderPass &render_pass, const Swapchain &swapchain, uint32_t img_idx);
+VkRenderPassBeginInfo render_pass_create_begin_info(const RenderPass &render_pass, const Swapchain &swapchain, uint32_t img_idx, const VkClearValue clear_color);
 
 VkAttachmentDescription render_pass_create_attachment_description(const Swapchain& swapchain);
 
