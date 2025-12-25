@@ -10,5 +10,5 @@
 
 # Screenshot
 
-[Now the program draws a multi-colored triangle!](images/triangle.jpg)
+![Now the program draws a multi-colored triangle!](images/triangle.jpg)
 
