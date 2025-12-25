@@ -1,5 +1,6 @@
 #include "core/vulkan/objects/Semaphore.hpp"
 #include "util/debug/Logger.hpp"
+#include "util/Constants.hpp"
 
 VkSemaphoreCreateInfo semaphore_create_info() {
     VkSemaphoreCreateInfo create_info = {};
@@ -7,16 +8,21 @@ VkSemaphoreCreateInfo semaphore_create_info() {
     return create_info;
 }
 
-void semaphore_create(Semaphore* semaphore, const LogicalDevice& device) {
+void semaphores_create(std::vector<Semaphore>* semaphores, const LogicalDevice& device) {
     VkSemaphoreCreateInfo semaphore_info = semaphore_create_info();
-    if(vkCreateSemaphore(device.handle, &semaphore_info, nullptr, &semaphore->handle) != VK_SUCCESS) {
-        log_critical("Failed to Create the Semaphore!");
+    semaphores->resize(MAX_FRAMES_IN_FLIGHT);
+    for(uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+        if(vkCreateSemaphore(device.handle, &semaphore_info, nullptr, &semaphores->data()[i].handle) != VK_SUCCESS) {
+            log_critical("Failed to Create the Semaphore!");
+        }
     }
 }
 
-void semaphore_destroy(const Semaphore& semaphore, const LogicalDevice& device) {
-    if(semaphore.handle == VK_NULL_HANDLE) {
-        log_error("Cannot Destroy the Semaphore::Semaphore is not Created!");
+void semaphores_destroy(const std::vector<Semaphore>& semaphores, const LogicalDevice& device) {
+    for(uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+        if(semaphores[i].handle == VK_NULL_HANDLE) {
+            log_error("Cannot Destroy the Semaphore::Semaphore is not Created!");
+        }
+        vkDestroySemaphore(device.handle, semaphores[i].handle, nullptr);
     }
-    vkDestroySemaphore(device.handle, semaphore.handle, nullptr);
 }

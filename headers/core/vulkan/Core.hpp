@@ -2,6 +2,7 @@
 
 #include "core/vulkan/objects/Instance.hpp"
 #include "core/vulkan/objects/QueueFamily.hpp"
+#include "core/vulkan/objects/Queue.hpp"
 #include "core/vulkan/objects/PhysicalDevice.hpp" 
 #include "core/vulkan/objects/LogicalDevice.hpp"
 #include "core/vulkan/objects/Surface.hpp"
@@ -16,6 +17,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include <vector>
+
 struct Core {
     Instance instance;
     DebugMessenger debug_msgr;
@@ -29,10 +32,10 @@ struct Core {
     Pipeline pipeline;
     RenderPass render_pass;
     CommandPool command_pool;
-    CommandBuffer command_buffer;
-    Semaphore img_available_semaphore;
-    Semaphore render_finished_semaphore;
-    Fence in_flight_fence;
+    std::vector<CommandBuffer> command_buffers;
+    std::vector<Semaphore> img_available_semaphores;
+    std::vector<Semaphore> render_finished_semaphores;
+    std::vector<Fence> in_flight_fences;
 };
 
 void vk_core_init(Core* vk_core, const Window& window);

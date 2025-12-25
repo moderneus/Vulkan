@@ -1,3 +1,5 @@
+#pragma once
+
 #include "core/vulkan/objects/LogicalDevice.hpp"
 
 #include <vulkan/vulkan.h>
@@ -8,6 +10,6 @@ struct Semaphore {
 
 VkSemaphoreCreateInfo semaphore_create_info();
 
-void semaphore_create(Semaphore* semaphore, const LogicalDevice& device);
+void semaphores_create(std::vector<Semaphore>* semaphores, const LogicalDevice& device);
 
-void semaphore_destroy(const Semaphore& semaphore, const LogicalDevice& device);
+void semaphores_destroy(const std::vector<Semaphore>& semaphores, const LogicalDevice& device);

@@ -1,4 +1,5 @@
 #include "core/vulkan/objects/CommandBuffer.hpp"
+#include "util/Constants.hpp"
 #include "util/debug/Logger.hpp"
 
 VkCommandBufferBeginInfo command_buffer_create_begin_info() {
@@ -31,21 +32,22 @@ void command_buffer_record(const CommandBuffer& command_buffer, const Pipeline& 
     }
 }
 
-VkCommandBufferAllocateInfo command_buffer_create_allocate_info(const CommandPool& command_pool) {
+VkCommandBufferAllocateInfo command_buffer_create_allocate_info(const CommandPool& command_pool, const std::vector<CommandBuffer>& command_buffers) {
     log_info("Creating Command Buffer Allocate Info...");
     VkCommandBufferAllocateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     create_info.commandPool = command_pool.handle;
     create_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    create_info.commandBufferCount = 1;
+    create_info.commandBufferCount = static_cast<uint32_t>(command_buffers.size());
     log_success("The Command Buffer Allocate Info was Created!");
     return create_info;
 }
 
-void command_buffer_create(CommandBuffer* command_buffer, const LogicalDevice& device, const CommandPool& command_pool) {
+void command_buffers_create(std::vector<CommandBuffer>* command_buffers, const LogicalDevice& device, const CommandPool& command_pool) {
     log_info("Creating a Command Buffer...");
-    VkCommandBufferAllocateInfo command_buffer_allocate_info = command_buffer_create_allocate_info(command_pool);
-    if(vkAllocateCommandBuffers(device.handle, &command_buffer_allocate_info, &command_buffer->handle) != VK_SUCCESS) {
+    command_buffers->resize(MAX_FRAMES_IN_FLIGHT);
+    VkCommandBufferAllocateInfo command_buffer_allocate_info = command_buffer_create_allocate_info(command_pool, *command_buffers);
+    if(vkAllocateCommandBuffers(device.handle, &command_buffer_allocate_info, &command_buffers->data()->handle) != VK_SUCCESS) {
         log_critical("Failed to Create the Command Buffer...");
     }
     log_success("The Command Buffer was Created!");

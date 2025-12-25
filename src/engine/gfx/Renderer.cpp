@@ -1,8 +1,11 @@
 #include "engine/gfx/Renderer.hpp"
 #include "util/EventManager.hpp"
 #include "util/debug/Logger.hpp"
+#include "util/Constants.hpp"
 
 #include <vulkan/vulkan.h>
+
+uint32_t current_frame = 0;
 
 void renderer_init(Renderer* renderer, Window* pwindow) {
     log_info("Initializing a Renderer...");
@@ -25,31 +28,31 @@ void renderer_loop(Renderer* renderer, const Core* vk_core) {
 }
 
 void renderer_draw(const Core* vk_core) {
-    vkWaitForFences(vk_core->device.handle, 1, &vk_core->in_flight_fence.handle, VK_TRUE, UINT64_MAX);
-    vkResetFences(vk_core->device.handle, 1, &vk_core->in_flight_fence.handle);
+    vkWaitForFences(vk_core->device.handle, 1, &vk_core->in_flight_fences[current_frame].handle, VK_TRUE, UINT64_MAX);
+    vkResetFences(vk_core->device.handle, 1, &vk_core->in_flight_fences[current_frame].handle);
 
     uint32_t img_idx;
-    vkAcquireNextImageKHR(vk_core->device.handle, vk_core->swapchain.handle, UINT64_MAX, vk_core->img_available_semaphore.handle, VK_NULL_HANDLE, &img_idx);
+    vkAcquireNextImageKHR(vk_core->device.handle, vk_core->swapchain.handle, UINT64_MAX, vk_core->img_available_semaphores[current_frame].handle, VK_NULL_HANDLE, &img_idx);
 
-    vkResetCommandBuffer(vk_core->command_buffer.handle, 0);
-    command_buffer_record(vk_core->command_buffer, vk_core->pipeline, vk_core->render_pass, vk_core->swapchain, img_idx);
+    vkResetCommandBuffer(vk_core->command_buffers[current_frame].handle, 0);
+    command_buffer_record(vk_core->command_buffers[current_frame], vk_core->pipeline, vk_core->render_pass, vk_core->swapchain, img_idx);
     
     VkSubmitInfo submit_info = {};
     submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-    VkSemaphore wait_semaphores[] = {vk_core->img_available_semaphore.handle};
+    VkSemaphore wait_semaphores[] = {vk_core->img_available_semaphores[current_frame].handle};
     VkPipelineStageFlags wait_stages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
     submit_info.waitSemaphoreCount = 1;
     submit_info.pWaitSemaphores = wait_semaphores;
     submit_info.pWaitDstStageMask = wait_stages;
     submit_info.commandBufferCount = 1;
-    submit_info.pCommandBuffers = &vk_core->command_buffer.handle;
+    submit_info.pCommandBuffers = &vk_core->command_buffers[current_frame].handle;
     
-    VkSemaphore signal_semaphores[] = {vk_core->render_finished_semaphore.handle};
+    VkSemaphore signal_semaphores[] = {vk_core->render_finished_semaphores[current_frame].handle};
     submit_info.signalSemaphoreCount = 1;
     submit_info.pSignalSemaphores = signal_semaphores;
 
-    if(vkQueueSubmit(vk_core->queue.graphics, 1, &submit_info, vk_core->in_flight_fence.handle) != VK_SUCCESS) {
+    if(vkQueueSubmit(vk_core->queue.graphics, 1, &submit_info, vk_core->in_flight_fences[current_frame].handle) != VK_SUCCESS) {
         log_critical("Failed to Submit Draw Command Buffer!");
     }
 
@@ -65,4 +68,6 @@ void renderer_draw(const Core* vk_core) {
     present_info.pResults = nullptr;
 
     vkQueuePresentKHR(vk_core->queue.present, &present_info);
+
+    current_frame = (current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
 }

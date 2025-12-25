@@ -1,3 +1,5 @@
+#pragma once
+
 #include "core/vulkan/objects/Swapchain.hpp"
 #include "core/vulkan/objects/LogicalDevice.hpp"
 #include "core/vulkan/objects/RenderPass.hpp"

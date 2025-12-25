@@ -1,3 +1,5 @@
+#pragma once
+
 #include "core/vulkan/objects/QueueFamily.hpp"
 #include "core/vulkan/objects/LogicalDevice.hpp"
 

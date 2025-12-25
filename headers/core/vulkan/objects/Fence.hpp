@@ -1,6 +1,10 @@
+#pragma once
+
 #include "core/vulkan/objects/LogicalDevice.hpp" 
 
 #include <vulkan/vulkan.h>
+
+#include <vector>
 
 struct Fence {
     VkFence handle = VK_NULL_HANDLE;
@@ -8,6 +12,6 @@ struct Fence {
 
 VkFenceCreateInfo fence_create_info();
 
-void fence_create(Fence* fence, const LogicalDevice& device);
+void fences_create(std::vector<Fence>* fences, const LogicalDevice& device);
 
-void fence_destroy(const Fence& fence, const LogicalDevice& device);
+void fences_destroy(const std::vector<Fence>& fences, const LogicalDevice& device);
