@@ -21,26 +21,26 @@
 ## Clone the repository
 
 ### Archlinux:
-- Install using pacman: ````sudo pacman -S git````
+- Install via pacman: ```sudo pacman -S git```
 
 ### Windows:
 - Git download page: [git](https://git-scm.com/install/windows)
 
 
 ### Clone: 
-- ````git clone --recurse-submodules https://github.com/moderneus/Vulkan````
+- ```git clone --recurse-submodules https://github.com/moderneus/Vulkan```
 
 ## Install the required dependencies
 
 ### Archlinux:
   
-  - ````sudo pacman -S vulkan-devel````
+  - ```sudo pacman -S vulkan-devel```
 
   - ```sudo pacman -S shaderc```
   
-  - ````sudo pacman -S cmake````
-  
-  - ````sudo pacman -S clang````
+  - ```sudo pacman -S cmake```
+
+  - ```sudo pacman -S clang```
 ### Windows:
 - [Vulkan SDK](https://vulkan.lunarg.com/sdk/home)
 - [CMake](https://cmake.org/download/)
