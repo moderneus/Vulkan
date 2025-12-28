@@ -35,6 +35,8 @@
 ### Archlinux:
   
   - ````sudo pacman -S vulkan-devel````
+
+  - ```sudo pacman -S shaderc```
   
   - ````sudo pacman -S cmake````
   
@@ -55,6 +57,8 @@
 **The commands are identical between the two operating systems, the only difference being that Windows uses a backslash.**
 - Commands:
 
+      glslc -O code/shaders/vert/VertexShader.vert -o code/shaders/vert/VertexShader.spv
+      glslc -O code/shaders/frag/FragmentShader.frag -o code/shaders/frag/FragmentShader.spv
       mkdir code/build
       cd code/build
       cmake ..
