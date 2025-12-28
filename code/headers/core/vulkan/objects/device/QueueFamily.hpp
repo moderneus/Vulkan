@@ -1,12 +1,12 @@
 #pragma once
 
-#include "core/vulkan/objects/device/PhysicalDevice.hpp"
-#include "core/vulkan/objects/instance/Surface.hpp"
-
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
 #include <optional>
+
+struct PhysicalDevice;
+struct Surface;
 
 struct QueueFamily {
     std::optional<uint32_t> graphics;

@@ -4,20 +4,23 @@
 #include "core/vulkan/objects/instance/Surface.hpp"
 #include "core/vulkan/objects/debug/DebugMessenger.hpp"
 #include "core/vulkan/objects/device/QueueFamily.hpp"
-#include "core/vulkan/objects/device/Queue.hpp"
 #include "core/vulkan/objects/device/PhysicalDevice.hpp" 
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "core/vulkan/objects/swapchain/Swapchain.hpp"
 #include "core/vulkan/objects/pipeline/PipelineLayout.hpp"
 #include "core/vulkan/objects/pipeline/Pipeline.hpp"
 #include "core/vulkan/objects/renderpass/RenderPass.hpp"
+#include "core/vulkan/objects/commands/CommandPool.hpp"
 #include "core/vulkan/objects/commands/CommandBuffer.hpp"
+#include "core/vulkan/objects/device/Queue.hpp"
 #include "core/vulkan/objects/sync/Semaphore.hpp"
 #include "core/vulkan/objects/sync/Fence.hpp"
 
 #include <vulkan/vulkan.h>
 
 #include <vector>
+
+struct Window;
 
 struct Core {
     Instance instance;

@@ -1,4 +1,8 @@
 #include "core/vulkan/objects/commands/CommandBuffer.hpp"
+#include "core/vulkan/objects/commands/CommandPool.hpp"
+#include "core/vulkan/objects/renderpass/RenderPass.hpp"
+#include "core/vulkan/objects/pipeline/Pipeline.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 #include "util/Constants.hpp"
 
@@ -10,7 +14,7 @@ VkCommandBufferBeginInfo command_buffer_create_begin_info() {
     return create_info;
 }
 
-void command_buffer_record(const CommandBuffer& command_buffer, const Pipeline& pipeline, const RenderPass& render_pass, const Swapchain& swapchain, uint32_t img_idx) {
+void command_buffer_record(const CommandBuffer& command_buffer, const Pipeline& pipeline, const RenderPass& render_pass, const Swapchain& swapchain, const uint32_t img_idx) {
     VkCommandBufferBeginInfo command_buffer_begin_info = command_buffer_create_begin_info();
     if(vkBeginCommandBuffer(command_buffer.handle, &command_buffer_begin_info) != VK_SUCCESS) {
         log_critical("Failed to Begin Recording Command Buffer!");

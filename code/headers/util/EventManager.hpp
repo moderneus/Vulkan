@@ -1,8 +1,8 @@
 #pragma once
 
-#include "engine/window/Window.hpp"
-
 #include "SDL3/SDL_events.h"
+
+struct Window;
 
 struct EventManager {
     SDL_Event event;

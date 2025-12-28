@@ -1,4 +1,5 @@
 #include "core/vulkan/objects/sync/Fence.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 #include "util/Constants.hpp"
 

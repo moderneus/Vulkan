@@ -1,4 +1,6 @@
 #include "core/vulkan/objects/device/QueueFamily.hpp"
+#include "core/vulkan/objects/device/PhysicalDevice.hpp"
+#include "core/vulkan/objects/instance/Surface.hpp"
 #include "util/debug/Logger.hpp"
 
 #include <vulkan/vulkan.h>

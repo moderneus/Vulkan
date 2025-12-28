@@ -1,4 +1,6 @@
 #include "core/vulkan/objects/device/PhysicalDevice.hpp"
+#include "core/vulkan/objects/instance/Instance.hpp"
+#include "core/vulkan/objects/instance/Surface.hpp"
 #include "core/vulkan/objects/swapchain/Swapchain.hpp"
 #include "util/debug/Logger.hpp"
 

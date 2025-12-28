@@ -1,13 +1,12 @@
 #pragma once
 
-#include "core/vulkan/objects/instance/Surface.hpp"
-#include "core/vulkan/objects/instance/Instance.hpp"
-
 #include <vulkan/vulkan.h>
 
-#include <cstdint>
 #include <string>
 #include <vector>
+
+struct Surface;
+struct Instance;
 
 struct PhysicalDevice {
     VkPhysicalDevice handle = VK_NULL_HANDLE;

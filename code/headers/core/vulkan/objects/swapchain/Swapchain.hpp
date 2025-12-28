@@ -1,13 +1,14 @@
 #pragma once
 
-#include "core/vulkan/objects/device/QueueFamily.hpp"
-#include "core/vulkan/objects/device/PhysicalDevice.hpp"
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-#include "core/vulkan/objects/instance/Surface.hpp"
-
 #include <vulkan/vulkan.h>
 
 #include <vector>
+
+struct Window;
+struct QueueFamily;
+struct PhysicalDevice;
+struct LogicalDevice;
+struct Surface;
 
 struct SwapchainSupportDetails {
     VkSurfaceCapabilitiesKHR capabilities;

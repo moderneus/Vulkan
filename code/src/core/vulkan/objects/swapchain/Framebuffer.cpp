@@ -1,4 +1,7 @@
 #include "core/vulkan/objects/swapchain/Framebuffer.hpp"
+#include "core/vulkan/objects/swapchain/Swapchain.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
+#include "core/vulkan/objects/renderpass/RenderPass.hpp"
 #include "util/debug/Logger.hpp"
 
 VkFramebufferCreateInfo framebuffer_create_info(const Swapchain& swapchain, const RenderPass& render_pass, const VkImageView* attachments) {

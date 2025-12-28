@@ -1,4 +1,5 @@
 #include "core/vulkan/objects/pipeline/PipelineLayout.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 
 #include <vulkan/vulkan.h>

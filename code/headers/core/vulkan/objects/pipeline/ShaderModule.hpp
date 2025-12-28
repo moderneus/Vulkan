@@ -1,11 +1,11 @@
 #pragma once
 
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-
 #include <vulkan/vulkan.h>
 
 #include <string>
 #include <vector>
+
+struct LogicalDevice;
 
 struct ShaderModule { 
     VkShaderModule handle = VK_NULL_HANDLE;

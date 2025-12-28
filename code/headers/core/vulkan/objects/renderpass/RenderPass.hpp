@@ -1,8 +1,9 @@
 #pragma once
 
-#include "core/vulkan/objects/swapchain/Swapchain.hpp"
-
 #include <vulkan/vulkan.h>
+
+struct LogicalDevice;
+struct Swapchain;
 
 struct RenderPass {
     VkRenderPass handle = VK_NULL_HANDLE;

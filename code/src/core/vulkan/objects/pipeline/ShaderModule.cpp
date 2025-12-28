@@ -1,4 +1,5 @@
 #include "core/vulkan/objects/pipeline/ShaderModule.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 #include "util/File.hpp"
 

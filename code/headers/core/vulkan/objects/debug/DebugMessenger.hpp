@@ -1,6 +1,8 @@
-#include "core/vulkan/objects/instance/Instance.hpp"
+#pragma once
 
 #include <vulkan/vulkan.h>
+
+struct Instance;
 
 struct DebugMessenger {
     VkDebugUtilsMessengerEXT handle = VK_NULL_HANDLE;

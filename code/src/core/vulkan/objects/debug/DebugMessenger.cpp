@@ -1,4 +1,5 @@
 #include "core/vulkan/objects/debug/DebugMessenger.hpp"
+#include "core/vulkan/objects/instance/Instance.hpp"
 #include "util/debug/Logger.hpp"
 
 #include "fmt/core.h"
@@ -53,7 +54,6 @@ VkDebugUtilsMessengerCreateInfoEXT debug_msgr_create_info() {
                                  VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
     
     create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
-                             VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
                              VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
     
     create_info.pfnUserCallback = callback;

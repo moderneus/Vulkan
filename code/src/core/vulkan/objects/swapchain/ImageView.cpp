@@ -1,4 +1,6 @@
 #include "core/vulkan/objects/swapchain/ImageView.hpp"
+#include "core/vulkan/objects/swapchain/Swapchain.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 
 VkImageViewCreateInfo img_view_create_info(const VkImage& img, const VkFormat& format) {

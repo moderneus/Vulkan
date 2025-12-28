@@ -1,14 +1,15 @@
 #pragma once
 
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "core/vulkan/objects/pipeline/ShaderModule.hpp"
-#include "core/vulkan/objects/swapchain/Swapchain.hpp"
-#include "core/vulkan/objects/pipeline/PipelineLayout.hpp"
-#include "core/vulkan/objects/renderpass/RenderPass.hpp"
 
 #include <vulkan/vulkan.h>
 
 #include <array>
+
+struct LogicalDevice;
+struct Swapchain;
+struct PipelineLayout;
+struct RenderPass;
 
 struct Pipeline {
     VkPipeline handle = VK_NULL_HANDLE;

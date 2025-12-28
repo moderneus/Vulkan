@@ -1,10 +1,10 @@
 #pragma once
 
-#include "core/vulkan/objects/device/QueueFamily.hpp"
-#include "core/vulkan/objects/device/Queue.hpp"
-#include "core/vulkan/objects/device/PhysicalDevice.hpp"
-
 #include <vulkan/vulkan.h>
+
+struct PhysicalDevice;
+struct QueueFamily;
+struct Queue;
 
 struct LogicalDevice {
     VkDevice handle = VK_NULL_HANDLE;

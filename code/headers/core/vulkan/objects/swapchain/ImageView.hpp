@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-#include "core/vulkan/objects/swapchain/Swapchain.hpp"
-
 #include <vulkan/vulkan.h>
+
+struct LogicalDevice;
+struct Swapchain;
 
 VkImageViewCreateInfo img_view_create_info(const VkImage& img, const VkFormat& format);
 

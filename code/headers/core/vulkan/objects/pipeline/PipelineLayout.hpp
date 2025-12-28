@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-
 #include <vulkan/vulkan.h>
+
+struct LogicalDevice;
 
 struct PipelineLayout {
     VkPipelineLayout handle = VK_NULL_HANDLE;

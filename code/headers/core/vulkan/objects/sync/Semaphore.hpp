@@ -1,8 +1,10 @@
 #pragma once
 
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-
 #include <vulkan/vulkan.h>
+
+#include <vector>
+
+struct LogicalDevice;
 
 struct Semaphore {
     VkSemaphore handle = VK_NULL_HANDLE;

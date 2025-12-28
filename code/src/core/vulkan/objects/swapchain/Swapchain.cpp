@@ -1,4 +1,8 @@
 #include "core/vulkan/objects/swapchain/Swapchain.hpp"
+#include "core/vulkan/objects/device/QueueFamily.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
+#include "core/vulkan/objects/device/PhysicalDevice.hpp"
+#include "core/vulkan/objects/instance/Surface.hpp"
 #include "engine/window/Window.hpp"
 #include "util/debug/Logger.hpp"
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/vulkan/Core.hpp"
-#include "engine/window/Window.hpp"
 #include "util/EventManager.hpp"
+
+struct Core;
 
 struct Renderer {
     Window* pwindow;

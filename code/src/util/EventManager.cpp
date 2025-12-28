@@ -1,4 +1,5 @@
 #include "util/EventManager.hpp"
+#include "engine/window/Window.hpp"
 
 void event_manager_poll_events(EventManager* event_manager, Window* window) {
     while(SDL_PollEvent(&event_manager->event)) {

@@ -1,4 +1,5 @@
 #include "core/vulkan/objects/commands/CommandPool.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "core/vulkan/objects/device/QueueFamily.hpp"
 #include "util/debug/Logger.hpp"
 

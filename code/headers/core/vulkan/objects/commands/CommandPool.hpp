@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/vulkan/objects/device/QueueFamily.hpp"
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-
 #include <vulkan/vulkan.h>
+
+struct QueueFamily;
+struct LogicalDevice;
 
 struct CommandPool {
     VkCommandPool handle = VK_NULL_HANDLE;

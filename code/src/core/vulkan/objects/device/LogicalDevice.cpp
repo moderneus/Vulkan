@@ -1,6 +1,7 @@
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "core/vulkan/objects/device/PhysicalDevice.hpp"
 #include "core/vulkan/objects/device/QueueFamily.hpp"
+#include "core/vulkan/objects/device/Queue.hpp"
 #include "util/debug/ValidationLayers.hpp"
 #include "util/debug/Logger.hpp"
 

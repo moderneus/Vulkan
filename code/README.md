@@ -77,7 +77,8 @@ code
 │   │           ├── device
 │   │           │   ├── LogicalDevice.cpp
 │   │           │   ├── PhysicalDevice.cpp
-│   │           │   └── QueueFamily.cpp
+│   │           │   ├── QueueFamily.cpp
+│   │           │   └── Queue.cpp
 │   │           ├── instance
 │   │           │   ├── Instance.cpp
 │   │           │   └── Surface.cpp

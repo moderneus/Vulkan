@@ -1,10 +1,10 @@
 #pragma once
 
-#include "core/vulkan/objects/device/LogicalDevice.hpp" 
-
 #include <vulkan/vulkan.h>
 
 #include <vector>
+
+struct LogicalDevice;
 
 struct Fence {
     VkFence handle = VK_NULL_HANDLE;

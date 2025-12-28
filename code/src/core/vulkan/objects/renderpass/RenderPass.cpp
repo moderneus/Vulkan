@@ -1,4 +1,6 @@
 #include "core/vulkan/objects/renderpass/RenderPass.hpp"
+#include "core/vulkan/objects/swapchain/Swapchain.hpp"
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 
 VkRenderPassBeginInfo render_pass_create_begin_info(const RenderPass &render_pass, const Swapchain &swapchain, uint32_t img_idx, const VkClearValue clear_color) {
