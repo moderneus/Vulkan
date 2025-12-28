@@ -2,11 +2,11 @@
 
 **This is my own take on the code from the Vulkan Tutorial. It's not a unique project or design — it's simply my vision of the potential structure of a good Vulkan program.**
 
-- Feel free to criticize any part of the program.
+- **Feel free to criticize any part of the program.**
 
-- Nothing prevents you from using any of the ideas.
+- **Nothing prevents you from using any of the ideas.**
 
-- Give it a star if you like it! :)
+- **Give it a star if you like it! :)**
 
 # Screenshot!
 
@@ -21,10 +21,10 @@
 ## Clone the repository
 
 ### Archlinux:
-- Install via pacman: ```sudo pacman -S git```
+- **Install via pacman:** ```sudo pacman -S git```
 
 ### Windows:
-- Git download page: [git](https://git-scm.com/install/windows)
+- **Git download page:** [git](https://git-scm.com/install/windows)
 
 
 ### Clone: 
@@ -55,7 +55,7 @@
 
 ## Building!
 **The commands are identical between the two operating systems, the only difference being that Windows uses a backslash.**
-- Commands:
+- **Commands:**
 
       glslc -O code/shaders/vert/VertexShader.vert -o code/shaders/vert/VertexShader.spv
       glslc -O code/shaders/frag/FragmentShader.frag -o code/shaders/frag/FragmentShader.spv
