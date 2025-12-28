@@ -20,8 +20,7 @@ VkDeviceQueueCreateInfo device_create_queue_info(const QueueFamily& queue_family
     return create_info;
 }
 
-VkDeviceCreateInfo device_create_info(const PhysicalDevice& phys_device, const VkDeviceQueueCreateInfo& queue_info, VkPhysicalDeviceFeatures* phys_device_features) 
-{
+VkDeviceCreateInfo device_create_info(const PhysicalDevice& phys_device, const VkDeviceQueueCreateInfo& queue_info, VkPhysicalDeviceFeatures* phys_device_features) {
     log_info("Creating the Logical Device Info...");
     VkDeviceCreateInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;

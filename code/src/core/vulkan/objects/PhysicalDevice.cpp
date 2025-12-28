@@ -77,7 +77,7 @@ VkPhysicalDeviceFeatures phys_device_get_features(const PhysicalDevice& phys_dev
     VkPhysicalDeviceFeatures phys_device_features = {};
     vkGetPhysicalDeviceFeatures(phys_device.handle, &phys_device_features);
     if(phys_device_features.geometryShader != VK_TRUE) {
-        log_critical("The found GPU doesn't have Geometry Shader Feature!");
+        log_critical("The found GPU doesn't have a Geometry Shader Feature!");
     }
     return phys_device_features;
 }

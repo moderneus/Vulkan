@@ -12,7 +12,7 @@
 
 **Now the program can draw a multi-colored triangle! :DDD**
 
-![Now the program draws a multi-colored triangle!](images/triangle.jpg)
+![Triangle](images/triangle.jpg)
 
 # How to build?
 

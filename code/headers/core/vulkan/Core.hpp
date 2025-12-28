@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/vulkan/objects/Instance.hpp"
+#include "core/vulkan/objects/DebugMessenger.hpp"
 #include "core/vulkan/objects/QueueFamily.hpp"
 #include "core/vulkan/objects/Queue.hpp"
 #include "core/vulkan/objects/PhysicalDevice.hpp" 
@@ -13,7 +14,6 @@
 #include "core/vulkan/objects/CommandBuffer.hpp"
 #include "core/vulkan/objects/Semaphore.hpp"
 #include "core/vulkan/objects/Fence.hpp"
-#include "util/debug/ValidationLayers.hpp"
 
 #include <vulkan/vulkan.h>
 

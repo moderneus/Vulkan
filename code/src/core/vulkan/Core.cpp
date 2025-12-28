@@ -1,8 +1,5 @@
 #include "core/vulkan/Core.hpp"
-#include "core/vulkan/objects/PhysicalDevice.hpp"
-#include "core/vulkan/objects/Pipeline.hpp"
 #include "core/vulkan/objects/ImageView.hpp"
-#include "core/vulkan/objects/RenderPass.hpp"
 #include "core/vulkan/objects/Framebuffer.hpp"
 #include "util/debug/Logger.hpp"
 

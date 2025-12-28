@@ -11,7 +11,7 @@ bool queue_family_is_complete(const QueueFamily& queue_family) {
 }
 
 void queue_family_find(QueueFamily* queue_family, const PhysicalDevice& phys_device, const Surface& surface) {
-    log_info("Seacrhing a Suitable Queue Families...");
+    log_info("Searching a Suitable Queue Families...");
     
     uint32_t queue_family_count = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(phys_device.handle, &queue_family_count, nullptr);
@@ -23,7 +23,6 @@ void queue_family_find(QueueFamily* queue_family, const PhysicalDevice& phys_dev
         if (queue_families[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
             queue_family->graphics = i;
         }
-        
         VkBool32 present_support = false;
         vkGetPhysicalDeviceSurfaceSupportKHR(phys_device.handle, i, surface.handle, &present_support);
         
@@ -37,5 +36,5 @@ void queue_family_find(QueueFamily* queue_family, const PhysicalDevice& phys_dev
     if(!queue_family_is_complete(*queue_family)) {
         log_critical("Failed to Find any Suitable Queue Families!");
     }
-    log_success("The Suitable Queue Families was Found!");
+    log_success("The Suitable Queue Families were Found!");
 }
