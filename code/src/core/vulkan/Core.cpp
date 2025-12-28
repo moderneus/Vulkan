@@ -1,6 +1,6 @@
 #include "core/vulkan/Core.hpp"
-#include "core/vulkan/objects/ImageView.hpp"
-#include "core/vulkan/objects/Framebuffer.hpp"
+#include "core/vulkan/objects/swapchain/ImageView.hpp"
+#include "core/vulkan/objects/swapchain/Framebuffer.hpp"
 #include "util/debug/Logger.hpp"
 
 void vk_core_init(Core* vk_core, const Window& window) {

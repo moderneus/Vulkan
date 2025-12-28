@@ -1,19 +1,19 @@
 #pragma once
 
-#include "core/vulkan/objects/Instance.hpp"
-#include "core/vulkan/objects/DebugMessenger.hpp"
-#include "core/vulkan/objects/QueueFamily.hpp"
-#include "core/vulkan/objects/Queue.hpp"
-#include "core/vulkan/objects/PhysicalDevice.hpp" 
-#include "core/vulkan/objects/LogicalDevice.hpp"
-#include "core/vulkan/objects/Surface.hpp"
-#include "core/vulkan/objects/Swapchain.hpp"
-#include "core/vulkan/objects/PipelineLayout.hpp"
-#include "core/vulkan/objects/Pipeline.hpp"
-#include "core/vulkan/objects/RenderPass.hpp"
-#include "core/vulkan/objects/CommandBuffer.hpp"
-#include "core/vulkan/objects/Semaphore.hpp"
-#include "core/vulkan/objects/Fence.hpp"
+#include "core/vulkan/objects/instance/Instance.hpp"
+#include "core/vulkan/objects/instance/Surface.hpp"
+#include "core/vulkan/objects/debug/DebugMessenger.hpp"
+#include "core/vulkan/objects/device/QueueFamily.hpp"
+#include "core/vulkan/objects/device/Queue.hpp"
+#include "core/vulkan/objects/device/PhysicalDevice.hpp" 
+#include "core/vulkan/objects/device/LogicalDevice.hpp"
+#include "core/vulkan/objects/swapchain/Swapchain.hpp"
+#include "core/vulkan/objects/pipeline/PipelineLayout.hpp"
+#include "core/vulkan/objects/pipeline/Pipeline.hpp"
+#include "core/vulkan/objects/renderpass/RenderPass.hpp"
+#include "core/vulkan/objects/commands/CommandBuffer.hpp"
+#include "core/vulkan/objects/sync/Semaphore.hpp"
+#include "core/vulkan/objects/sync/Fence.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -21,12 +21,12 @@
 
 struct Core {
     Instance instance;
+    Surface surface;
     DebugMessenger debug_msgr;
     QueueFamily queue_family;
     Queue queue;
     PhysicalDevice phys_device;
     LogicalDevice device;
-    Surface surface;
     Swapchain swapchain;
     PipelineLayout pipeline_layout;
     Pipeline pipeline;
