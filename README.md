@@ -49,9 +49,9 @@
 ## Build Environment
 
 ### Archlinux:
-- You have everything ready, you can start building!
+- **You have everything ready, you can start building!**
 ### Windows: 
-- be sure to add the dependency bin folders to the global PATH variable!
+- **Be sure to add the dependency bin folders to the global PATH variable!**
 
 ## Building!
 **The commands are identical between the two operating systems, the only difference being that Windows uses a backslash.**
