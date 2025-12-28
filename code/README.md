@@ -35,12 +35,14 @@ code
 │   │           └── sync
 │   │               ├── Fence.hpp
 │   │               └── Semaphore.hpp
+│   │
 │   ├── engine
 │   │   ├── Engine.hpp
 │   │   ├── gfx
 │   │   │   └── Renderer.hpp
 │   │   └── window
 │   │       └── Window.hpp
+│   │
 │   └── util
 │       ├── Constants.hpp
 │       ├── debug
@@ -49,16 +51,18 @@ code
 │       ├── EventManager.hpp
 │       ├── File.hpp
 │       └── String.hpp
-├── README.md
+│
+├── libs
+│   ├── SDL
+│   └── fmt
+│
 ├── shaders
 │   ├── frag
-│   │   ├── FragmentShader.frag
-│   │   └── FragmentShader.spv
+│   │   └── FragmentShader.frag
 │   └── vert
-│       ├── FragmentShader.spv
-│       ├── VertexShader.spv
 │       └── VertexShader.vert
-└── src
+│
+├── src
 │   ├── core
 │   │   ├── SDL
 │   │   │   └── SDL.cpp
@@ -90,12 +94,14 @@ code
 │   │           └── sync
 │   │               ├── Fence.cpp
 │   │               └── Semaphore.cpp
+│   │
 │   ├── engine
 │   │   ├── Engine.cpp
 │   │   ├── gfx
 │   │   │   └── Renderer.cpp
 │   │   └── window
 │   │       └── Window.cpp
+│   │   
 │   ├── util
 │   │   ├── debug
 │   │   │   ├── Logger.cpp
@@ -104,6 +110,7 @@ code
 │   │   ├── File.cpp
 │   │   └── String.cpp
 │   └── Vulkan.cpp
-│ 
+│
+├── README.md 
 └── CMakeLists.txt
 ````
