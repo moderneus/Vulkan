@@ -52,12 +52,10 @@ void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue
 }
 
 void device_destroy(const LogicalDevice& device) {
-    log_info("Destroying the Logical Device...");
-    
+    log_info("Destroying the Logical Device...");
     if(device.handle == VK_NULL_HANDLE) {
         log_error("Cannot Destroy the Logical Device::Logical Device is not Created!");
     }
-    vkDestroyDevice(device.handle, nullptr);
-    
+    vkDestroyDevice(device.handle, nullptr);
     log_success("The Logical Device was Destroyed!");
 }
