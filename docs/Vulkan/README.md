@@ -1,8 +1,9 @@
 # Preface
 You shouldn't treat this as the Vulkan API documentation,  tutorial, or something like that. It's just my own understanding and my own view of Vulkan API that I’d like to share. I'm writing this as notes that I can use while I'm programming. If you have noticed that any of the explanations here is wrong then please open an issue and tell me about it so I can rewrite and fix it. By the way English is not my first language, so you might see many mistakes.
 
-# Topics
-Objects are sorted by creation order.
+# Introduction
+- **[Vulkan](Vulkan.md)**
+# Vulkan Objects
 - **[Instance](Vulkan-Objects/Instance.md)**
 - **[DebugMessenger](Vulkan-Objects/DebugMessenger.md)**
 - **[Surface](Vulkan-Objects/Surface.md)**
