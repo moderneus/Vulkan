@@ -1,4 +1,7 @@
-build
+code/build
+code/shaders/frag/FragmentShader.spv
+code/shaders/vert/VertexShader.spv
 .cache
-.vscode
-logs
+docs
+
+
