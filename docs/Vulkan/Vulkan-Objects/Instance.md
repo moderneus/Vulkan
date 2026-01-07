@@ -1,12 +1,12 @@
 # What is an Instance?
-The Instance is a Vulkan object that stores a context of your application. Unlike OpenGL you must create it explicitly. 
+The Instance is a Vulkan object that stores a context of your application. Unlike OpenGL, you must create it explicitly. 
 The context is set of conditions in which you run the program, such as API version, enabled extensions, enabled layers and a platform-specific details.
-What is the extensions? Extensions are an additional functionality for Vulkan, each extension has a name like "*VK_EXT_debug_utils*". 
-And what is the layers? Layers are implementations placed between the application and the driver, adding additional checks or modifying Vulkan behavior.
+What are the extensions? Extensions are an additional functionality for Vulkan, each extension has a name like "*VK_EXT_debug_utils*". 
+And what are the layers? Layers are implementations placed between the application and the driver, adding additional checks or modifying Vulkan behavior.
 
 # How to create?
 
-For all of the objects we'll create a relevant struct where we'll store the object handle. 
+For all of the objects, we'll create a relevant struct where we'll store the object handle. 
 
 ```cpp
 struct Instance
@@ -15,7 +15,7 @@ struct Instance
 };
 ```
 
-Almost all of the objects can be created by vkCreate*ObjectName()* function, for example: *vkCreateInstance()*, *vkCreateDevice()*, *vkCreateShaderModule()*, etc. 
+Almost all objects can be created by vkCreate*ObjectName()* function, for example: *vkCreateInstance()*, *vkCreateDevice()*, *vkCreateShaderModule()*, etc. 
 
 ```cpp
 void instance_create(Instance* instance)
@@ -32,12 +32,12 @@ void instance_create(Instance* instance)
 }
 ```
 
-But you can see that we have to create an info of this object. The info is just a struct with some fields (usually the settings) that we have to setup.
-It's not difficult, but it might take the significant timew while you read the documentation and explore all of the values of this fields.
-Since I'm writing it as note then I'll very briefly explain all of the fields and chosed value for it, I'll also skip any obviosly moments for brevity. 
+But you can see that we have to create an info for this object. The info is just a struct with some fields (usually the settings) that we have to setup.
+It's not difficult, but it might take significant time while you read the documentation and explore all of the values of this fields.
+Since I'm writing this as a note, I'll briefly explain all of the fields and chosed value for it, I'll also skip any obviosly moments for brevity. 
 If you want to know the details then you can find a link to the documentation at the very bottom.
 
-So, let's take a look over the Instance info creation! Firstly we have to create an application info and then pass it to the Instance info. I did it in the relevant function:
+So, let's take a look over the Instance info creation! Firstly we have to create application info and then pass it to the Instance info. I did it in the relevant function:
 
 ```cpp
 VkApplicationInfo instance_create_app_info()
@@ -66,7 +66,7 @@ std::vector<const char*> instance_get_required_exts()
 }
 ```
 
-Since we're using a window system then we have to enable some extensions for presenting a rendered image to the screen, such as: *VK_KHR_surface*, *VK_KHR_win32_surface*. And also we need to enable the debug extension to receive a debug messages from the Validation Layers. I'll not explain now how to enable the Validation Layers and how to create a DebugMessenger, you can read it **[here](DebugMessenger.md)**. Well, to get the needed extensions for your platform from SDL we can use *SDL_Vulkan_GetInstanceExtensions(Uint32 \*count)* function. Next we're just copying the data from the array to the vector and adding the *VK_EXT_debug_utils* extension.
+Since we're using a window system, we have to enable some extensions for presenting a rendered image to the screen, such as: *VK_KHR_surface*, *VK_KHR_win32_surface*. And also we need to enable the debug extension to receive a debug messages from the Validation Layers. I won't explain now how to enable the Validation Layers and how to create a DebugMessenger, you can read it **[here](DebugMessenger.md)**. Well, to get the needed extensions for your platform from SDL we can use *SDL_Vulkan_GetInstanceExtensions(Uint32 \*count)* function. Next we're just copying the data from the array to a vector and adding the *VK_EXT_debug_utils* extension.
 Now we have all to create the Instance info itself! 
 
 ```cpp
@@ -99,11 +99,11 @@ VkInstanceCreateInfo instance_create_info
 }
 ```
 
-Everything here is pretty easy to understand except *sType* and *pNext* fields. Both of them are used to create a list of extension structures for base structure (in our case it's *VkInstanceCreateInfo*). We add pNext to the main structure, which is a pointer to an extension structure containing an sType field. When creating an object, the driver reads the main structure and applies the base features. Then it follows the pNext chain: for each structure, it checks the sType in a switch-like mechanism and, if supported, enables the corresponding flags and features. It continues down the linked list until pNext is NULL.
+Everything here is pretty easy to understand except the *sType* and *pNext* fields. Both of them are used to create a list of extension structures for base structure (in our case it's *VkInstanceCreateInfo*). We add pNext to the main structure, which is a pointer to an extension structure containing an sType field. When creating an object, the driver reads the main structure and applies the base features. Then it follows the pNext chain: for each structure, it checks the sType in a switch-like mechanism and, if supported, enables the corresponding flags and features. It continues down the linked list until pNext is NULL.
 
 # Dependencies
 
-Instance is located at the top of the hierarchy of objects, so it does not depend on anyone. All other objects depend on Instance in one way or another, since all extensions and layers that affect driver behavior are registered at the Instance level.
+Instance is located at the top of the hierarchy of objects, so it does not depend on anything. All other objects depend on Instance in one way or another, since all extensions and layers that affect driver behavior are registered at the Instance level.
 
 # How to destroy?
 
@@ -122,4 +122,6 @@ void instance_destroy(const Instance& instance)
 
 # Links
 
-Vulkan Specification: [Instance](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#initialization-instances)
+- Vulkan Specification: [Instance](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#initialization-instances)
+- Vulkan Documentation: [Instance](https://docs.vulkan.org/tutorial/latest/03_Drawing_a_triangle/00_Setup/01_Instance.html)
+
