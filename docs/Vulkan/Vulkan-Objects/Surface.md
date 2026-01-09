@@ -1,6 +1,6 @@
 # What is a Surface?
 
-The Surface is a Vulkan object that stores the context of the connected window system. In this case, the context is usually just a set of window handles..
+The Surface is a Vulkan object that stores the context of the connected window system. In this case, the context is usually just a set of window handles.
 The Surface context allows the driver to determine the format, size, quantity, queues, and mode the application can output frames to a given window on a given device. 
 Note that Surface is part of the core WSI extension set because Vulkan is for rendering and not for presenting. If you want to present something to the screen, you must enable the necessary extensions. 
 
