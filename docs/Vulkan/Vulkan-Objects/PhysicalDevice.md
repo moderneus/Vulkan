@@ -45,7 +45,7 @@ void phys_device_pick(PhysicalDevice* phys_device, const Instance& instance, con
 }
 ```
 
-But how to rate the PhysicalDevice? I did this in relevant function:
+But how to rate the PhysicalDevice? Here we evaluate the PhysicalDevice score based on our program's preferences. Thus, we fill our multimap in a loop and since it is always sorted, we only have to choose the first PhysicalDevice. 
 
 ```cpp
 uint32_t phys_device_rate(const VkPhysicalDevice& phys_device)
@@ -62,15 +62,13 @@ uint32_t phys_device_rate(const VkPhysicalDevice& phys_device)
 }
 ```
 
-Here we evaluate the PhysicalDevice score based on our program's preferences. Thus, we fill our multimap in a loop and since it is always sorted, we only have to choose the first PhysicalDevice. 
-
-The device is selected, but if we want to display images on the screen, we need to enable the *VK_KHR_swapchain* extension. 
+The device is selected, but if we want to display images on the screen, we need to enable the *VK_KHR_swapchain* extension. We will store all the necessary extensions in the const char vector.
 
 ```cpp
 const std::vector<const char*> phys_device_exts = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
 ```
 
-We will store all the necessary extensions in the const char vector.
+The *phys_device_is_suitable()* function returns true if the selected physical device supports the required extensions and if the swapchain supports the required formats and present modes. 
 
 ```cpp
 bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface)
@@ -79,7 +77,7 @@ bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const VkSurfac
 }
 ```
 
-The *phys_device_is_suitable()* function returns true if the selected physical device supports the required extensions and if the swapchain supports the required formats and present modes. And here is the extension checking function itself:
+Here we collect all available extensions, and place our enabled ones in a set for performance. Now, if our enabled extension is present in the available ones, we erase it. If all enabled extensions are available, the vector will remain empty. If the vector is empty, the extensions are supported.
 
 ```cpp
 bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device)
@@ -104,5 +102,10 @@ bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device)
 # Dependencies
 
 # Links
+
+Vulkan Specification: **[PhysicalDevice](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#devsandqueues-physical-device-enumeration)**
+
+Vulkan Documentation: **[PhysicalDevice](https://docs.vulkan.org/refpages/latest/refpages/source/VkPhysicalDevice.html)**
+
 
 
