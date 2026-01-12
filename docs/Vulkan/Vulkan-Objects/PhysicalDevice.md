@@ -1,6 +1,6 @@
 # What is a PhysicalDevice?
 
-The PhysicalDevice is a Vulkan object that represents a specific graphics device available on the system. It is a purely informational object describing the device’s features, limits, and available queue families. It doesn't manage resources, allocate memory, or participate in command execution. However, the **[LogicalDevice](LogicalDevice.md)** will provide us with this capability.
+The PhysicalDevice is a Vulkan object that represents a specific graphics device available on the system. It is a purely informational object describing the device’s features, limits, and available queue families. It doesn't manage resources, allocate memory, or participate in command execution. 
 
 # How to choose?
 
@@ -62,11 +62,47 @@ uint32_t phys_device_rate(const VkPhysicalDevice& phys_device)
 }
 ```
 
+Here we evaluate the PhysicalDevice score based on our program's preferences. Thus, we fill our multimap in a loop and since it is always sorted, we only have to choose the first PhysicalDevice. 
 
+The device is selected, but if we want to display images on the screen, we need to enable the *VK_KHR_swapchain* extension. 
+
+```cpp
+const std::vector<const char*> phys_device_exts = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+```
+
+We will store all the necessary extensions in the const char vector.
+
+```cpp
+bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface)
+{
+    return phys_device_check_ext_support(phys_device) && swapchain_is_adequate(phys_device, surface);
+}
+```
+
+The *phys_device_is_suitable()* function returns true if the selected physical device supports the required extensions and if the swapchain supports the required formats and present modes. And here is the extension checking function itself:
+
+```cpp
+bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device)
+{
+    uint32_t ext_count;
+    vkEnumerateDeviceExtensionProperties(phys_device, nullptr, &ext_count, nullptr);
+    
+    std::vector<VkExtensionProperties> exts(ext_count);
+    vkEnumerateDeviceExtensionProperties(phys_device, nullptr, &ext_count, exts.data());
+    
+    std::set<std::string> required_exts(phys_device_exts.begin(), phys_device_exts.end());
+
+    for(const auto& ext : exts) 
+        required_exts.erase(ext.extensionName);
+    
+    return required_exts.empty();
+}
+```
 
 # How to destroy?
 
 # Dependencies
 
 # Links
+
 
