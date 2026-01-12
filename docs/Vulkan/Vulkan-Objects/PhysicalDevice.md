@@ -97,15 +97,27 @@ bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device)
 }
 ```
 
+Congratulations, we have selected a PhysicalDevice with the parameters we need and can now make it the basis for a **[LogicalDevice](LogicalDevice.md)**.
+
 # How to destroy?
 
+You don't need to manually destroy the PhysicalDevice, it is destroyed automatically along with the Instance.
+
 # Dependencies
+
+The PhysicalDevice is created after the VkInstance and depends only on it, as the Vulkan instance determines which physical devices are available on the system.
+It has no mutable state and does not depend on any LogicalDevice or resources.
+
+The creation of a LogicalDevice directly depends on the PhysicalDevice, since it defines the available queues, features, limits, and extensions.
+All Vulkan resources and operations ultimately rely on the selected PhysicalDevice through the corresponding LogicalDevice.
+
 
 # Links
 
 Vulkan Specification: **[PhysicalDevice](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#devsandqueues-physical-device-enumeration)**
 
 Vulkan Documentation: **[PhysicalDevice](https://docs.vulkan.org/refpages/latest/refpages/source/VkPhysicalDevice.html)**
+
 
 
 
