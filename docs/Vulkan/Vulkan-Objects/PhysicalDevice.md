@@ -1,6 +1,6 @@
 # What is a PhysicalDevice?
 
-The PhysicalDevice is a Vulkan object that represents a specific graphics device available on the system. It is a purely informational object describing the device’s features, limits, and available queue families.
+The PhysicalDevice is a Vulkan object that represents a specific graphics device available on the system. It is a purely informational object describing the device’s features, limits, and available queue families. It doesn't manage resources, allocate memory, or participate in command execution. However, the **[LogicalDevice](LogicalDevice.md)** will provide us with this capability.
 
 # How to choose?
 
@@ -13,7 +13,7 @@ struct PhysicalDevice
 };
 ```
 
-To choose the PhysicalDevice firstly we must enumrate them via *vkEnumeratePhysicalDevices()* function.
+To choose the PhysicalDevice firstly we must enumrate them via *vkEnumeratePhysicalDevices()* function. Next we're initializing the vector with size equals *phys_device_count*. We call this function twice so that the phys_device_count variable does not have a garbage value and the vector is initialized with the correct size. Afterwards, we put our *candidates* into a multimap paired with their score to automatically sort them and avoid unnecessary duplication errors. Further we select the PhysicalDevice with the highest score.
 
 ```cpp
 void phys_device_pick(PhysicalDevice* phys_device, const Instance& instance, const Surface& surface)
@@ -45,8 +45,28 @@ void phys_device_pick(PhysicalDevice* phys_device, const Instance& instance, con
 }
 ```
 
+But how to rate the PhysicalDevice? I did this in relevant function:
+
+```cpp
+uint32_t phys_device_rate(const VkPhysicalDevice& phys_device)
+{
+    VkPhysicalDeviceProperties phys_device_props;
+    vkGetPhysicalDeviceProperties(phys_device, &phys_device_props);
+
+    uint32_t score = 0;
+    if(phys_device_props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+        score += 1000;
+    
+    score += phys_device_props.limits.maxImageDimension2D;
+    return score;
+}
+```
+
+
+
 # How to destroy?
 
 # Dependencies
 
 # Links
+
