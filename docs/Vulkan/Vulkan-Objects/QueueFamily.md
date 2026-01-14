@@ -4,6 +4,9 @@ A queue family is a hardware-defined set of queues with identical command execut
 
 # How to find the QueueFamily?
 
+Before we search for the queues we need: graphics and present. Each queue family has its own index: 0, 1, 2, etc. We'll create a structure to conveniently store them. 
+We made them optional so that we could easily check whether the indices of these families were found.
+
 ```cpp
 struct QueueFamily
 {
@@ -11,6 +14,11 @@ struct QueueFamily
     std::optional<uint32_t> present;
 };
 ```
+
+First, we query the number of queue families, then place the characteristics of these queues into a vector. 
+Each queue family has a bitmask, for example, *VK_QUEUE_GRAPHICS_BIT*. This bitmask lets us know whether a graphics queue is in this family.
+In the loop, we go through all the families and when we find the desired family, we assign them an index or iteration number. Keep in mind that Vulkan is for rendering and doesn't have native presentation support. 
+So, we must enable the Surface extension to determine whether our graphics device supports presentation in a specific queue family.
 
 ```cpp
 void queue_family_find(QueueFamily* queue_family, const PhysicalDevice& phys_device, const Surface& surface)
@@ -40,6 +48,8 @@ void queue_family_find(QueueFamily* queue_family, const PhysicalDevice& phys_dev
 }
 ```
 
+Here we simply return true if we found the indices of the required families.
+
 ```cpp
 bool queue_family_is_complete(const QueueFamily& queue_family)
 {
@@ -51,7 +61,10 @@ bool queue_family_is_complete(const QueueFamily& queue_family)
 
 # How to destroy?
 
+They don't require clearing, and you don't create queue families or queues anywhere. It's a hardware-based part of Vulkan.
+
 # Links
 
 - Vulkan Documentation: **[QueueFamily](https://docs.vulkan.org/guide/latest/queues.html)**
+
 
