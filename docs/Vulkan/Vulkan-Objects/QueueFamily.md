@@ -75,12 +75,13 @@ A queue family depends on the physical device, because its capabilities and the 
 
 # How to destroy?
 
-Queue families and queues are managed by the GPU; you don’t create or destroy them manually
+Queue families and queues are managed by the GPU; you don’t create or destroy them manually.
 
 # Links
 
 - Vulkan Specification: **[QueueFamily](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#devsandqueues-queues)**
 - Vulkan Documentation: **[QueueFamily](https://docs.vulkan.org/guide/latest/queues.html)**
+
 
 
 
