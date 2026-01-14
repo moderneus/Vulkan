@@ -59,12 +59,16 @@ bool queue_family_is_complete(const QueueFamily& queue_family)
 
 # Dependencies
 
+A queue family depends on the physical device, because its capabilities and the number of queues are defined by the GPU hardware. The choice of a queue family determines which types of commands an application can submit efficiently. Specific queues, command execution, and task scheduling all depend on the selected queue family. In turn, the logical device and command submission are constrained by the available queue families.
+
 # How to destroy?
 
 They don't require clearing, and you don't create queue families or queues anywhere. It's a hardware-based part of Vulkan.
 
 # Links
 
+- Vulkan Specification: **[QueueFamily](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#devsandqueues-queues)**
 - Vulkan Documentation: **[QueueFamily](https://docs.vulkan.org/guide/latest/queues.html)**
+
 
 
