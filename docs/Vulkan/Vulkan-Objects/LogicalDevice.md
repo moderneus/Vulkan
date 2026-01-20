@@ -5,6 +5,13 @@ The LogicalDevice is a Vulkan object based on a certain PhysicalDevice. LogicalD
 # How to create?
 
 ```cpp
+struct LogicalDevice
+{
+    VkDevice handle = VK_NULL_HANDLE;
+}
+```
+
+```cpp
 void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device) 
 {
     VkPhysicalDeviceFeatures features = {};
