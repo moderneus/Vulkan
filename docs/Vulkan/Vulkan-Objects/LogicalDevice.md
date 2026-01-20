@@ -1,6 +1,9 @@
 # What is a LogicalDevice?
 
-The LogicalDevice is a Vulkan object based on a certain PhysicalDevice. LogicalDevice manages memory allocations and manages all the resources stored in. When creating the LogicalDevice we specify which queues, features, extensions and layers we'll use. 
+The LogicalDevice is a Vulkan object that represents the interface through which the application interacts with the GPU.
+It manages memory allocations and resources.
+The LogicalDevice is based on a PhysicalDevice and is created from it.
+During creation, we must specify which queues, features, extensions, and layers are used.
 
 # How to create?
 
