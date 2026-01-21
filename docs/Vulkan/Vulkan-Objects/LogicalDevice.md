@@ -121,7 +121,7 @@ VkDeviceCreateInfo device_create_info(const std::vector<VkDeviceQueueCreateInfo>
     create_info.queueCreateInfoCount = static_cast<uint32_t>(queue_infos.size()); 
     create_info.pQueueCreateInfos = queue_infos.data(); // Pass queue info to Vulkan so it knows which queues to create
     create_info.pEnabledFeatures = &phys_device_features; // Specify which GPU features we want to enable on this logical device
-    create_info.enabledExtensionCount = static_cast<uint32_t>(phys_device_exts.size()); // Enabled extensions count 
+    create_info.enabledExtensionCount = static_cast<uint32_t>(phys_device_exts.size());
     create_info.ppEnabledExtensionNames = phys_device_exts.data(); // Pass a pointer to an array of extensions to enable them
     return create_info;
 }
