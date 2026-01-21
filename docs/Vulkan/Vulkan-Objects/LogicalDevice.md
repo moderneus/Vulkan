@@ -3,7 +3,7 @@
 The LogicalDevice is a Vulkan object that represents the interface through which the application interacts with the GPU.
 It manages memory allocations and resources.
 The LogicalDevice is based on a PhysicalDevice and is created from it.
-During creation, we must specify which queues, features, extensions, and layers are used.
+During creation, we must specify which queues, features, extensions, and layers will be used.
 
 # How to create?
 
@@ -16,8 +16,8 @@ struct LogicalDevice
 };
 ```
 
-The PhysicalDevice represents an actually installed hardware, it's pure informative Vulkan object. The LogicalDevice is which PhysicalDevice we use and how we use it. 
-So before creating the LogicalDevice firstly we must specify which queues, features, extensions and layers will used and bind it to the LogicalDevice info. 
+The PhysicalDevice represents the actual installed hardware; it's a purely informative Vulkan object. The LogicalDevice represents a specific PhysicalDevice and specifies how the application will use it. 
+So before creating the LogicalDevice first, we must specify which queues, features, extensions, and layers will be used and bind them to the LogicalDevice info.
 
 ```cpp
 void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device)
@@ -70,7 +70,7 @@ std::vector<VkDeviceQueueCreateInfo> device_create_queue_infos(const QueueFamily
 }
 ```
 
-Here's how we creating the queue info. Explanation of fields in comments.
+Here's how we create the queue info. Explanation of fields in comments.
 
 ```cpp
 VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx, const float& queue_priority)
@@ -84,7 +84,7 @@ VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx
 }
 ```
 
-Now we can enable the features we want. Actually I don't need the geometry shader feature but I added it for example. 
+Now we can enable the features we want. Actually, I don't need the geometry shader feature, but I added it as an example.
 
 ```cpp
 VkPhysicalDeviceFeatures device_get_enabled_features(const PhysicalDevice& phys_device)
@@ -121,8 +121,8 @@ VkDeviceCreateInfo device_create_info(const std::vector<VkDeviceQueueCreateInfo>
     create_info.queueCreateInfoCount = static_cast<uint32_t>(queue_infos.size()); 
     create_info.pQueueCreateInfos = queue_infos.data(); // Pass queue info to Vulkan so it knows which queues to create
     create_info.pEnabledFeatures = &phys_device_features; // Specify which GPU features we want to enable on this logical device
-    create_info.enabledExtensionCount = static_cast<uint32_t>(phys_device_exts.size()); Enabled extensions count 
-    create_info.ppEnabledExtensionNames = phys_device_exts.data(); Pass a pointer to an array of extensions to enable them
+    create_info.enabledExtensionCount = static_cast<uint32_t>(phys_device_exts.size()); // Enabled extensions count 
+    create_info.ppEnabledExtensionNames = phys_device_exts.data(); // Pass a pointer to an array of extensions to enable them
     return create_info;
 }
 ```
@@ -141,7 +141,7 @@ void device_destroy(const LogicalDevice& device)
 # Dependencies
 
 The LogicalDevice depends on the Instance, since the PhysicalDevice, which serves as its foundation, depends on it. In particular, it relies on the enabled extensions, features, and layers. 
-Many objects also depend on the LogicalDevice: this includes Queues, CommandPools, Buffers, Images, ImageViews, DescriptorSets, Samplers, and Pipelines, as it manages the creation and lifetime of these resources.
+Many objects also depend on the LogicalDevice; these include Queues, CommandPools, Buffers, Images, ImageViews, DescriptorSets, Samplers, and Pipelines, as it manages the creation and lifetime of these resources.
 
 # Links
 
