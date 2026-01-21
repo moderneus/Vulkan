@@ -89,7 +89,7 @@ Now we can enable the features we want. Actually, I don't need the geometry shad
 ```cpp
 VkPhysicalDeviceFeatures device_get_enabled_features(const PhysicalDevice& phys_device)
 {
-	// Enable features we plan to use, for example geometry shaders
+    // Enable features we plan to use, for example geometry shaders
     // If a feature is not enabled here, the logical device won't allow creating resources that require it
     VkPhysicalDeviceFeatures features = {};
     features.geometryShader = phys_device_get_features(phys_device).geometryShader;
