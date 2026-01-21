@@ -22,7 +22,7 @@ Before creating the LogicalDevice, we must first specify which queues, features,
 ```cpp
 void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device)
 {
-	   // Vulkan allows multiple queues in a single queue family, each can have a priority.
+    // Vulkan allows multiple queues in a single queue family, each can have a priority.
     // Higher priority queues are preferred by the GPU scheduler when competing for execution.
     const float queue_priority = 1.0f; 
     
