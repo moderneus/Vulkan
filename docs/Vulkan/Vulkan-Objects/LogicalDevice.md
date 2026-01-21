@@ -35,7 +35,7 @@ void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue
 }
 ```
 
-I start with specifying the queues. Here for every queue we're creating the queue info.
+I started with specifying the queues. Here for every queue we're creating the queue info.
 If the graphics and present queue families are equal we must create only one info. Otherwise we must create the present queue info separately.
 
 ```cpp
@@ -69,6 +69,8 @@ VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx
 }
 ```
 
+Now we can enable the features we want. Actually I don't need the geometry shader feature but I added it for example. 
+
 ```cpp
 VkPhysicalDeviceFeatures device_get_enabled_features(const PhysicalDevice& phys_device)
 {
@@ -77,6 +79,22 @@ VkPhysicalDeviceFeatures device_get_enabled_features(const PhysicalDevice& phys_
     return features;
 }
 ```
+
+For it I wrote an additional function in *PhysicalDevice.cpp*. 
+
+```cpp
+VkPhysicalDeviceFeatures phys_device_get_features(const PhysicalDevice& phys_device)
+{
+    VkPhysicalDeviceFeatures phys_device_features = {};
+    vkGetPhysicalDeviceFeatures(phys_device.handle, &phys_device_features);
+    if(phys_device_features.geometryShader != VK_TRUE) 
+        log_critical("The found GPU doesn't have a Geometry Shader Feature!");
+    
+    return phys_device_features;
+}
+```
+
+
 
 ```cpp
 VkDeviceCreateInfo device_create_info(const std::vector<VkDeviceQueueCreateInfo>& queue_infos, const VkPhysicalDeviceFeatures& phys_device_features)
