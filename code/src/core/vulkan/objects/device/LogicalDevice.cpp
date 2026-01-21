@@ -15,15 +15,15 @@ VkPhysicalDeviceFeatures device_get_enabled_features(const PhysicalDevice& phys_
 }
 
 std::vector<VkDeviceQueueCreateInfo> device_create_queue_infos(const QueueFamily& queue_family, const float& queue_priority) {
-	std::vector<VkDeviceQueueCreateInfo> queue_infos;
-	if(queue_family.graphics == queue_family.present) {
-		queue_infos.push_back(device_create_queue_info(queue_family.graphics.value(), queue_priority));
-	} 
-	else {
-		queue_infos.push_back(device_create_queue_info(queue_family.graphics.value(), queue_priority));
-		queue_infos.push_back(device_create_queue_info(queue_family.present.value(), queue_priority));
-	}
-	return queue_infos;
+    std::vector<VkDeviceQueueCreateInfo> queue_infos;
+    if(queue_family.graphics == queue_family.present) {
+	queue_infos.push_back(device_create_queue_info(queue_family.graphics.value(), queue_priority));
+    } 
+    else {
+	queue_infos.push_back(device_create_queue_info(queue_family.graphics.value(), queue_priority));
+	queue_infos.push_back(device_create_queue_info(queue_family.present.value(), queue_priority));
+    }
+    return queue_infos;
 }
 
 VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx, const float& queue_priority) {
@@ -53,10 +53,9 @@ VkDeviceCreateInfo device_create_info(const std::vector<VkDeviceQueueCreateInfo>
 void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device) {
     log_info("Creating a Logical Device...");
     const float queue_priority = 1.0f;
-	std::vector<VkDeviceQueueCreateInfo> queue_infos = device_create_queue_infos(queue_family, queue_priority);
+    std::vector<VkDeviceQueueCreateInfo> queue_infos = device_create_queue_infos(queue_family, queue_priority);
     VkPhysicalDeviceFeatures phys_device_features = device_get_enabled_features(phys_device);
     VkDeviceCreateInfo device_info = device_create_info(queue_infos, phys_device_features);
-    
     if(vkCreateDevice(phys_device.handle, &device_info, nullptr, &device->handle) != VK_SUCCESS) {
         log_critical("Failed to Create the Logical Device!");
     }
