@@ -17,7 +17,7 @@ struct LogicalDevice
 ```
 
 The PhysicalDevice represents the actual installed hardware; it's a purely informative Vulkan object. The LogicalDevice represents a specific PhysicalDevice and specifies how the application will use it. 
-So before creating the LogicalDevice first, we must specify which queues, features, extensions, and layers will be used and bind them to the LogicalDevice info.
+Before creating the LogicalDevice, we must first specify which queues, features, extensions, and layers will be used, and bind them to the LogicalDevice info.
 
 ```cpp
 void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device)
@@ -97,7 +97,7 @@ VkPhysicalDeviceFeatures device_get_enabled_features(const PhysicalDevice& phys_
 }
 ```
 
-For it I wrote an additional function in *PhysicalDevice.cpp*. I think everything is obvious here.
+For this I wrote an additional function in *PhysicalDevice.cpp*. I think everything is obvious here.
 
 ```cpp
 VkPhysicalDeviceFeatures phys_device_get_features(const PhysicalDevice& phys_device)
@@ -111,7 +111,7 @@ VkPhysicalDeviceFeatures phys_device_get_features(const PhysicalDevice& phys_dev
 }
 ```
 
-All that's left is create the LogicalDevice info. Explanation of fields in comments.
+All that's left is to create the LogicalDevice info. Explanation of fields in comments.
 
 ```cpp
 VkDeviceCreateInfo device_create_info(const std::vector<VkDeviceQueueCreateInfo>& queue_infos, const VkPhysicalDeviceFeatures& phys_device_features)
