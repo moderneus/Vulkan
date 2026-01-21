@@ -59,14 +59,13 @@ void phys_device_pick(PhysicalDevice* phys_device, const Instance& instance, con
     
     std::multimap<int, VkPhysicalDevice> candidates;
     for(const VkPhysicalDevice& phys_device : phys_devices) {
-        uint32_t score = phys_device_rate(phys_device);
-        candidates.insert(std::make_pair(score, phys_device));
+        if(phys_device_is_suitable(phys_device, surface.handle)) {
+            uint32_t score = phys_device_rate(phys_device);
+            candidates.insert(std::make_pair(score, phys_device));
+        }
     }
     if(candidates.rbegin()->first > 0) {
         phys_device->handle = candidates.rbegin()->second;
-    }
-    else if(!phys_device_is_suitable(phys_device->handle, surface.handle)) {
-        log_critical("Failed to Find any Suitable GPU!");
     }
     else {
         log_critical("Failed to Find any Suitable GPU!");
