@@ -7,8 +7,6 @@ During creation, we must specify which queues, features, extensions, and layers 
 
 # How to create?
 
-```cpp
-
 Let's write a simple wrapper of the LogicalDevice.
 
 ```cpp
