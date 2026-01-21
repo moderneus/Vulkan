@@ -27,7 +27,6 @@ void queue_family_find(QueueFamily* queue_family, const PhysicalDevice& phys_dev
         }
         VkBool32 present_support = false;
         vkGetPhysicalDeviceSurfaceSupportKHR(phys_device.handle, i, surface.handle, &present_support);
-        
         if(present_support) {
             queue_family->present = i;
         }

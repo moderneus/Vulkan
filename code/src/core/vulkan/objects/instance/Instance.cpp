@@ -12,8 +12,7 @@
 
 std::vector<const char*> instance_get_required_exts() {
     uint32_t exts_count = 0;
-    const char* const* exts;
-    exts = SDL_Vulkan_GetInstanceExtensions(&exts_count);
+    const char* const* exts = SDL_Vulkan_GetInstanceExtensions(&exts_count);
     
     std::vector<const char*> exts_vec(exts, exts + exts_count);
     exts_vec.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
@@ -27,9 +26,7 @@ VkApplicationInfo instance_create_app_info() {
     log_info("Creating an Application Info...");
     VkApplicationInfo create_info = {};
     create_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    create_info.pApplicationName = "Vulkan";
     create_info.applicationVersion = VK_MAKE_VERSION(1, 0, 1);
-    create_info.pEngineName = "No Engine";
     create_info.engineVersion = VK_MAKE_VERSION(0, 1, 0);
     create_info.apiVersion = VK_API_VERSION_1_4;
     log_success("The Application Info created!");
