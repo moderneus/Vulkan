@@ -16,16 +16,27 @@ struct LogicalDevice
 }
 ```
 
-Since LogicalDevice is an interface of the PhysicalDevice we must specify 
+The PhysicalDevice represents an actually installed hardware, it's pure informative Vulkan object. The LogicalDevice is which PhysicalDevice we use and how we use it. 
+So before creating the LogicalDevice firstly we must specify which queues, features, extensions and layers will used and bind it to the LogicalDevice info. 
 
 ```cpp
-VkPhysicalDeviceFeatures device_get_enabled_features(const PhysicalDevice& phys_device)
+void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device)
 {
-    VkPhysicalDeviceFeatures features = {};
-    features.geometryShader = phys_device_get_features(phys_device).geometryShader;
-    return features;
+    const float queue_priority = 1.0f;
+	std::vector<VkDeviceQueueCreateInfo> queue_infos = device_create_queue_infos(queue_family, queue_priority);
+    VkPhysicalDeviceFeatures phys_device_features = device_get_enabled_features(phys_device);
+    VkDeviceCreateInfo device_info = device_create_info(queue_infos, phys_device_features);
+    
+    if(vkCreateDevice(phys_device.handle, &device_info, nullptr, &device->handle) != VK_SUCCESS)
+        log_critical("Failed to Create the Logical Device!");
+    
+    vkGetDeviceQueue(device->handle, queue_family.graphics.value(), 0, &queue->graphics);
+    vkGetDeviceQueue(device->handle, queue_family.present.value(), 0, &queue->present);
 }
 ```
+
+I start with specifying the queues. Here for every queue we're creating the queue info.
+If the graphics and present queue families are equal we must create only one info. Otherwise we must create the present queue info separately.
 
 ```cpp
 std::vector<VkDeviceQueueCreateInfo> device_create_queue_infos(const QueueFamily& queue_family, const float& queue_priority)
@@ -44,6 +55,8 @@ std::vector<VkDeviceQueueCreateInfo> device_create_queue_infos(const QueueFamily
 }
 ```
 
+Here's how we creating the queue info. Explanation of fields in comments.
+
 ```cpp
 VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx, const float& queue_priority)
 {
@@ -53,6 +66,15 @@ VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx
     create_info.queueCount = 1;
     create_info.pQueuePriorities = &queue_priority;
     return create_info;
+}
+```
+
+```cpp
+VkPhysicalDeviceFeatures device_get_enabled_features(const PhysicalDevice& phys_device)
+{
+    VkPhysicalDeviceFeatures features = {};
+    features.geometryShader = phys_device_get_features(phys_device).geometryShader;
+    return features;
 }
 ```
 
@@ -67,22 +89,6 @@ VkDeviceCreateInfo device_create_info(const std::vector<VkDeviceQueueCreateInfo>
     create_info.enabledExtensionCount = static_cast<uint32_t>(phys_device_exts.size());
     create_info.ppEnabledExtensionNames = phys_device_exts.data();
     return create_info;
-}
-```
-
-```cpp
-void device_create(LogicalDevice* device, Queue* queue, const QueueFamily& queue_family, const PhysicalDevice& phys_device)
-{
-    const float queue_priority = 1.0f;
-	std::vector<VkDeviceQueueCreateInfo> queue_infos = device_create_queue_infos(queue_family, queue_priority);
-    VkPhysicalDeviceFeatures phys_device_features = device_get_enabled_features(phys_device);
-    VkDeviceCreateInfo device_info = device_create_info(queue_infos, phys_device_features);
-    
-    if(vkCreateDevice(phys_device.handle, &device_info, nullptr, &device->handle) != VK_SUCCESS)
-        log_critical("Failed to Create the Logical Device!");
-    
-    vkGetDeviceQueue(device->handle, queue_family.graphics.value(), 0, &queue->graphics);
-    vkGetDeviceQueue(device->handle, queue_family.present.value(), 0, &queue->present);
 }
 ```
 
