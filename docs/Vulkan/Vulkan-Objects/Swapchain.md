@@ -37,7 +37,11 @@ bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceK
     SwapchainSupportDetails details = swapchain_query_support_details(phys_device, surface);
     return !details.formats.empty() && !details.present_modes.empty();
 }
+```
 
+
+
+```cpp
 VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>& formats)
 {
     if(formats.size() == 1 && formats[0].format == VK_FORMAT_UNDEFINED)
@@ -92,14 +96,15 @@ VkExtent2D swapchain_choose_extent(const Window& window, const VkSurfaceCapabili
 
 
 ```cpp
-VkSwapchainCreateInfoKHR swapchain_create_info(
-        const QueueFamily& queue_family,
-        const Surface& surface,
-        const VkSurfaceFormatKHR& format, 
-        const VkPresentModeKHR& present_mode, 
-        const VkExtent2D& extent, 
-        const VkSurfaceCapabilitiesKHR& capabilities, 
-        uint32_t img_count
+VkSwapchainCreateInfoKHR swapchain_create_info
+(
+    const QueueFamily& queue_family,
+    const Surface& surface,
+    const VkSurfaceFormatKHR& format, 
+    const VkPresentModeKHR& present_mode, 
+    const VkExtent2D& extent, 
+    const VkSurfaceCapabilitiesKHR& capabilities, 
+    uint32_t img_count
 )
 {
     VkSwapchainCreateInfoKHR create_info = {};
@@ -138,7 +143,15 @@ VkSwapchainCreateInfoKHR swapchain_create_info(
 
 
 ```cpp
-void swapchain_create(Swapchain* swapchain, const LogicalDevice& device, const PhysicalDevice& phys_device, const QueueFamily& queue_family, const Window& window, const Surface& surface)
+void swapchain_create
+(
+    Swapchain* swapchain,
+    const LogicalDevice& device,
+    const PhysicalDevice& phys_device,
+    const QueueFamily& queue_family,
+    const Window& window,
+    const Surface& surface
+)
 {
     SwapchainSupportDetails details = swapchain_query_support_details(phys_device.handle, surface.handle);
     VkSurfaceFormatKHR format = swapchain_choose_format(details.formats);
