@@ -8,6 +8,30 @@ The swapchain is part of WSI: Vulkan handles rendering, not presentation.
 # How to create?
 
 ```cpp
+struct SwapchainSupportDetails {
+    VkSurfaceCapabilitiesKHR capabilities;
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR> present_modes;
+};
+```
+
+
+
+```cpp
+struct Swapchain {
+    VkSwapchainKHR handle = VK_NULL_HANDLE;
+    VkExtent2D extent = {};
+    VkFormat format = VK_FORMAT_UNDEFINED;
+    VkColorSpaceKHR color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    std::vector<VkFramebuffer> frame_buffers;
+    std::vector<VkImageView> views; 
+    std::vector<VkImage> imgs;
+};
+```
+
+
+
+```cpp
 SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface)
 {
     SwapchainSupportDetails details;
