@@ -173,6 +173,15 @@ void swapchain_create
 
 # How to destroy?
 
+```cpp
+void swapchain_destroy(const Swapchain& swapchain, const LogicalDevice& device)
+{
+    if(swapchain.handle == VK_NULL_HANDLE) 
+        log_error("Cannot Destroy the Swapchain::Swapchain is not Created!");
+    vkDestroySwapchainKHR(device.handle, swapchain.handle, nullptr);
+}
+```
+
 # Dependencies
 
 The Swapchain depends on the Surface, the PhysicalDevice capabilities (supported formats, present modes, image count), and queues that support presentation. 
