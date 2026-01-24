@@ -8,15 +8,10 @@
 
 VkCommandBufferBeginInfo command_buffer_create_begin_info() 
 {
-	log_info("Creating the Command Buffer Begin Info...");
-
 	VkCommandBufferBeginInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	create_info.flags = 0;
 	create_info.pInheritanceInfo = nullptr;
-
-	log_success("The Command Buffer Begin Info was Created!");
-
 	return create_info;
 }
 
