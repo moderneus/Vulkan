@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOD_PIPELINE_HPP
+#define MOD_PIPELINE_HPP
 
 #include "core/vulkan/objects/pipeline/ShaderModule.hpp"
 
@@ -6,38 +7,40 @@
 
 #include <array>
 
-struct LogicalDevice;
-struct Swapchain;
-struct PipelineLayout;
-struct RenderPass;
+struct device_t;
+struct swapchain_t;
+struct pipeline_layout_t;
+struct render_pass_t;
 
-struct Pipeline {
-    VkPipeline handle = VK_NULL_HANDLE;
-    ShaderModule vert_shader;
-    ShaderModule frag_shader;
+struct pipeline_t
+{
+	VkPipeline		handle = VK_NULL_HANDLE;
+	shader_module_t		vert_shader;
+	shader_module_t		frag_shader;
 };
 
-struct PipelineState {
-    std::array<VkPipelineShaderStageCreateInfo, 2> shaderStages = {};
-    VkPipelineDynamicStateCreateInfo dynamicStateInfo = {};
-    VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
-    VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo = {};
-    VkPipelineViewportStateCreateInfo viewportInfo = {};
-    VkPipelineRasterizationStateCreateInfo rasterizationInfo = {};
-    VkPipelineMultisampleStateCreateInfo multisampleInfo = {};
-    VkPipelineDepthStencilStateCreateInfo depthStencilInfo = {};
-    VkPipelineColorBlendStateCreateInfo colorBlendInfo = {};
+struct pipeline_state_t
+{
+	std::array<VkPipelineShaderStageCreateInfo, 2>		shader_stages	    = {};
+	VkPipelineDynamicStateCreateInfo			dynamic_state_info  = {};
+	VkPipelineVertexInputStateCreateInfo			vertex_input_info   = {};
+	VkPipelineInputAssemblyStateCreateInfo			input_assembly_info = {};
+	VkPipelineViewportStateCreateInfo			viewport_info       = {};
+	VkPipelineRasterizationStateCreateInfo			rasterization_info  = {};
+	VkPipelineMultisampleStateCreateInfo			multisample_info    = {};
+	VkPipelineDepthStencilStateCreateInfo			depth_stencil_info  = {};
+	VkPipelineColorBlendStateCreateInfo			color_blend_info    = {};
 };
 
-VkViewport pipeline_create_viewport(const Swapchain& swapchain);
+VkViewport pipeline_create_viewport(const swapchain_t& swapchain);
 
-VkRect2D pipeline_create_scissor(const Swapchain& swapchain);
+VkRect2D pipeline_create_scissor(const swapchain_t& swapchain);
 
 VkPipelineColorBlendAttachmentState pipeline_create_color_blend_attachment();
 
 VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info();
 
-void pipeline_create_shader_modules(Pipeline* pipeline, const LogicalDevice& device);
+void pipeline_create_shader_modules(pipeline_t* pipeline, const device_t& device);
 
 std::array<VkPipelineShaderStageCreateInfo, 2> pipeline_create_shader_stage_info();
 
@@ -55,8 +58,10 @@ VkPipelineMultisampleStateCreateInfo pipeline_create_multisample_info();
 
 VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info(const VkPipelineColorBlendAttachmentState* attachment);
 
-VkGraphicsPipelineCreateInfo pipeline_create_info(const PipelineState& state, const PipelineLayout& layout, const RenderPass& render_pass);
+VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_state_t& state, const pipeline_layout_t& layout, const render_pass_t& render_pass);
 
-void pipeline_create(Pipeline* pipeline, const LogicalDevice& device, const Swapchain& swapchain, const PipelineLayout& layout, const RenderPass& render_pass);
+void pipeline_create(pipeline_t* pipeline, const device_t& device, const swapchain_t& swapchain, const pipeline_layout_t& layout, const render_pass_t& render_pass);
 
-void pipeline_destroy(const Pipeline& pipeline, const LogicalDevice& device);
+void pipeline_destroy(const pipeline_t& pipeline, const device_t& device);
+
+#endif

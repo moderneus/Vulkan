@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOD_LOGGER_HPP
+#define MOD_LOGGER_HPP
 
 #include <string>
 #include <vector>
@@ -28,3 +29,5 @@ void log_critical(const std::string& msg, const std::string& error);
 void log_success(const std::string& msg);
 
 void log_success(const std::string& msg, const std::string& value);
+
+#endif
