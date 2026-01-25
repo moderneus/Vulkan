@@ -16,7 +16,7 @@ void SDL_context_init()
 
 	is_init = true;
 
-	log_success("The SDL was initialiazed!");
+	log_info("The SDL was initialiazed.");
 }
 
 void SDL_context_destroy() 
@@ -31,5 +31,5 @@ void SDL_context_destroy()
 
 	is_init = false;
 
-	log_success("SDL quit!");
+	log_info("SDL quit.");
 }

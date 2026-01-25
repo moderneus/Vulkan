@@ -20,7 +20,7 @@ std::vector<char> read_file(const std::string& path)
 	file.read(buffer.data(), fileSize);
 	file.close();
 
-	log_success("The File was Read! Path = ", path);
+	log_info("The File was Read by Path = ", path);
 
 	return buffer;
 }

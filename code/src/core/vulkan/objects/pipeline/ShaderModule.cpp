@@ -1,6 +1,7 @@
 #include "core/vulkan/objects/pipeline/ShaderModule.hpp"
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
+#include "util/Constants.hpp"
 #include "util/File.hpp"
 
 #include <cstdint>
@@ -14,7 +15,7 @@ VkShaderModuleCreateInfo shader_module_create_info(const std::vector<char>& src)
 	create_info.codeSize = src.size();
 	create_info.pCode = reinterpret_cast<const uint32_t*>(src.data());
 
-	log_success("The Shader Module Info was Created!");
+	log_info("The Shader Module Info was Created.");
 
 	return create_info;
 }
@@ -27,10 +28,10 @@ void shader_module_create(shader_module_t* shader_module, const device_t& device
 	VkShaderModuleCreateInfo shader_module_info = shader_module_create_info(src);
 
 	if (vkCreateShaderModule(device.handle, &shader_module_info, nullptr, &shader_module->handle) != VK_SUCCESS) {
-		log_critical("Failed to Create the ShaderModule!");
+		log_critical("Failed to Create the ShaderModule.");
 	}
 
-	log_success("The Shader Module was Created!");
+	log_info("The Shader Module was Created.");
 }
 
 void shader_module_destroy(const shader_module_t& shader_module, const device_t& device) 
@@ -38,10 +39,32 @@ void shader_module_destroy(const shader_module_t& shader_module, const device_t&
 	log_info("Destroying the Shader Module...");
 
 	if (shader_module.handle == VK_NULL_HANDLE) {
-		log_error("Cannot Destroy the Shader Module::Shader Module is not Created!");
+		log_error("Cannot Destroy the Shader Module::Shader Module is not Created.");
 	}
 
 	vkDestroyShaderModule(device.handle, shader_module.handle, nullptr);
 
-	log_success("The Shader Module was Destroyed!");
+	log_info("The Shader Module was Destroyed.");
+}
+
+void shader_modules_create(std::array<shader_module_t, 2>* shader_modules, const device_t& device) 
+{
+	log_info("Creating the Shader Modules...");
+
+	for(uint32_t i = 0; i < shader_modules->size(); ++i) {
+		shader_module_create(&shader_modules->data()[i], device, shader_paths[i]);
+	}
+
+	log_info("The Shader Modules were Created.");
+}
+
+void shader_modules_destroy(const std::array<shader_module_t, 2>& shader_modules, const device_t& device)
+{
+	log_info("Destroying the Shader Modules...");
+
+	for(const auto& shader_module : shader_modules) {
+		vkDestroyShaderModule(device.handle, shader_module.handle, nullptr);
+	}
+
+	log_info("The Shader Modules were Destroyed.");
 }

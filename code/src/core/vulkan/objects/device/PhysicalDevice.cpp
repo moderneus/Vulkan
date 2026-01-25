@@ -64,7 +64,7 @@ void phys_device_pick(phys_device_t* phys_device, const instance_t& instance, co
 	vkEnumeratePhysicalDevices(instance.handle, &phys_device_count, nullptr);
 
 	if (phys_device_count == 0) {
-		log_critical("Failed to find GPU with Vulkan support!");
+		log_critical("Failed to find GPU with Vulkan support.");
 	}
 
 	std::vector<VkPhysicalDevice> phys_devices(phys_device_count);
@@ -82,10 +82,9 @@ void phys_device_pick(phys_device_t* phys_device, const instance_t& instance, co
 	if (candidates.rbegin()->first > 0) {
 		phys_device->handle = candidates.rbegin()->second;
 	} else {
-		log_critical("Failed to Find any Suitable GPU!");
+		log_critical("Failed to Find any Suitable GPU.");
 	}
 
-	log_success("The GPU was Found!");
 	log_info("Selected GPU = ", phys_device_get_name(*phys_device));
 }
 
@@ -95,7 +94,7 @@ VkPhysicalDeviceFeatures phys_device_get_features(const phys_device_t& phys_devi
 	vkGetPhysicalDeviceFeatures(phys_device.handle, &phys_device_features);
 
 	if (phys_device_features.geometryShader != VK_TRUE) {
-		log_critical("The found GPU doesn't have a Geometry Shader Feature!");
+		log_critical("The found GPU doesn't have a Geometry Shader Feature.");
 	}
 
 	return phys_device_features;

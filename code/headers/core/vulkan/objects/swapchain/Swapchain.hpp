@@ -20,7 +20,11 @@ struct swapchain_support_detailts_t
 
 struct swapchain_t
 {
-	VkSwapchainKHR			handle = VK_NULL_HANDLE;
+	VkSwapchainKHR handle = VK_NULL_HANDLE;
+};
+
+struct swapchain_config_t
+{
 	VkExtent2D			extent = {};
 	VkFormat			format = VK_FORMAT_UNDEFINED;
 	VkColorSpaceKHR			color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
@@ -50,7 +54,9 @@ VkSwapchainCreateInfoKHR swapchain_create_info
 
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
 
-void swapchain_create(swapchain_t* swapchain, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const window_t& window, const surface_t& surface);
+void swapchain_config_setup(swapchain_config_t* cfg, const swapchain_t& swapchain, const device_t& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent);
+
+void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const window_t& window, const surface_t& surface);
 
 void swapchain_destroy(const swapchain_t& swapchain, const device_t& device);
 

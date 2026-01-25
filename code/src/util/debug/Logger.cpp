@@ -1,6 +1,7 @@
 #include "util/debug/Logger.hpp"
 
 #include "fmt/core.h"
+#include "fmt/color.h"
 
 #include <ctime>
 #include <fstream>
@@ -28,46 +29,28 @@ std::string log_get_time()
 #endif
 
 	std::ostringstream oss;
-	oss << '[' << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "] ";
+	oss << '[' << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "]";
 
 	return oss.str();
 }
 
-void log_open_file(const std::string& path) 
-{
-	log_file.open(path, std::ios::app);
-
-	if (!log_file.is_open()) {
-		fmt::print("Failed to open file by path: {}\n", path);
-	}
-}
-
 void log_write(const Level level, const std::string& msg, const std::string& value="") 
 {
-	std::filesystem::create_directories("logs");
-	log_open_file(path);
-
 	switch(level) {
-		case INFO:
-			log_file << log_get_time() << "\tINFO::" << msg << value << std::endl;
-		break;
-		    
-		case ERROR:
-			log_file << log_get_time() << "\tERROR::" << msg << value << std::endl;
-		break;
+	case INFO:
+		log_file << log_get_time() << " [INFO] " << msg << value << std::endl;
+	break;
+	    
+	case ERROR:
+		log_file << log_get_time() << " [ERROR] " << msg << value << std::endl;
+	break;
 
-		case CRITICAL:
-			log_file << log_get_time() << "\tCRITICAL::" << msg << value << std::endl;
-			std::abort();
-		break;
-		    
-		case SUCCESS:
-			log_file << log_get_time() << "\tSUCCESS::" << msg << value << std::endl;
-		break;
+	case CRITICAL:
+		log_file << log_get_time() << " [CRITICAL] " << msg << value << std::endl;
+		std::abort();
+	break;
 	}
-
 	log_file.flush();
-	log_file.close();
 }
 
 void log_info(const std::string& msg) 
@@ -111,12 +94,19 @@ void log_critical(const std::string& msg, const std::string& error)
 	log_write(CRITICAL, msg, error);
 }
 
-void log_success(const std::string& msg) 
+void log_init() 
 {
-	log_write(SUCCESS, msg);
+	std::filesystem::create_directories("logs");
+	log_file.open(path, std::ios::app);
+
+	if (!log_file.is_open()) {
+		fmt::print(fmt::fg(fmt::color::red), "\t[ERROR]\tFailed to open file by path: {}\n", path);
+	} else {
+		log_write(INFO, "The Logger was Initialized.");
+	}
 }
 
-void log_success(const std::string& msg, const std::string& value) 
+void log_destroy()
 {
-	log_write(SUCCESS, msg, value);
+	log_file.close();
 }

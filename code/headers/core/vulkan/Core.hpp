@@ -32,8 +32,11 @@ struct core_t
 	queue_t					queue;
 	phys_device_t				phys_device;
 	device_t				device;
+	swapchain_config_t			swapchain_cfg;
 	swapchain_t				swapchain;
 	pipeline_layout_t			pipeline_layout;
+	std::array<shader_module_t, 2>		shader_modules;
+	pipeline_config_t			pipeline_cfg;
 	pipeline_t				pipeline;
 	render_pass_t				render_pass;
 	command_pool_t				command_pool;

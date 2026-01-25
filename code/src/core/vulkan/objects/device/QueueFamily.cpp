@@ -24,6 +24,7 @@ void queue_family_find(queue_family_t* queue_family, const phys_device_t& phys_d
 	vkGetPhysicalDeviceQueueFamilyProperties(phys_device.handle, &queue_family_count, queue_families.data());
 
 	for (uint32_t i = 0; i < queue_family_count ; ++i) {
+
 		if (queue_families[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
 			queue_family->graphics = i;
 		}
@@ -41,8 +42,8 @@ void queue_family_find(queue_family_t* queue_family, const phys_device_t& phys_d
 	}
 
 	if(!queue_family_is_complete(*queue_family)) {
-		log_critical("Failed to Find any Suitable Queue Families!");
+		log_critical("Failed to Find any Suitable Queue Families.");
 	}
 
-	log_success("The Suitable Queue Families were Found!");
+	log_info("The Suitable Queue Families were Found.");
 }

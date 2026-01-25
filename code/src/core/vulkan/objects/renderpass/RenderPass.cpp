@@ -3,25 +3,25 @@
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 
-VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass_t& render_pass, const swapchain_t &swapchain, uint32_t img_idx, const VkClearValue clear_color) 
+VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass_t& render_pass, const swapchain_config_t& cfg, uint32_t img_idx, const VkClearValue clear_color) 
 {
 	VkRenderPassBeginInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	create_info.renderPass = render_pass.handle;
-	create_info.framebuffer = swapchain.frame_buffers[img_idx];
+	create_info.framebuffer = cfg.frame_buffers[img_idx];
 	create_info.renderArea.offset = {0, 0};
-	create_info.renderArea.extent = swapchain.extent;
+	create_info.renderArea.extent = cfg.extent;
 	create_info.clearValueCount = 1;
 	create_info.pClearValues = &clear_color;
 	return create_info;
 }
 
-VkAttachmentDescription render_pass_create_attachment_description(const swapchain_t& swapchain) 
+VkAttachmentDescription render_pass_create_attachment_description(const swapchain_config_t& cfg) 
 {
 	log_info("Creating an Attachment Description...");
 
 	VkAttachmentDescription description = {};
-	description.format = swapchain.format;
+	description.format = cfg.format;
 	description.samples = VK_SAMPLE_COUNT_1_BIT;
 	description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -30,7 +30,7 @@ VkAttachmentDescription render_pass_create_attachment_description(const swapchai
 	description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	description.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
-	log_success("The Attachment Description was Created!");
+	log_info("The Attachment Description was Created.");
 
 	return description;
 }
@@ -43,7 +43,7 @@ VkAttachmentReference render_pass_create_attachment_reference()
 	ref.attachment = 0;
 	ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-	log_success("The Attachment Reference was Created!");
+	log_info("The Attachment Reference was Created.");
 
 	return ref;
 }
@@ -57,7 +57,7 @@ VkSubpassDescription render_pass_create_subpass_description(VkAttachmentReferenc
 	description.colorAttachmentCount = 1;
 	description.pColorAttachments = pattachment_ref;
 
-	log_success("The Subpasss Description was Created!");
+	log_info("The Subpasss Description was Created.");
 
 	return description;
 }
@@ -87,26 +87,26 @@ VkRenderPassCreateInfo render_pass_create_info(VkAttachmentDescription* pattache
 	create_info.dependencyCount = 1;
 	create_info.pDependencies = subpass_dependency;
 
-	log_success("The Render Pass Info was Created!");
+	log_info("The Render Pass Info was Created.");
 
 	return create_info;
 }
 
-void render_pass_create(render_pass_t* render_pass, const device_t& device, const swapchain_t& swapchain) 
+void render_pass_create(render_pass_t* render_pass, const device_t& device, const swapchain_config_t& cfg) 
 {
 	log_info("Creating a Render Pass...");
 
-	VkAttachmentDescription color_attachment = render_pass_create_attachment_description(swapchain);
+	VkAttachmentDescription color_attachment = render_pass_create_attachment_description(cfg);
 	VkAttachmentReference color_attachment_ref = render_pass_create_attachment_reference();
 	VkSubpassDescription subpass = render_pass_create_subpass_description(&color_attachment_ref);
 	VkSubpassDependency subpass_dependency = render_pass_create_subpass_dependency();
 	VkRenderPassCreateInfo render_pass_info = render_pass_create_info(&color_attachment, &subpass, &subpass_dependency);
 
 	if (vkCreateRenderPass(device.handle, &render_pass_info, nullptr, &render_pass->handle) != VK_SUCCESS) {
-		log_critical("Failed to Create the Render Pass!");
+		log_critical("Failed to Create the Render Pass.");
 	}
 
-	log_success("The Render Pass was Created!");
+	log_info("The Render Pass was Created.");
 }
 
 void render_pass_destroy(render_pass_t* render_pass, const device_t& device) 
@@ -114,10 +114,10 @@ void render_pass_destroy(render_pass_t* render_pass, const device_t& device)
 	log_info("Destroying the Render Pass...");
 
 	if (render_pass->handle == VK_NULL_HANDLE) {
-		log_error("Cannot Destroy the Render Pass::Render Pass is not Created!");
+		log_error("Cannot Destroy the Render Pass::Render Pass is not Created.");
 	}
 
 	vkDestroyRenderPass(device.handle, render_pass->handle, nullptr);
 
-	log_success("The Render Pass was Destroyed!");
+	log_info("The Render Pass was Destroyed.");
 }

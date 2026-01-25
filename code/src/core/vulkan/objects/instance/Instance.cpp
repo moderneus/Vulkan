@@ -30,11 +30,11 @@ VkApplicationInfo instance_create_app_info()
 
 	VkApplicationInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	create_info.applicationVersion = VK_MAKE_VERSION(1, 0, 1);
+	create_info.applicationVersion = VK_MAKE_VERSION(1, 0, 5);
 	create_info.engineVersion = VK_MAKE_VERSION(0, 1, 0);
 	create_info.apiVersion = VK_API_VERSION_1_4;
 
-	log_success("The Application Info created!");
+	log_info("The Application Info created.");
 
 	return create_info;
 }
@@ -58,17 +58,17 @@ VkInstanceCreateInfo instance_create_info
 	log_info("Checking a Valiation Layers Support...");
 
 	if (check_validation_layers_support()) {
-		log_success("The Validation layers is supported!");
+		log_info("The Validation layers is supported.");
 		create_info.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
 		create_info.ppEnabledLayerNames = validationLayers.data();
 		create_info.pNext = debug_info;
 	} else {
-		log_error("The Validation Layers doesn't supported!");
+		log_error("The Validation Layers doesn't supported.");
 		create_info.enabledLayerCount = 0;
 		create_info.ppEnabledLayerNames = nullptr;
 	}
 
-	log_success("The Instance info was created!");
+	log_info("The Instance info was created.");
 
 	return create_info;
 }
@@ -83,10 +83,10 @@ void instance_create(instance_t* instance)
 	VkInstanceCreateInfo instance_info = instance_create_info(&app_info, &debug_info, exts);
 
 	if (vkCreateInstance(&instance_info, nullptr, &instance->handle) != VK_SUCCESS) {
-		log_critical("Failed to Create Instance!");
+		log_critical("Failed to Create Instance.");
 	}
 
-	log_success("The Instance was Created!");
+	log_info("The Instance was Created.");
 }
 
 void instance_destroy(const instance_t& instance) 
@@ -94,10 +94,10 @@ void instance_destroy(const instance_t& instance)
 	log_info("Destroying the Instance...");
 
 	if (instance.handle == VK_NULL_HANDLE) {
-		log_error("Cannot Destroy the Instance::Instance is not Created!");
+		log_error("Cannot Destroy the Instance::Instance is not Created.");
 	}
 
 	vkDestroyInstance(instance.handle, nullptr);
 
-	log_success("The Instance was Destroyed!");
+	log_info("The Instance was Destroyed.");
 }

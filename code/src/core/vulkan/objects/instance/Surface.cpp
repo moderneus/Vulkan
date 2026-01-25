@@ -14,7 +14,7 @@ void surface_create(surface_t* surface, const instance_t& instance, const window
 		log_critical("Failed to Create the Surface::", SDL_GetError()); 
 	}
 
-	log_success("The Surface was Created!");
+	log_info("The Surface was Created.");
 }
 
 void surface_destroy(const surface_t& surface, const instance_t& instance) 
@@ -22,10 +22,10 @@ void surface_destroy(const surface_t& surface, const instance_t& instance)
 	log_info("Destroying the Surface...");
 
 	if (surface.handle == VK_NULL_HANDLE) {
-		log_error("Cannot Destroy the Surface::Surface is not Created!");
+		log_error("Cannot Destroy the Surface::Surface is not Created.");
 	}
 
 	SDL_Vulkan_DestroySurface(instance.handle, surface.handle, nullptr);
 
-	log_success("The Surface was Destroyed!");
+	log_info("The Surface was Destroyed.");
 }

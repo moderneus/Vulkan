@@ -5,23 +5,22 @@
 
 #include <vulkan/vulkan.h>
 
+#include <vector>
 #include <array>
 
-struct device_t;
-struct swapchain_t;
+struct swapchain_config_t;
 struct pipeline_layout_t;
 struct render_pass_t;
+struct device_t;
 
 struct pipeline_t
 {
-	VkPipeline		handle = VK_NULL_HANDLE;
-	shader_module_t		vert_shader;
-	shader_module_t		frag_shader;
+	VkPipeline handle = VK_NULL_HANDLE;
 };
 
 struct pipeline_state_t
 {
-	std::array<VkPipelineShaderStageCreateInfo, 2>		shader_stages	    = {};
+	std::vector<VkPipelineShaderStageCreateInfo>		shader_stages	    = {};
 	VkPipelineDynamicStateCreateInfo			dynamic_state_info  = {};
 	VkPipelineVertexInputStateCreateInfo			vertex_input_info   = {};
 	VkPipelineInputAssemblyStateCreateInfo			input_assembly_info = {};
@@ -32,17 +31,29 @@ struct pipeline_state_t
 	VkPipelineColorBlendStateCreateInfo			color_blend_info    = {};
 };
 
-VkViewport pipeline_create_viewport(const swapchain_t& swapchain);
+struct pipeline_config_t
+{
+	pipeline_state_t				state		   = {};
+	std::vector<shader_module_ref_t>		shader_module_refs = {};
+	VkViewport					viewport	   = {};
+	VkRect2D					scissor            = {};
+	VkPipelineColorBlendAttachmentState		attachment         = {};
+	std::vector<VkDynamicState>			dynamic_states     = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+};
 
-VkRect2D pipeline_create_scissor(const swapchain_t& swapchain);
+VkViewport pipeline_create_viewport(const swapchain_config_t& cfg);
+
+VkRect2D pipeline_create_scissor(const swapchain_config_t& cfg);
 
 VkPipelineColorBlendAttachmentState pipeline_create_color_blend_attachment();
 
 VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info();
 
-void pipeline_create_shader_modules(pipeline_t* pipeline, const device_t& device);
+std::vector<shader_module_ref_t> pipeline_create_shader_module_refs(const std::array<shader_module_t, 2>& shader_modules);
 
-std::array<VkPipelineShaderStageCreateInfo, 2> pipeline_create_shader_stage_info();
+VkPipelineShaderStageCreateInfo pipeline_create_shader_stage_info(const shader_module_ref_t& shader_module);
+
+std::vector<VkPipelineShaderStageCreateInfo> pipeline_create_shader_stage_infos(const std::vector<shader_module_ref_t>& shader_modules);
 
 VkPipelineDynamicStateCreateInfo pipeline_create_dynamic_state_info();
 
@@ -60,7 +71,9 @@ VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info(const VkPip
 
 VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_state_t& state, const pipeline_layout_t& layout, const render_pass_t& render_pass);
 
-void pipeline_create(pipeline_t* pipeline, const device_t& device, const swapchain_t& swapchain, const pipeline_layout_t& layout, const render_pass_t& render_pass);
+void pipeline_config_setup(pipeline_config_t* pipeline_cfg, const swapchain_config_t& swapchain_cfg, const std::array<shader_module_t, 2>& shader_modules);
+
+void pipeline_create(pipeline_t* pipeline, const device_t& device, const pipeline_config_t& cfg, const pipeline_layout_t& pipeline_layout, const render_pass_t& render_pass);
 
 void pipeline_destroy(const pipeline_t& pipeline, const device_t& device);
 

@@ -12,7 +12,7 @@ void window_create(window_t* window, const char* title, const uint32_t width, co
 		log_critical("Failed to create the Window::" + cstr_to_str(SDL_GetError()));
 	}
 
-	log_success("The Window was Created!");
+	log_info("The Window was Created.");
 }
 
 void window_destroy(const window_t& window) 
@@ -20,10 +20,10 @@ void window_destroy(const window_t& window)
 	log_info("Destroying the Window...");
 
 	if (window.pwindow == nullptr) {
-		log_critical("Cannot Destroy the Window::Window is not Created!");
+		log_critical("Cannot Destroy the Window::Window is not Created.");
 	}
 
 	SDL_DestroyWindow(window.pwindow);
 
-	log_success("The Window was Destroyed!");
+	log_info("The Window was Destroyed.");
 }

@@ -44,18 +44,18 @@ VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>
 	log_info("Choosing the Swapchain Format...");
 
 	if(formats.size() == 1 && formats[0].format == VK_FORMAT_UNDEFINED) {
-		log_success("The Swapchain Format Was Chosen!");
+		log_info("The Swapchain Format Was Chosen.");
 		return {VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
 	}
 
 	for(const auto& format : formats) {
 		if (format.format == VK_FORMAT_B8G8R8A8_SRGB && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-			log_success("The Swapchain Format was Chosen!");
+			log_info("The Swapchain Format was Chosen.");
 			return format;
 		}
 	}
 
-	log_success("The Swapchain Format was Chosen!");
+	log_info("The Swapchain Format was Chosen.");
 
 	return formats[0];
 }
@@ -65,13 +65,13 @@ VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKH
 	log_info("Choosing the Swapchain Present Mode...");
 
 	for(const auto& present_mode : present_modes) {
-		if(present_mode == VK_PRESENT_MODE_MAILBOX_KHR) {
-			log_success("The Swapchain Present Mode was Chosen! Present Mode = VK_PRESENT_MODE_MAILBOX_KHR");
+		if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR) {
+			log_info("The Swapchain Present Mode was Chosen = VK_PRESENT_MODE_MAILBOX_KHR.");
 			return present_mode;
 		}
 	}
 
-	log_success("The Swapchain Present Mode was Chosen! Present Mode = VK_PRESENT_MODE_FIFO_KHR");
+	log_info("The Swapchain Present Mode was Chosen = VK_PRESENT_MODE_FIFO_KHR.");
 
 	return VK_PRESENT_MODE_FIFO_KHR;
 }
@@ -81,7 +81,7 @@ VkExtent2D swapchain_choose_extent(const window_t& window, const VkSurfaceCapabi
 	log_info("Choosing the Swapchain Extent..."); 
 
 	if(capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-		log_success("The Swapchain Extent was Chosen!");
+		log_info("The Swapchain Extent was Chosen.");
 		return capabilities.currentExtent;
 	} else {
 		int width, height;
@@ -96,7 +96,7 @@ VkExtent2D swapchain_choose_extent(const window_t& window, const VkSurfaceCapabi
 		extent.width = std::clamp(extent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
 		extent.height = std::clamp(extent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
 
-		log_success("The Swapchain Extent was Chosen!");
+		log_info("The Swapchain Extent was Chosen.");
 
 		return extent;
 	}
@@ -143,12 +143,24 @@ VkSwapchainCreateInfoKHR swapchain_create_info
 	create_info.clipped = VK_TRUE;
 	create_info.oldSwapchain = VK_NULL_HANDLE;
 
-	log_success("The Swapchain Info was Created!");
+	log_info("The Swapchain Info was Created.");
 
 	return create_info;
 }
 
-void swapchain_create(swapchain_t* swapchain, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const window_t& window, const surface_t& surface) 
+void swapchain_config_setup(swapchain_config_t* cfg, const swapchain_t& swapchain, const device_t& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent)
+{
+	cfg->format = format.format;
+	cfg->extent = extent;
+
+	uint32_t img_count = 0;
+	vkGetSwapchainImagesKHR(device.handle, swapchain.handle, &img_count, nullptr);
+
+	cfg->imgs.resize(img_count);
+	vkGetSwapchainImagesKHR(device.handle, swapchain.handle, &img_count, cfg->imgs.data());
+}
+
+void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const window_t& window, const surface_t& surface) 
 {
 	log_info("Creating a Swapchain...");
 
@@ -156,8 +168,6 @@ void swapchain_create(swapchain_t* swapchain, const device_t& device, const phys
 	VkSurfaceFormatKHR format = swapchain_choose_format(details.formats);
 	VkPresentModeKHR present_mode = swapchain_choose_present_mode(details.present_modes);
 	VkExtent2D extent = swapchain_choose_extent(window, details.capabilities);
-	swapchain->format = format.format;
-	swapchain->extent = extent;
 
 	uint32_t img_count = details.capabilities.minImageCount + 1;
 
@@ -168,10 +178,12 @@ void swapchain_create(swapchain_t* swapchain, const device_t& device, const phys
 	VkSwapchainCreateInfoKHR swapchain_info = swapchain_create_info(queue_family, surface, format, present_mode, extent, details.capabilities, img_count);
 
 	if (vkCreateSwapchainKHR(device.handle, &swapchain_info, nullptr, &swapchain->handle) != VK_SUCCESS) {
-		log_critical("Failed to Create the Swapchain!");
+		log_critical("Failed to Create the Swapchain.");
 	}
 
-	log_success("The Swapchain was Created!");
+	swapchain_config_setup(cfg, *swapchain, device, format, extent);
+
+	log_info("The Swapchain was Created.");
 }
 
 void swapchain_destroy(const swapchain_t& swapchain, const device_t& device) 
@@ -179,10 +191,10 @@ void swapchain_destroy(const swapchain_t& swapchain, const device_t& device)
 	log_info("Destroying the Swapchain...");
 
 	if (swapchain.handle == VK_NULL_HANDLE) {
-		log_error("Cannot Destroy the Swapchain::Swapchain is not Created!");
+		log_error("Cannot Destroy the Swapchain::Swapchain is not Created.");
 	}
 
 	vkDestroySwapchainKHR(device.handle, swapchain.handle, nullptr);
 
-	log_success("The Swapchain was Destroyed!");
+	log_info("The Swapchain was Destroyed.");
 }

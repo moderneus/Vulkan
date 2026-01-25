@@ -17,7 +17,7 @@ void renderer_init(renderer_t* renderer, window_t* pwindow)
 
 	renderer->pwindow = pwindow;
 
-	log_success("The Renderer was Initialized!");
+	log_info("The Renderer was Initialized.");
 }
 
 void renderer_destroy(renderer_t* renderer) 
@@ -26,7 +26,7 @@ void renderer_destroy(renderer_t* renderer)
 
 	renderer->pwindow = nullptr;
 
-	log_success("The Renderer was Destroyed!");
+	log_info("The Renderer was Destroyed.");
 }
 
 void renderer_loop(renderer_t* renderer, const core_t* vk_core) 
@@ -47,7 +47,7 @@ void renderer_draw(const core_t* vk_core)
 	vkAcquireNextImageKHR(vk_core->device.handle, vk_core->swapchain.handle, UINT64_MAX, vk_core->img_available_semaphores[current_frame].handle, VK_NULL_HANDLE, &img_idx);
 
 	vkResetCommandBuffer(vk_core->command_buffers[current_frame].handle, 0);
-	command_buffer_record(vk_core->command_buffers[current_frame], vk_core->pipeline, vk_core->render_pass, vk_core->swapchain, img_idx);
+	command_buffer_record(vk_core->command_buffers[current_frame], vk_core->pipeline, vk_core->render_pass, vk_core->swapchain_cfg, img_idx);
 
 	std::array<VkSemaphore, 1> wait_semaphores = {vk_core->img_available_semaphores[current_frame].handle};
 	std::array<VkPipelineStageFlags, 1> wait_stages = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
@@ -56,7 +56,7 @@ void renderer_draw(const core_t* vk_core)
 	VkSubmitInfo submit_info = queue_create_submit_info(current_frame, wait_semaphores, signal_semaphores, wait_stages, vk_core->command_buffers);
 
 	if (vkQueueSubmit(vk_core->queue.graphics, 1, &submit_info, vk_core->in_flight_fences[current_frame].handle) != VK_SUCCESS) {
-		log_critical("Failed to Submit Draw Command Buffer!");
+		log_critical("Failed to Submit Draw Command Buffer.");
 	}
 
 	std::array<VkSwapchainKHR, 1> swapchains = {vk_core->swapchain.handle};

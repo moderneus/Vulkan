@@ -15,30 +15,30 @@ VkCommandBufferBeginInfo command_buffer_create_begin_info()
 	return create_info;
 }
 
-void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_t& swapchain, const uint32_t img_idx) 
+void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_config_t& cfg, const uint32_t img_idx) 
 {
 	VkCommandBufferBeginInfo command_buffer_begin_info = command_buffer_create_begin_info();
 
 	if (vkBeginCommandBuffer(command_buffer.handle, &command_buffer_begin_info) != VK_SUCCESS) {
-		log_critical("Failed to Begin Recording Command Buffer!");
+		log_critical("Failed to Begin Recording Command Buffer.");
 	}
 
 	VkClearValue clear_color = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-	VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, swapchain, img_idx, clear_color);
+	VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, cfg, img_idx, clear_color);
 
 	vkCmdBeginRenderPass(command_buffer.handle, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
 		vkCmdBindPipeline(command_buffer.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);
-		VkViewport viewport = pipeline_create_viewport(swapchain);
+		VkViewport viewport = pipeline_create_viewport(cfg);
 		vkCmdSetViewport(command_buffer.handle, 0, 1, &viewport);
-		VkRect2D scissor = pipeline_create_scissor(swapchain);
+		VkRect2D scissor = pipeline_create_scissor(cfg);
 		vkCmdSetScissor(command_buffer.handle, 0, 1, &scissor);
 		vkCmdDraw(command_buffer.handle, 3, 1, 0, 0);
 
 	vkCmdEndRenderPass(command_buffer.handle);
 
 	if (vkEndCommandBuffer(command_buffer.handle) != VK_SUCCESS) {
-		log_critical("Failed to End Recording Command Buffer!");
+		log_critical("Failed to End Recording Command Buffer.");
 	}
 }
 
@@ -52,7 +52,7 @@ VkCommandBufferAllocateInfo command_buffer_create_allocate_info(const command_po
 	create_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	create_info.commandBufferCount = static_cast<uint32_t>(command_buffers.size());
 
-	log_success("The Command Buffer Allocate Info was Created!");
+	log_info("The Command Buffer Allocate Info was Created.");
 
 	return create_info;
 }
@@ -63,9 +63,10 @@ void command_buffers_create(std::vector<command_buffer_t>* command_buffers, cons
 
 	command_buffers->resize(MAX_FRAMES_IN_FLIGHT);
 	VkCommandBufferAllocateInfo command_buffer_allocate_info = command_buffer_create_allocate_info(command_pool, *command_buffers);
+
 	if (vkAllocateCommandBuffers(device.handle, &command_buffer_allocate_info, &command_buffers->data()->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Command Buffer...");
 	}
 
-	log_success("The Command Buffer was Created!");
+	log_info("The Command Buffer was Created.");
 }

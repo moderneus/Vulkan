@@ -6,7 +6,7 @@
 #include <vector>
 
 struct device_t;
-struct swapchain_t;
+struct swapchain_config_t;
 struct render_pass_t;
 struct pipeline_t;
 struct command_pool_t;
@@ -18,7 +18,7 @@ struct command_buffer_t
 
 VkCommandBufferBeginInfo command_buffer_create_begin_info();
 
-void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_t& swapchain, const uint32_t img_idx);
+void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_config_t& cfg, const uint32_t img_idx);
 
 VkCommandBufferAllocateInfo command_buffer_create_allocate_info(const command_pool_t& command_pool, const std::vector<command_buffer_t>& command_buffers);
 

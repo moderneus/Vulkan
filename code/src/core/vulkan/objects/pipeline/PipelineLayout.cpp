@@ -14,7 +14,7 @@ VkPipelineLayoutCreateInfo pipeline_layout_create_info()
 	create_info.pSetLayouts = nullptr;
 	create_info.pushConstantRangeCount = 0;
 
-	log_success("The Pipeline Layout Info was Created!");
+	log_info("The Pipeline Layout Info was Created.");
 
 	return create_info;
 }
@@ -26,10 +26,10 @@ void pipeline_layout_create(pipeline_layout_t* pipeline_layout, const device_t& 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = pipeline_layout_create_info();
 
 	if (vkCreatePipelineLayout(device.handle, &pipelineLayoutInfo, nullptr, &pipeline_layout->handle) != VK_SUCCESS) {
-		log_critical("Failed to Create the Pipeline Layout!");
+		log_critical("Failed to Create the Pipeline Layout.");
 	}
 
-	log_success("The Pipeline Layout was Created!");
+	log_info("The Pipeline Layout was Created.");
 }
 
 void pipeline_layout_destroy(const pipeline_layout_t& pipeline_layout, const device_t& device) 
@@ -37,10 +37,10 @@ void pipeline_layout_destroy(const pipeline_layout_t& pipeline_layout, const dev
 	log_info("Destroying the Pipeline Layout...");
 
 	if (pipeline_layout.handle == VK_NULL_HANDLE) {
-		log_error("Cannot Destroy the Pipeline Layout::Pipeline Layout is not Created!");
+		log_error("Cannot Destroy the Pipeline Layout::Pipeline Layout is not Created.");
 	}
 
 	vkDestroyPipelineLayout(device.handle, pipeline_layout.handle, nullptr);
 
-	log_success("The Pipeline Layout was Destroyed!");
+	log_info("The Pipeline Layout was Destroyed.");
 }
