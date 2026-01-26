@@ -15,30 +15,30 @@ struct device_t;
 
 struct pipeline_t
 {
-	VkPipeline handle = VK_NULL_HANDLE;
+		VkPipeline handle = VK_NULL_HANDLE;
 };
 
 struct pipeline_state_t
 {
-	std::vector<VkPipelineShaderStageCreateInfo>		shader_stages	    = {};
-	VkPipelineDynamicStateCreateInfo			dynamic_state_info  = {};
-	VkPipelineVertexInputStateCreateInfo			vertex_input_info   = {};
-	VkPipelineInputAssemblyStateCreateInfo			input_assembly_info = {};
-	VkPipelineViewportStateCreateInfo			viewport_info       = {};
-	VkPipelineRasterizationStateCreateInfo			rasterization_info  = {};
-	VkPipelineMultisampleStateCreateInfo			multisample_info    = {};
-	VkPipelineDepthStencilStateCreateInfo			depth_stencil_info  = {};
-	VkPipelineColorBlendStateCreateInfo			color_blend_info    = {};
+		std::vector<VkPipelineShaderStageCreateInfo>		shader_stages	    = {};
+		VkPipelineDynamicStateCreateInfo					dynamic_state_info  = {};
+		VkPipelineVertexInputStateCreateInfo				vertex_input_info   = {};
+		VkPipelineInputAssemblyStateCreateInfo				input_assembly_info = {};
+		VkPipelineViewportStateCreateInfo					viewport_info       = {};
+		VkPipelineRasterizationStateCreateInfo				rasterization_info  = {};
+		VkPipelineMultisampleStateCreateInfo				multisample_info    = {};
+		VkPipelineDepthStencilStateCreateInfo				depth_stencil_info  = {};
+		VkPipelineColorBlendStateCreateInfo					color_blend_info    = {};
 };
 
 struct pipeline_config_t
 {
-	pipeline_state_t				state		   = {};
-	std::vector<shader_module_ref_t>		shader_module_refs = {};
-	VkViewport					viewport	   = {};
-	VkRect2D					scissor            = {};
-	VkPipelineColorBlendAttachmentState		attachment         = {};
-	std::vector<VkDynamicState>			dynamic_states     = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+		pipeline_state_t							state			   = {};
+		std::vector<shader_module_ref_t>			shader_module_refs = {};
+		VkViewport									viewport		   = {};
+		VkRect2D									scissor            = {};
+		VkPipelineColorBlendAttachmentState			attachment         = {};
+		std::vector<VkDynamicState>					dynamic_states     = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
 };
 
 VkViewport pipeline_create_viewport(const swapchain_config_t& cfg);
