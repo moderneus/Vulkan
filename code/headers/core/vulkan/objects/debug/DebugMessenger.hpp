@@ -7,25 +7,25 @@ struct instance_t;
 
 struct debug_msgr_t
 {
-		VkDebugUtilsMessengerEXT handle = VK_NULL_HANDLE;
+	VkDebugUtilsMessengerEXT handle = VK_NULL_HANDLE;
 };
 
 VKAPI_ATTR VkBool32 VKAPI_CALL callback
 (
-		VkDebugUtilsMessageSeverityFlagBitsEXT						msg_severity,
-		VkDebugUtilsMessageTypeFlagsEXT								msg_type,
-		const VkDebugUtilsMessengerCallbackDataEXT*					pcallback_data,
-		void*														puser_data 
+	VkDebugUtilsMessageSeverityFlagBitsEXT				msg_severity,
+	VkDebugUtilsMessageTypeFlagsEXT					msg_type,
+	const VkDebugUtilsMessengerCallbackDataEXT*			pcallback_data,
+	void*								puser_data 
 );
 
 VkDebugUtilsMessengerCreateInfoEXT debug_msgr_create_info();
 
 VkResult debug_msgr_create 
 (
-		debug_msgr_t*											debug_msgr,
-		const instance_t&										instance,
-		const VkDebugUtilsMessengerCreateInfoEXT*				pcreate_info,
-		const VkAllocationCallbacks*							pallocator
+	debug_msgr_t*							debug_msgr,
+	const instance_t&						instance,
+	const VkDebugUtilsMessengerCreateInfoEXT*			pcreate_info,
+	const VkAllocationCallbacks*					pallocator
 );
 
 VkResult debug_msgr_destroy(debug_msgr_t* debug_msgr, const instance_t& instance);
