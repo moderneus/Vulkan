@@ -13,9 +13,9 @@ struct surface_t;
 
 struct swapchain_support_detailts_t
 {
-	VkSurfaceCapabilitiesKHR		capabilities;
-	std::vector<VkSurfaceFormatKHR>		formats;
-	std::vector<VkPresentModeKHR>		present_modes;
+		VkSurfaceCapabilitiesKHR						capabilities;
+		std::vector<VkSurfaceFormatKHR>					formats;
+		std::vector<VkPresentModeKHR>					present_modes;
 };
 
 struct swapchain_t
@@ -25,12 +25,12 @@ struct swapchain_t
 
 struct swapchain_config_t
 {
-	VkExtent2D			extent = {};
-	VkFormat			format = VK_FORMAT_UNDEFINED;
-	VkColorSpaceKHR			color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-	std::vector<VkFramebuffer>	frame_buffers;
-	std::vector<VkImageView>	views; 
-	std::vector<VkImage>		imgs;
+		VkExtent2D								extent = {};
+		VkFormat								format = VK_FORMAT_UNDEFINED;
+		VkColorSpaceKHR							color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+		std::vector<VkFramebuffer>				frame_buffers;
+		std::vector<VkImageView>				views; 
+		std::vector<VkImage>					imgs;
 };
 
 swapchain_support_detailts_t swapchain_query_support_details(const phys_device_t& phys_device, const surface_t& surface);
@@ -43,13 +43,13 @@ VkExtent2D swapchain_choose_extent(const window_t& window, const VkSurfaceCapabi
 
 VkSwapchainCreateInfoKHR swapchain_create_info
 (
-	const queue_family_t&			queue_family,
-	const surface_t&			surface,
-	const VkSurfaceFormatKHR&		format, 
-	const VkPresentModeKHR&			present_mode, 
-	const VkExtent2D&			extent, 
-	const VkSurfaceCapabilitiesKHR&		capabilities, 
-	const uint32_t				img_count
+		const queue_family_t&						queue_family,
+		const surface_t&							surface,
+		const VkSurfaceFormatKHR&					format, 
+		const VkPresentModeKHR&						present_mode, 
+		const VkExtent2D&							extent, 
+		const VkSurfaceCapabilitiesKHR&				capabilities, 
+		const uint32_t								img_count
 );
 
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
