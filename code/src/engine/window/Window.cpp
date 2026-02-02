@@ -6,7 +6,7 @@ void window_create(window_t* window, const char* title, const uint32_t width, co
 {
 	log_info("Creating a Window...");
 
-	window->pwindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_VULKAN);
+	window->pwindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 
 	if (!window->pwindow) {
 		log_critical("Failed to create the Window::" + cstr_to_str(SDL_GetError()));

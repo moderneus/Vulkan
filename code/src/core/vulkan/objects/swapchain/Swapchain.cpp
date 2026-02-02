@@ -1,4 +1,6 @@
 #include "core/vulkan/objects/swapchain/Swapchain.hpp"
+#include "core/vulkan/objects/swapchain/Framebuffer.hpp"
+#include "core/vulkan/objects/swapchain/ImageView.hpp"
 #include "core/vulkan/objects/device/QueueFamily.hpp"
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "core/vulkan/objects/device/PhysicalDevice.hpp"
@@ -160,7 +162,30 @@ void swapchain_config_setup(swapchain_config_t* cfg, const swapchain_t& swapchai
 	vkGetSwapchainImagesKHR(device.handle, swapchain.handle, &img_count, cfg->imgs.data());
 }
 
-void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const window_t& window, const surface_t& surface) 
+void swapchain_recreate
+(
+	swapchain_t*				swapchain, 
+	swapchain_config_t*			cfg, 
+	const device_t&				device, 
+	const phys_device_t&			phys_device, 
+	const render_pass_t&			render_pass, 
+	const queue_family_t&			queue_family, 
+	const surface_t&			surface,
+	const window_t&				window
+)
+{
+	vkDeviceWaitIdle(device.handle);
+
+	framebuffers_destroy(*cfg, device);
+	img_views_destroy(*cfg, device);
+	swapchain_destroy(*swapchain, device);
+	
+	swapchain_create(swapchain, cfg, device, phys_device, queue_family, surface, window);
+	img_views_create(cfg, device);
+	framebuffers_create(cfg, device, render_pass);
+}
+
+void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const surface_t& surface, const window_t& window) 
 {
 	log_info("Creating a Swapchain...");
 

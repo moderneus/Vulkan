@@ -8,6 +8,7 @@
 struct window_t;
 struct queue_family_t;
 struct phys_device_t;
+struct render_pass_t;
 struct device_t;
 struct surface_t;
 
@@ -56,7 +57,19 @@ bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceK
 
 void swapchain_config_setup(swapchain_config_t* cfg, const swapchain_t& swapchain, const device_t& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent);
 
-void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const window_t& window, const surface_t& surface);
+void swapchain_recreate
+(
+	swapchain_t*				swapchain, 
+	swapchain_config_t*			cfg, 
+	const device_t&				device, 
+	const phys_device_t&			phys_device, 
+	const render_pass_t&			render_pass, 
+	const queue_family_t&			queue_family, 
+	const surface_t&			surface, 
+	const window_t&				window
+);
+
+void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const surface_t& surface, const window_t& window);
 
 void swapchain_destroy(const swapchain_t& swapchain, const device_t& device);
 

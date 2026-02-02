@@ -13,7 +13,7 @@ void vk_core_init(core_t* vk_core, const window_t& window)
 	phys_device_pick(&vk_core->phys_device, vk_core->instance, vk_core->surface);
 	queue_family_find(&vk_core->queue_family, vk_core->phys_device, vk_core->surface);
 	device_create(&vk_core->device, &vk_core->queue, vk_core->queue_family, vk_core->phys_device);
-	swapchain_create(&vk_core->swapchain, &vk_core->swapchain_cfg, vk_core->device, vk_core->phys_device, vk_core->queue_family, window, vk_core->surface);
+	swapchain_create(&vk_core->swapchain, &vk_core->swapchain_cfg, vk_core->device, vk_core->phys_device, vk_core->queue_family, vk_core->surface, window);
 	img_views_create(&vk_core->swapchain_cfg, vk_core->device);
 	pipeline_layout_create(&vk_core->pipeline_layout, vk_core->device);
 	render_pass_create(&vk_core->render_pass, vk_core->device, vk_core->swapchain_cfg);

@@ -23,5 +23,5 @@ void engine_destroy(engine_t* engine)
 
 void engine_run(engine_t* engine) 
 {
-	renderer_loop(&engine->renderer, &engine->vk_core);
+	renderer_loop(&engine->renderer, &engine->event_manager, &engine->vk_core);
 }
