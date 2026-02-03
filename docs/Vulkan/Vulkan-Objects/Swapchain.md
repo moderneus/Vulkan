@@ -71,8 +71,7 @@ SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& 
 }
 ```
 
-This is the function we call during PhysicalDevice creation. It simply returns true if the formats and present modes are supported, meaning those vectors are not empty after the request to fill them.
-
+This is the function we call during PhysicalDevice creation. It returns true if the formats and present modes are supported, meaning those vectors have desired values.
 ```cpp
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) 
 {
@@ -97,7 +96,8 @@ bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceK
 }
 ```
 
-Here we're choosing the format of images in the Swapchain. If 
+Here we're choosing the format of images in the Swapchain. A driver may not tell us what formats are supported instead he returns *VK_FORMAT_UNDEFINED*. 
+It means you can choose any desired format and the driver undertakes accept it.
 
 ```cpp
 VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>& formats) 
@@ -115,6 +115,7 @@ VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>
 }
 ```
 
+I think everything is quite simple here. But I have to explain what present modes exist and difference beetwen each other. 
 
 ```cpp
 VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKHR>& present_modes) 
