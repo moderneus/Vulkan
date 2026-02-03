@@ -7,12 +7,16 @@ The swapchain is part of WSI: Vulkan handles rendering, not presentation.
 
 # How to create?
 
+As usual create a wrapper for the Swapchain handle.
+
 ```cpp
 struct Swapchain
 {
 	VkSwapchainKHR handle = VK_NULL_HANDLE;
 };
 ```
+
+Also for additional info required by Swapchain during creation.
 
 ```cpp
 struct SwapchainSupportDetails
@@ -22,6 +26,8 @@ struct SwapchainSupportDetails
 	std::vector<VkPresentModeKHR> present_modes;
 };
 ```
+
+And for resources that represents the Swapchain state.
 
 ```cpp
 struct SwapchainState
@@ -35,8 +41,7 @@ struct SwapchainState
 };
 ```
 
-------------------------------------------
-
+First of all we query the Swapchain support details from Surface to get the available formats and present modes. 
 
 ```cpp
 SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) 
@@ -66,13 +71,33 @@ SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& 
 }
 ```
 
+This is the function we call during PhysicalDevice creation. It simply returns true if the formats and present modes are supported, meaning those vectors are not empty after the request to fill them.
+
 ```cpp
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) 
 {
-    SwapchainSupportDetails details = swapchain_query_support_details(phys_device, surface);
-    return !details.formats.empty() && !details.present_modes.empty();
+	SwapchainSupportDetails details = swapchain_query_support_details(phys_device, surface);
+	
+	bool has_srgb = false;
+	for(const auto& format : details.formats)
+	{
+		if ((format.format == VK_FORMAT_B8G8R8A8_SRGB || format.format == VK_FORMAT_UNDEFINED) &&
+   		     format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+			has_srgb = true;
+	}
+	
+	bool has_mailbox_or_fifo = false;
+	for(const auto& present_mode : details.present_modes)
+	{
+		if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR || present_mode == VK_PRESENT_MODE_FIFO_KHR)
+			has_mailbox_or_fifo = true;
+	}
+	
+	return has_srgb && has_mailbox_or_fifo;
 }
 ```
+
+Here we're choosing the format of images in the Swapchain. If 
 
 ```cpp
 VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>& formats) 
