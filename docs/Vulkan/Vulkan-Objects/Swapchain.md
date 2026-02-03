@@ -173,7 +173,14 @@ VkSwapchainCreateInfoKHR swapchain_create_info
 ```
 
 ```cpp
-void swapchain_config_setup(SwapchainState* st, const Swapchain& swapchain, const Device& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent)
+void swapchain_config_setup
+(
+	SwapchainState* st,
+	const Swapchain& swapchain,
+	const Device& device,
+	const VkSurfaceFormatKHR& format,
+	const VkExtent2D& extent
+)
 {
     st->format = format.format;
     st->extent = extent;
@@ -233,7 +240,8 @@ void swapchain_create
     if(details.capabilities.maxImageCount > 0 && img_count > details.capabilities.maxImageCount) 
         img_count = details.capabilities.maxImageCount;
     
-    VkSwapchainCreateInfoKHR swapchain_info = swapchain_create_info(queue_family, surface, format, present_mode, extent, details.capabilities, img_count);
+    VkSwapchainCreateInfoKHR swapchain_info = swapchain_create_info(queue_family, surface, format, present_mode,
+								    extent, details.capabilities, img_count);
     
     if(vkCreateSwapchainKHR(device.handle, &swapchain_info, nullptr, &swapchain->handle) != VK_SUCCESS)
         log_critical("Failed to Create the Swapchain.");
