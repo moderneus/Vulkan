@@ -15,7 +15,7 @@ VkCommandBufferBeginInfo command_buffer_create_begin_info()
 	return create_info;
 }
 
-void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_config_t& cfg, const uint32_t img_idx) 
+void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_state_t& st, const uint32_t img_idx) 
 {
 	VkCommandBufferBeginInfo command_buffer_begin_info = command_buffer_create_begin_info();
 
@@ -24,14 +24,14 @@ void command_buffer_record(const command_buffer_t& command_buffer, const pipelin
 	}
 
 	VkClearValue clear_color = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-	VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, cfg, img_idx, clear_color);
+	VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, st, img_idx, clear_color);
 
 	vkCmdBeginRenderPass(command_buffer.handle, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
 		vkCmdBindPipeline(command_buffer.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);
-		VkViewport viewport = pipeline_create_viewport(cfg);
+		VkViewport viewport = pipeline_create_viewport(st);
 		vkCmdSetViewport(command_buffer.handle, 0, 1, &viewport);
-		VkRect2D scissor = pipeline_create_scissor(cfg);
+		VkRect2D scissor = pipeline_create_scissor(st);
 		vkCmdSetScissor(command_buffer.handle, 0, 1, &scissor);
 		vkCmdDraw(command_buffer.handle, 3, 1, 0, 0);
 

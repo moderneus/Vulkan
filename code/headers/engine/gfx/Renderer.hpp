@@ -12,7 +12,7 @@ struct renderer_t
 	window_t* pwindow;
 };
 
-struct renderer_config_t
+struct renderer_state_t
 {
 	uint32_t current_frame = 0;
 	bool framebuffer_resized = false;
@@ -24,6 +24,6 @@ void renderer_destroy(renderer_t* renderer);
 
 void renderer_loop(renderer_t* renderer, event_manager_t* event_manager, core_t* vk_core);
 
-void renderer_draw(const renderer_t& renderer, renderer_config_t* cfg, core_t* vk_core);
+void renderer_draw(const renderer_t& renderer, renderer_state_t* st, core_t* vk_core);
 
 #endif

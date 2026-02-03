@@ -2,7 +2,7 @@
 #include "engine/gfx/Renderer.hpp"
 #include "engine/window/Window.hpp"
 
-void event_manager_poll_events(event_manager_t* event_manager, renderer_config_t* cfg, window_t* window) 
+void event_manager_poll_events(event_manager_t* event_manager, renderer_state_t* st, window_t* window) 
 {
 	while(SDL_PollEvent(&event_manager->event)) {
 		switch(event_manager->event.type) {
@@ -11,7 +11,7 @@ void event_manager_poll_events(event_manager_t* event_manager, renderer_config_t
 		break;
 
 		case SDL_EVENT_WINDOW_RESIZED:
-			cfg->framebuffer_resized = true;
+			st->framebuffer_resized = true;
 		break;
 		}
 	}

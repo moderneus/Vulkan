@@ -24,7 +24,7 @@ struct swapchain_t
 	VkSwapchainKHR handle = VK_NULL_HANDLE;
 };
 
-struct swapchain_config_t
+struct swapchain_state_t
 {
 	VkExtent2D					extent = {};
 	VkFormat					format = VK_FORMAT_UNDEFINED;
@@ -55,12 +55,12 @@ VkSwapchainCreateInfoKHR swapchain_create_info
 
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
 
-void swapchain_config_setup(swapchain_config_t* cfg, const swapchain_t& swapchain, const device_t& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent);
+void swapchain_config_setup(swapchain_state_t* st, const swapchain_t& swapchain, const device_t& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent);
 
 void swapchain_recreate
 (
 	swapchain_t*				swapchain, 
-	swapchain_config_t*			cfg, 
+	swapchain_state_t*			st, 
 	const device_t&				device, 
 	const phys_device_t&			phys_device, 
 	const render_pass_t&			render_pass, 
@@ -69,7 +69,7 @@ void swapchain_recreate
 	const window_t&				window
 );
 
-void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const surface_t& surface, const window_t& window);
+void swapchain_create(swapchain_t* swapchain, swapchain_state_t* st, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const surface_t& surface, const window_t& window);
 
 void swapchain_destroy(const swapchain_t& swapchain, const device_t& device);
 

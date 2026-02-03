@@ -6,23 +6,23 @@
 #include "core/vulkan/objects/renderpass/RenderPass.hpp"
 #include "util/debug/Logger.hpp"
 
-VkViewport pipeline_create_viewport(const swapchain_config_t& cfg) 
+VkViewport pipeline_create_viewport(const swapchain_state_t& st) 
 {
 	VkViewport viewport = {};
 	viewport.x = 0.0f;
 	viewport.y = 0.0f;
-	viewport.width = static_cast<float>(cfg.extent.width);
-	viewport.height = static_cast<float>(cfg.extent.height);
+	viewport.width = static_cast<float>(st.extent.width);
+	viewport.height = static_cast<float>(st.extent.height);
 	viewport.minDepth = 0.0f;
 	viewport.maxDepth = 1.0f;
 	return viewport;
 }
 
-VkRect2D pipeline_create_scissor(const swapchain_config_t& cfg) 
+VkRect2D pipeline_create_scissor(const swapchain_state_t& st) 
 {
 	VkRect2D scissor = {};
 	scissor.offset = {0, 0};
-	scissor.extent = cfg.extent;
+	scissor.extent = st.extent;
 	return scissor;
 }
 
@@ -72,12 +72,12 @@ VkPipelineShaderStageCreateInfo pipeline_create_shader_stage_info(const shader_m
 	return create_info;
 }
 
-std::vector<VkPipelineShaderStageCreateInfo> pipeline_create_shader_stage_infos(pipeline_config_t* cfg)
+std::vector<VkPipelineShaderStageCreateInfo> pipeline_create_shader_stage_infos(const pipeline_config_t& cfg)
 {
 	log_info("Creating the Shader Stage Infos...");
 
 	std::vector<VkPipelineShaderStageCreateInfo> shader_stage_infos;
-	for(const auto& shader_module : cfg->shader_module_refs) {
+	for(const auto& shader_module : cfg.shader_module_refs) {
 		shader_stage_infos.push_back(pipeline_create_shader_stage_info(shader_module));
 	}
 	return shader_stage_infos;
@@ -202,22 +202,22 @@ VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info(const VkPip
 	return create_info;
 }
 
-VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_state_t &state, const pipeline_layout_t& pipeline_layout, const render_pass_t& render_pass)
+VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info_t& info, const pipeline_layout_t& pipeline_layout, const render_pass_t& render_pass)
 {
 	log_info("Creating the Pipeline Info...");
 
 	VkGraphicsPipelineCreateInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	create_info.stageCount = 2;
-	create_info.pStages = state.shader_stages.data();
-	create_info.pVertexInputState = &state.vertex_input_info;
-	create_info.pInputAssemblyState = &state.input_assembly_info;
-	create_info.pViewportState = &state.viewport_info;
-	create_info.pRasterizationState = &state.rasterization_info;
-	create_info.pMultisampleState = &state.multisample_info;
+	create_info.pStages = info.shader_stage_info.data();
+	create_info.pVertexInputState = &info.vertex_input_info;
+	create_info.pInputAssemblyState = &info.input_assembly_info;
+	create_info.pViewportState = &info.viewport_info;
+	create_info.pRasterizationState = &info.rasterization_info;
+	create_info.pMultisampleState = &info.multisample_info;
 	create_info.pDepthStencilState = nullptr;
-	create_info.pColorBlendState = &state.color_blend_info;
-	create_info.pDynamicState = &state.dynamic_state_info;
+	create_info.pColorBlendState = &info.color_blend_info;
+	create_info.pDynamicState = &info.dynamic_state_info;
 	create_info.layout = pipeline_layout.handle;
 	create_info.renderPass = render_pass.handle;
 	create_info.subpass = 0;
@@ -227,27 +227,27 @@ VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_state_t &state,
 	return create_info;
 }
 
-void pipeline_config_setup(pipeline_config_t* pipeline_cfg, const swapchain_config_t& swapchain_cfg, const std::array<shader_module_t, 2>& shader_modules)
-{
-	pipeline_cfg->shader_module_refs = pipeline_create_shader_module_refs(shader_modules);
-	pipeline_cfg->state.shader_stages = pipeline_create_shader_stage_infos(pipeline_cfg);
-	pipeline_cfg->state.vertex_input_info = pipeline_create_vertex_input_info();
-	pipeline_cfg->state.input_assembly_info = pipeline_create_input_assembly_info();
-	pipeline_cfg->viewport = pipeline_create_viewport(swapchain_cfg);
-	pipeline_cfg->scissor = pipeline_create_scissor(swapchain_cfg);
-	pipeline_cfg->state.viewport_info = pipeline_create_viewport_info(pipeline_cfg->viewport, pipeline_cfg->scissor);
-	pipeline_cfg->state.rasterization_info = pipeline_create_rasterization_info();
-	pipeline_cfg->state.multisample_info = pipeline_create_multisample_info();
-	pipeline_cfg->attachment = pipeline_create_color_blend_attachment();
-	pipeline_cfg->state.color_blend_info = pipeline_create_color_blend_info(&pipeline_cfg->attachment);
-	pipeline_cfg->state.dynamic_state_info = pipeline_create_dynamic_state_info(pipeline_cfg->dynamic_states);
-}
-
-void pipeline_create(pipeline_t* pipeline, const device_t& device, const pipeline_config_t& cfg, const pipeline_layout_t& pipeline_layout, const render_pass_t& render_pass) 
+void pipeline_create(pipeline_t* pipeline, const device_t& device, const swapchain_state_t& st, const pipeline_layout_t& pipeline_layout, const render_pass_t& render_pass, const std::array<shader_module_t, 2> shader_modules) 
 {
 	log_info("Creating a Pipeline...");
 
-	VkGraphicsPipelineCreateInfo pipeline_info = pipeline_create_info(cfg.state, pipeline_layout, render_pass);
+	pipeline_config_t cfg = {};
+	cfg.shader_module_refs = pipeline_create_shader_module_refs(shader_modules);
+	cfg.viewport = pipeline_create_viewport(st);
+	cfg.scissor = pipeline_create_scissor(st);
+	cfg.attachment = pipeline_create_color_blend_attachment();
+
+	pipeline_info_t info = {};
+	info.shader_stage_info = pipeline_create_shader_stage_infos(cfg);
+	info.vertex_input_info = pipeline_create_vertex_input_info();
+	info.input_assembly_info = pipeline_create_input_assembly_info();
+	info.viewport_info = pipeline_create_viewport_info(cfg.viewport, cfg.scissor);
+	info.rasterization_info = pipeline_create_rasterization_info();
+	info.multisample_info = pipeline_create_multisample_info();
+	info.color_blend_info = pipeline_create_color_blend_info(&cfg.attachment);
+	info.dynamic_state_info = pipeline_create_dynamic_state_info(cfg.dynamic_states);
+
+	VkGraphicsPipelineCreateInfo pipeline_info = pipeline_create_info(info, pipeline_layout, render_pass);
 
 	if (vkCreateGraphicsPipelines(device.handle, VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &pipeline->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Graphics Pipeline.");

@@ -22,16 +22,16 @@ VkImageViewCreateInfo img_view_create_info(const VkImage& img, const VkFormat& f
 	return create_info;
 }
 
-void img_views_create(swapchain_config_t* cfg, const device_t& device) 
+void img_views_create(swapchain_state_t* st, const device_t& device) 
 {
 	log_info("Creating an Image Views...");
 
-	cfg->views.resize(cfg->imgs.size());
+	st->views.resize(st->imgs.size());
 
-	for(uint32_t i = 0; i < cfg->imgs.size(); ++i) {
-		VkImageViewCreateInfo img_view_info = img_view_create_info(cfg->imgs[i], cfg->format);
+	for(uint32_t i = 0; i < st->imgs.size(); ++i) {
+		VkImageViewCreateInfo img_view_info = img_view_create_info(st->imgs[i], st->format);
 
-		if (vkCreateImageView(device.handle, &img_view_info, nullptr, &cfg->views[i]) != VK_SUCCESS) {
+		if (vkCreateImageView(device.handle, &img_view_info, nullptr, &st->views[i]) != VK_SUCCESS) {
 			log_critical("Failed to Create the ImageView.");
 		}
 	}
@@ -39,11 +39,11 @@ void img_views_create(swapchain_config_t* cfg, const device_t& device)
 	log_info("The Image Views were Created.");
 }
 
-void img_views_destroy(const swapchain_config_t& cfg, const device_t& device) 
+void img_views_destroy(const swapchain_state_t& st, const device_t& device) 
 {
 	log_info("Destroying the Image Views...");
 
-	for(auto& view : cfg.views) {
+	for(auto& view : st.views) {
 		vkDestroyImageView(device.handle, view, nullptr);
 	}
 

@@ -3,25 +3,25 @@
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 
-VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass_t& render_pass, const swapchain_config_t& cfg, uint32_t img_idx, const VkClearValue clear_color) 
+VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass_t& render_pass, const swapchain_state_t& st, uint32_t img_idx, const VkClearValue clear_color) 
 {
 	VkRenderPassBeginInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	create_info.renderPass = render_pass.handle;
-	create_info.framebuffer = cfg.frame_buffers[img_idx];
+	create_info.framebuffer = st.frame_buffers[img_idx];
 	create_info.renderArea.offset = {0, 0};
-	create_info.renderArea.extent = cfg.extent;
+	create_info.renderArea.extent = st.extent;
 	create_info.clearValueCount = 1;
 	create_info.pClearValues = &clear_color;
 	return create_info;
 }
 
-VkAttachmentDescription render_pass_create_attachment_description(const swapchain_config_t& cfg) 
+VkAttachmentDescription render_pass_create_attachment_description(const swapchain_state_t& st) 
 {
 	log_info("Creating an Attachment Description...");
 
 	VkAttachmentDescription description = {};
-	description.format = cfg.format;
+	description.format = st.format;
 	description.samples = VK_SAMPLE_COUNT_1_BIT;
 	description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -92,11 +92,11 @@ VkRenderPassCreateInfo render_pass_create_info(VkAttachmentDescription* pattache
 	return create_info;
 }
 
-void render_pass_create(render_pass_t* render_pass, const device_t& device, const swapchain_config_t& cfg) 
+void render_pass_create(render_pass_t* render_pass, const device_t& device, const swapchain_state_t& st) 
 {
 	log_info("Creating a Render Pass...");
 
-	VkAttachmentDescription color_attachment = render_pass_create_attachment_description(cfg);
+	VkAttachmentDescription color_attachment = render_pass_create_attachment_description(st);
 	VkAttachmentReference color_attachment_ref = render_pass_create_attachment_reference();
 	VkSubpassDescription subpass = render_pass_create_subpass_description(&color_attachment_ref);
 	VkSubpassDependency subpass_dependency = render_pass_create_subpass_dependency();

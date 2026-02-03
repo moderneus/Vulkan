@@ -150,22 +150,22 @@ VkSwapchainCreateInfoKHR swapchain_create_info
 	return create_info;
 }
 
-void swapchain_config_setup(swapchain_config_t* cfg, const swapchain_t& swapchain, const device_t& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent)
+void swapchain_config_setup(swapchain_state_t* st, const swapchain_t& swapchain, const device_t& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent)
 {
-	cfg->format = format.format;
-	cfg->extent = extent;
+	st->format = format.format;
+	st->extent = extent;
 
 	uint32_t img_count = 0;
 	vkGetSwapchainImagesKHR(device.handle, swapchain.handle, &img_count, nullptr);
 
-	cfg->imgs.resize(img_count);
-	vkGetSwapchainImagesKHR(device.handle, swapchain.handle, &img_count, cfg->imgs.data());
+	st->imgs.resize(img_count);
+	vkGetSwapchainImagesKHR(device.handle, swapchain.handle, &img_count, st->imgs.data());
 }
 
 void swapchain_recreate
 (
 	swapchain_t*				swapchain, 
-	swapchain_config_t*			cfg, 
+	swapchain_state_t*			st, 
 	const device_t&				device, 
 	const phys_device_t&			phys_device, 
 	const render_pass_t&			render_pass, 
@@ -176,16 +176,16 @@ void swapchain_recreate
 {
 	vkDeviceWaitIdle(device.handle);
 
-	framebuffers_destroy(*cfg, device);
-	img_views_destroy(*cfg, device);
+	framebuffers_destroy(*st, device);
+	img_views_destroy(*st, device);
 	swapchain_destroy(*swapchain, device);
 	
-	swapchain_create(swapchain, cfg, device, phys_device, queue_family, surface, window);
-	img_views_create(cfg, device);
-	framebuffers_create(cfg, device, render_pass);
+	swapchain_create(swapchain, st, device, phys_device, queue_family, surface, window);
+	img_views_create(st, device);
+	framebuffers_create(st, device, render_pass);
 }
 
-void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const surface_t& surface, const window_t& window) 
+void swapchain_create(swapchain_t* swapchain, swapchain_state_t* st, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const surface_t& surface, const window_t& window) 
 {
 	log_info("Creating a Swapchain...");
 
@@ -206,7 +206,7 @@ void swapchain_create(swapchain_t* swapchain, swapchain_config_t* cfg, const dev
 		log_critical("Failed to Create the Swapchain.");
 	}
 
-	swapchain_config_setup(cfg, *swapchain, device, format, extent);
+	swapchain_config_setup(st, *swapchain, device, format, extent);
 
 	log_info("The Swapchain was Created.");
 }
