@@ -37,8 +37,23 @@ swapchain_support_detailts_t swapchain_query_support_details(const VkPhysicalDev
 
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) 
 {
-    swapchain_support_detailts_t details = swapchain_query_support_details(phys_device, surface);
-    return !details.formats.empty() && !details.present_modes.empty();
+	swapchain_support_detailts_t details = swapchain_query_support_details(phys_device, surface);
+
+	bool has_srgb = false;
+	for(const auto& format : details.formats) {
+		if ((format.format == VK_FORMAT_B8G8R8A8_SRGB || format.format == VK_FORMAT_UNDEFINED) && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+			has_srgb = true;
+		}
+	}
+
+	bool has_mailbox_or_fifo = false;
+	for(const auto& present_mode : details.present_modes) {
+		if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR || present_mode == VK_PRESENT_MODE_FIFO_KHR) {
+			has_mailbox_or_fifo = true;
+		}
+	}
+
+	return has_srgb && has_mailbox_or_fifo;
 }
 
 VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>& formats) 
