@@ -72,6 +72,7 @@ SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& 
 ```
 
 This is the function we call during PhysicalDevice creation. It returns true if the formats and present modes are supported, meaning those vectors have desired values.
+
 ```cpp
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) 
 {
@@ -117,6 +118,12 @@ VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>
 
 I think everything is quite simple here. But I have to explain what present modes exist and difference beetwen each other. 
 
+- **FIFO** — Images are displayed strictly one after another. All images will be displayed, but if the image queue is full, the graphics device is forced to wait.
+- **MAILBOX** — This is the same FIFO, but with frame replacement if the graphics device is running too fast. If, when displaying an image, others are already outdated, they are replaced with current ones.
+- **FIFO_RELAXED** — This is the same as FIFO, however, frames are still sometimes replaced so as not to block the graphics device too much.
+
+We're choosing **MAILBOX** for minimal input lag, but if we didn't find him we select **FIFO** that always supported.
+
 ```cpp
 VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKHR>& present_modes) 
 {
@@ -129,6 +136,7 @@ VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKH
 }
 ```
 
+Now, we must choose an extent of images. The extent itself represents a size of thing in pixels. In the Swapchain extent is the image size.
 
 ```cpp
 VkExtent2D swapchain_choose_extent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities) 
