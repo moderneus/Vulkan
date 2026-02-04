@@ -2,17 +2,17 @@
 
 **This is my own take on the code from the Vulkan Tutorial. It's not a unique project or design — it's simply my vision of the potential structure of a good Vulkan program.**
 
-- Feel free to criticize any part of the program.
+- **Feel free to criticize any part of the program.**
 
-- Nothing prevents you from using any of the ideas.
+- **Nothing prevents you from using any of the ideas.**
 
-- Give it a star if you like it! :)
+- **Give it a star if you like it! :)**
 
 # Screenshot!
 
 **Now the program can draw a multi-colored triangle! :DDD**
 
-![Now the program draws a multi-colored triangle!](images/triangle.jpg)
+![Triangle](images/triangle.jpg)
 
 # How to build?
 
@@ -21,24 +21,26 @@
 ## Clone the repository
 
 ### Archlinux:
-- Install using pacman: ````sudo pacman -S git````
+- **Install via pacman:** ```sudo pacman -S git```
 
 ### Windows:
-- Git download page: [git](https://git-scm.com/install/windows)
+- **Git download page:** [git](https://git-scm.com/install/windows)
 
 
 ### Clone: 
-- ````git clone --recurse-submodules https://github.com/moderneus/Vulkan````
+- ```git clone --recurse-submodules https://github.com/moderneus/Vulkan```
 
 ## Install the required dependencies
 
 ### Archlinux:
   
-  - ````sudo pacman -S vulkan-devel````
+  - ```sudo pacman -S vulkan-devel```
+
+  - ```sudo pacman -S shaderc```
   
-  - ````sudo pacman -S cmake````
-  
-  - ````sudo pacman -S clang````
+  - ```sudo pacman -S cmake```
+
+  - ```sudo pacman -S clang```
 ### Windows:
 - [Vulkan SDK](https://vulkan.lunarg.com/sdk/home)
 - [CMake](https://cmake.org/download/)
@@ -47,13 +49,13 @@
 ## Build Environment
 
 ### Archlinux:
-- You have everything ready, you can start building!
+- **You have everything ready, you can start building!**
 ### Windows: 
-- be sure to add the dependency bin folders to the global PATH variable!
+- **Be sure to add the dependency bin folders to the global PATH variable!**
 
 ## Building!
 **The commands are identical between the two operating systems, the only difference being that Windows uses a backslash.**
-- Commands:
+- **Commands:**
 
       mkdir code/build
       cd code/build

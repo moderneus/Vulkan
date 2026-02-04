@@ -1,73 +1,82 @@
 #include "engine/gfx/Renderer.hpp"
-#include "util/EventManager.hpp"
+#include "engine/events/EventManager.hpp"
+#include "engine/window/Window.hpp"
+#include "core/vulkan/Core.hpp"
 #include "util/debug/Logger.hpp"
 #include "util/Constants.hpp"
 
 #include <vulkan/vulkan.h>
 
-uint32_t current_frame = 0;
+#include <array>
 
-void renderer_init(Renderer* renderer, Window* pwindow) {
-    log_info("Initializing a Renderer...");
-    renderer->pwindow = pwindow;
-    log_success("The Renderer was Initialized!");
+void renderer_init(renderer_t* renderer, window_t* pwindow) 
+{
+	log_info("Initializing a Renderer...");
+
+	renderer->pwindow = pwindow;
+
+	log_info("The Renderer was Initialized.");
 }
 
-void renderer_destroy(Renderer* renderer) {
-    log_info("Destroying the Renderer...");
-    renderer->pwindow = nullptr;
-    log_success("The Renderer was Destroyed!");
+void renderer_destroy(renderer_t* renderer) 
+{
+	log_info("Destroying the Renderer...");
+
+	renderer->pwindow = nullptr;
+
+	log_info("The Renderer was Destroyed.");
 }
 
-void renderer_loop(Renderer* renderer, const Core* vk_core) {
-    while(!renderer->pwindow->is_closed) {
-        event_manager_poll_events(&renderer->event_manager, renderer->pwindow);
-        renderer_draw(vk_core);
-    }
-    vkDeviceWaitIdle(vk_core->device.handle);
+void renderer_loop(renderer_t* renderer, event_manager_t* event_manager, core_t* vk_core) 
+{
+	renderer_state_t st = {};
+	while(!renderer->pwindow->is_closed) {
+		event_manager_poll_events(event_manager, &st, renderer->pwindow);
+		renderer_draw(*renderer, &st, vk_core);
+	}
+	vkDeviceWaitIdle(vk_core->device.handle);
 }
 
-void renderer_draw(const Core* vk_core) {
-    vkWaitForFences(vk_core->device.handle, 1, &vk_core->in_flight_fences[current_frame].handle, VK_TRUE, UINT64_MAX);
-    vkResetFences(vk_core->device.handle, 1, &vk_core->in_flight_fences[current_frame].handle);
+void renderer_draw(const renderer_t& renderer, renderer_state_t* st, core_t* vk_core) 
+{
+	vkWaitForFences(vk_core->device.handle, 1, &vk_core->in_flight_fences[st->current_frame].handle, VK_TRUE, UINT64_MAX);
 
-    uint32_t img_idx;
-    vkAcquireNextImageKHR(vk_core->device.handle, vk_core->swapchain.handle, UINT64_MAX, vk_core->img_available_semaphores[current_frame].handle, VK_NULL_HANDLE, &img_idx);
+	uint32_t img_idx;
+	VkResult res = vkAcquireNextImageKHR(vk_core->device.handle, vk_core->swapchain.handle, UINT64_MAX, vk_core->img_available_semaphores[st->current_frame].handle, VK_NULL_HANDLE, &img_idx);
 
-    vkResetCommandBuffer(vk_core->command_buffers[current_frame].handle, 0);
-    command_buffer_record(vk_core->command_buffers[current_frame], vk_core->pipeline, vk_core->render_pass, vk_core->swapchain, img_idx);
-    
-    VkSubmitInfo submit_info = {};
-    submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	if (res == VK_ERROR_OUT_OF_DATE_KHR) {
+		swapchain_recreate(&vk_core->swapchain, &vk_core->swapchain_state, vk_core->device, vk_core->phys_device, vk_core->render_pass, vk_core->queue_family, vk_core->surface, *renderer.pwindow);
+		return;
+	} else if (res != VK_SUCCESS && res != VK_SUBOPTIMAL_KHR) {
+		log_critical("Failed to Acquire Swapchain Image.");
+	}
 
-    VkSemaphore wait_semaphores[] = {vk_core->img_available_semaphores[current_frame].handle};
-    VkPipelineStageFlags wait_stages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-    submit_info.waitSemaphoreCount = 1;
-    submit_info.pWaitSemaphores = wait_semaphores;
-    submit_info.pWaitDstStageMask = wait_stages;
-    submit_info.commandBufferCount = 1;
-    submit_info.pCommandBuffers = &vk_core->command_buffers[current_frame].handle;
-    
-    VkSemaphore signal_semaphores[] = {vk_core->render_finished_semaphores[current_frame].handle};
-    submit_info.signalSemaphoreCount = 1;
-    submit_info.pSignalSemaphores = signal_semaphores;
+	vkResetFences(vk_core->device.handle, 1, &vk_core->in_flight_fences[st->current_frame].handle);
 
-    if(vkQueueSubmit(vk_core->queue.graphics, 1, &submit_info, vk_core->in_flight_fences[current_frame].handle) != VK_SUCCESS) {
-        log_critical("Failed to Submit Draw Command Buffer!");
-    }
+	vkResetCommandBuffer(vk_core->command_buffers[st->current_frame].handle, 0);
+	command_buffer_record(vk_core->command_buffers[st->current_frame], vk_core->pipeline, vk_core->render_pass, vk_core->swapchain_state, img_idx);
 
-    VkPresentInfoKHR present_info = {};
-    present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    present_info.waitSemaphoreCount = 1;
-    present_info.pWaitSemaphores = signal_semaphores;
+	std::array<VkSemaphore, 1> wait_semaphores = {vk_core->img_available_semaphores[st->current_frame].handle};
+	std::array<VkPipelineStageFlags, 1> wait_stages = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+	std::array<VkSemaphore, 1> signal_semaphores = {vk_core->render_finished_semaphores[st->current_frame].handle};
 
-    VkSwapchainKHR swapchains[] = {vk_core->swapchain.handle};
-    present_info.swapchainCount = 1;
-    present_info.pSwapchains = swapchains;
-    present_info.pImageIndices = &img_idx;
-    present_info.pResults = nullptr;
+	VkSubmitInfo submit_info = queue_create_submit_info(st->current_frame, wait_semaphores, signal_semaphores, wait_stages, vk_core->command_buffers);
 
-    vkQueuePresentKHR(vk_core->queue.present, &present_info);
-    
-    current_frame = (current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
+	if (vkQueueSubmit(vk_core->queue.graphics, 1, &submit_info, vk_core->in_flight_fences[st->current_frame].handle) != VK_SUCCESS) {
+		log_critical("Failed to Submit Draw Command Buffer.");
+	}
+
+	std::array<VkSwapchainKHR, 1> swapchains = {vk_core->swapchain.handle};
+	VkPresentInfoKHR present_info = queue_create_present_info(signal_semaphores, swapchains, img_idx);
+
+	vkQueuePresentKHR(vk_core->queue.present, &present_info);
+
+	if (res == VK_ERROR_OUT_OF_DATE_KHR || res == VK_SUBOPTIMAL_KHR || st->framebuffer_resized) {
+		st->framebuffer_resized = false;
+		swapchain_recreate(&vk_core->swapchain, &vk_core->swapchain_state, vk_core->device, vk_core->phys_device, vk_core->render_pass, vk_core->queue_family, vk_core->surface, *renderer.pwindow);
+	} else if (res != VK_SUCCESS) {
+		log_critical("Failed to Present Swapchain Image.");
+	}
+
+	st->current_frame = (st->current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
