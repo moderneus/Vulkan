@@ -1,7 +1,7 @@
 # Architecture
-````
-Vulkan
-│ 
+```
+code
+│
 ├── headers
 │   ├── core
 │   │   ├── SDL
@@ -9,89 +9,110 @@ Vulkan
 │   │   └── vulkan
 │   │       ├── Core.hpp
 │   │       └── objects
-│   │           ├── CommandBuffer.hpp
-│   │           ├── CommandPool.hpp
-│   │           ├── Fence.hpp
-│   │           ├── Framebuffer.hpp
-│   │           ├── ImageView.hpp
-│   │           ├── Instance.hpp
-│   │           ├── LogicalDevice.hpp
-│   │           ├── PhysicalDevice.hpp
-│   │           ├── Pipeline.hpp
-│   │           ├── PipelineLayout.hpp
-│   │           ├── Queue.hpp
-│   │           ├── QueueFamily.hpp
-│   │           ├── RenderPass.hpp
-│   │           ├── Semaphore.hpp
-│   │           ├── ShaderModule.hpp
-│   │           ├── Surface.hpp
-│   │           └── Swapchain.hpp
+│   │           ├── commands
+│   │           │   ├── CommandBuffer.hpp
+│   │           │   └── CommandPool.hpp
+│   │           ├── debug
+│   │           │   └── DebugMessenger.hpp
+│   │           ├── device
+│   │           │   ├── LogicalDevice.hpp
+│   │           │   ├── PhysicalDevice.hpp
+│   │           │   ├── QueueFamily.hpp
+│   │           │   └── Queue.hpp
+│   │           ├── instance
+│   │           │   ├── Instance.hpp
+│   │           │   └── Surface.hpp
+│   │           ├── pipeline
+│   │           │   ├── Pipeline.hpp
+│   │           │   ├── PipelineLayout.hpp
+│   │           │   └── ShaderModule.hpp
+│   │           ├── renderpass
+│   │           │   └── RenderPass.hpp
+│   │           ├── swapchain
+│   │           │   ├── Framebuffer.hpp
+│   │           │   ├── ImageView.hpp
+│   │           │   └── Swapchain.hpp
+│   │           └── sync
+│   │               ├── Fence.hpp
+│   │               └── Semaphore.hpp
+│   │
 │   ├── engine
 │   │   ├── Engine.hpp
+│   │   ├── events
+│   │   │   └── EventManager.hpp
 │   │   ├── gfx
 │   │   │   └── Renderer.hpp
 │   │   └── window
 │   │       └── Window.hpp
+│   │
 │   └── util
 │       ├── Constants.hpp
-│       ├── EventManager.hpp
-│       ├── File.hpp
-│       ├── String.hpp
+│       ├── File.hpp
+│       ├── String.hpp
 │       └── debug
-│           ├── Logger.hpp
-│           └── ValidationLayers.hpp
+│           ├── Logger.hpp
+│           └── ValidationLayers.hpp         
+│
 ├── libs
-│   ├── SDL
-│   └── fmt
-│ 
+│   ├── SDL
+│   └── fmt
+│
 ├── shaders
 │   ├── frag
-│   │   ├── FragmentShader.frag
-│   │   └── FragmentShader.spv
+│   │   └── FragmentShader.frag
 │   └── vert
-│       ├── FragmentShader.spv
-│       ├── VertexShader.spv
 │       └── VertexShader.vert
-│ 
+│
 ├── src
-│    ├── Vulkan.cpp
-│    ├── core
-│    │   ├── SDL
-│    │   │   └── SDL.cpp
-│    │   └── vulkan
-│    │       ├── Core.cpp
-│    │       └── objects
-│    │           ├── CommandBuffer.cpp
-│    │           ├── CommandPool.cpp
-│    │           ├── Fence.cpp
-│    │           ├── Framebuffer.cpp
-│    │           ├── ImageView.cpp
-│    │           ├── Instance.cpp
-│    │           ├── LogicalDevice.cpp
-│    │           ├── PhysicalDevice.cpp
-│    │           ├── Pipeline.cpp
-│    │           ├── PipelineLayout.cpp
-│    │           ├── QueueFamily.cpp
-│    │           ├── RenderPass.cpp
-│    │           ├── Semaphore.cpp
-│    │           ├── ShaderModule.cpp
-│    │           ├── Surface.cpp
-│    │           └── Swapchain.cpp
-│    ├── engine
-│    │   ├── Engine.cpp
-│    │   ├── gfx
-│    │   │   └── Renderer.cpp
-│    │   └── window
-│    │       └── Window.cpp
-│    └── util
-│        ├── EventManager.cpp
-│        ├── File.cpp
-│        ├── String.cpp
-│        └── debug
-│            ├── Logger.cpp
-│            └── ValidationLayers.cpp
-│ 
-├── CMakeLists.txt
-├── LICENSE
-└── README.md
-````
+│   ├── core
+│   │   ├── SDL
+│   │   │   └── SDL.cpp
+│   │   └── vulkan
+│   │       ├── Core.cpp
+│   │       └── objects
+│   │           ├── commands
+│   │           │   ├── CommandBuffer.cpp
+│   │           │   └── CommandPool.cpp
+│   │           ├── debug
+│   │           │   └── DebugMessenger.cpp
+│   │           ├── device
+│   │           │   ├── LogicalDevice.cpp
+│   │           │   ├── PhysicalDevice.cpp
+│   │           │   ├── QueueFamily.cpp
+│   │           │   └── Queue.cpp
+│   │           ├── instance
+│   │           │   ├── Instance.cpp
+│   │           │   └── Surface.cpp
+│   │           ├── pipeline
+│   │           │   ├── Pipeline.cpp
+│   │           │   ├── PipelineLayout.cpp
+│   │           │   └── ShaderModule.cpp
+│   │           ├── renderpass
+│   │           │   └── RenderPass.cpp
+│   │           ├── swapchain
+│   │           │   ├── Framebuffer.cpp
+│   │           │   ├── ImageView.cpp
+│   │           │   └── Swapchain.cpp
+│   │           └── sync
+│   │               ├── Fence.cpp
+│   │               └── Semaphore.cpp
+│   │
+│   ├── engine
+│   │   ├── Engine.cpp
+│   │   ├── events
+│   │   │   └── EventManager.cpp
+│   │   ├── gfx
+│   │   │   └── Renderer.cpp
+│   │   └── window
+│   │       └── Window.cpp
+│   │   
+│   ├── util
+│   │      ├── File.cpp
+│   │      ├── String.cpp
+│   │      └── debug
+│   │          ├── Logger.cpp
+│   │          └── ValidationLayers.cpp
+│   └── Vulkan.cpp
+│
+└── CMakeLists.txt
+```
