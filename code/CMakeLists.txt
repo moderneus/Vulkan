@@ -14,6 +14,7 @@ project(${TARGET} LANGUAGES CXX)
 
 add_subdirectory("libs/fmt")
 add_subdirectory("libs/SDL")
+add_subdirectory("libs/glm")
 
 find_package(Vulkan REQUIRED)
 
@@ -25,7 +26,7 @@ target_compile_options(${TARGET} PRIVATE -g -std=c++20 -O2 -Wall -Wextra -Wpedan
 target_include_directories(${TARGET} PRIVATE headers libs/SDL/include libs/fmt/include)
 target_link_libraries(${TARGET} PRIVATE SDL3::SDL3 fmt::fmt Vulkan::Vulkan)
 
-set(DYNAMIC_LIBS SDL3::SDL3 fmt::fmt)
+set(DYNAMIC_LIBS SDL3::SDL3 fmt::fmt glm::glm)
 
 foreach(lib IN LISTS DYNAMIC_LIBS)
     get_target_property(lib_type ${lib} TYPE)
