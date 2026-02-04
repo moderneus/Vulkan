@@ -7,12 +7,16 @@ The swapchain is part of WSI: Vulkan handles rendering, not presentation.
 
 # How to create?
 
+As usual create a wrapper for the Swapchain handle.
+
 ```cpp
 struct Swapchain
 {
 	VkSwapchainKHR handle = VK_NULL_HANDLE;
 };
 ```
+
+Also for additional info required by Swapchain during creation.
 
 ```cpp
 struct SwapchainSupportDetails
@@ -22,6 +26,8 @@ struct SwapchainSupportDetails
 	std::vector<VkPresentModeKHR> present_modes;
 };
 ```
+
+And for resources that represents the Swapchain state.
 
 ```cpp
 struct SwapchainState
@@ -35,8 +41,7 @@ struct SwapchainState
 };
 ```
 
-------------------------------------------
-
+First of all we query the Swapchain support details from Surface to get the available formats and present modes. 
 
 ```cpp
 SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) 
@@ -66,13 +71,34 @@ SwapchainSupportDetails swapchain_query_support_details(const VkPhysicalDevice& 
 }
 ```
 
+This is the function we call during PhysicalDevice creation. It returns true if the formats and present modes are supported, meaning those vectors have desired values.
+
 ```cpp
 bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface) 
 {
-    SwapchainSupportDetails details = swapchain_query_support_details(phys_device, surface);
-    return !details.formats.empty() && !details.present_modes.empty();
+	SwapchainSupportDetails details = swapchain_query_support_details(phys_device, surface);
+	
+	bool has_srgb = false;
+	for(const auto& format : details.formats)
+	{
+		if ((format.format == VK_FORMAT_B8G8R8A8_SRGB || format.format == VK_FORMAT_UNDEFINED) &&
+   		     format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+			has_srgb = true;
+	}
+	
+	bool has_mailbox_or_fifo = false;
+	for(const auto& present_mode : details.present_modes)
+	{
+		if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR || present_mode == VK_PRESENT_MODE_FIFO_KHR)
+			has_mailbox_or_fifo = true;
+	}
+	
+	return has_srgb && has_mailbox_or_fifo;
 }
 ```
+
+Here we're choosing the format of images in the Swapchain. A driver may not tell us what formats are supported instead he returns *VK_FORMAT_UNDEFINED*. 
+It means you can choose any desired format and the driver undertakes accept it.
 
 ```cpp
 VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>& formats) 
@@ -90,6 +116,13 @@ VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>
 }
 ```
 
+I think everything is quite simple here. But I have to explain what present modes exist and difference beetwen each other. 
+
+- **FIFO** — Images are displayed strictly one after another. All images will be displayed, but if the image queue is full, the graphics device is forced to wait.
+- **MAILBOX** — This is the same FIFO, but with frame replacement if the graphics device is running too fast. If, when displaying an image, others are already outdated, they are replaced with current ones.
+- **FIFO_RELAXED** — This is the same as FIFO, however, frames are still sometimes replaced so as not to block the graphics device too much.
+
+We're choosing **MAILBOX** for minimal input lag, but if we didn't find him we select **FIFO** that always supported.
 
 ```cpp
 VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKHR>& present_modes) 
@@ -103,6 +136,7 @@ VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKH
 }
 ```
 
+Now, we must choose an extent of images. The extent itself represents a size of thing in pixels. In the Swapchain extent is the image size.
 
 ```cpp
 VkExtent2D swapchain_choose_extent(const Window& window, const VkSurfaceCapabilitiesKHR& capabilities) 
