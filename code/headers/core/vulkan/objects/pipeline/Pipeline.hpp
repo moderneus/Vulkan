@@ -1,45 +1,58 @@
-#pragma once
+#ifndef MOD_PIPELINE_HPP
+#define MOD_PIPELINE_HPP
 
 #include "core/vulkan/objects/pipeline/ShaderModule.hpp"
 
 #include <vulkan/vulkan.h>
 
+#include <vector>
 #include <array>
 
-struct LogicalDevice;
-struct Swapchain;
-struct PipelineLayout;
-struct RenderPass;
+struct swapchain_state_t;
+struct pipeline_layout_t;
+struct render_pass_t;
+struct device_t;
 
-struct Pipeline {
-    VkPipeline handle = VK_NULL_HANDLE;
-    ShaderModule vert_shader;
-    ShaderModule frag_shader;
+struct pipeline_t
+{
+	VkPipeline handle = VK_NULL_HANDLE;
 };
 
-struct PipelineState {
-    std::array<VkPipelineShaderStageCreateInfo, 2> shaderStages = {};
-    VkPipelineDynamicStateCreateInfo dynamicStateInfo = {};
-    VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
-    VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo = {};
-    VkPipelineViewportStateCreateInfo viewportInfo = {};
-    VkPipelineRasterizationStateCreateInfo rasterizationInfo = {};
-    VkPipelineMultisampleStateCreateInfo multisampleInfo = {};
-    VkPipelineDepthStencilStateCreateInfo depthStencilInfo = {};
-    VkPipelineColorBlendStateCreateInfo colorBlendInfo = {};
+struct pipeline_info_t
+{
+	std::vector<VkPipelineShaderStageCreateInfo>			shader_stage_info   = {};
+	VkPipelineDynamicStateCreateInfo				dynamic_state_info  = {};
+	VkPipelineVertexInputStateCreateInfo				vertex_input_info   = {};
+	VkPipelineInputAssemblyStateCreateInfo				input_assembly_info = {};
+	VkPipelineViewportStateCreateInfo				viewport_info       = {};
+	VkPipelineRasterizationStateCreateInfo				rasterization_info  = {};
+	VkPipelineMultisampleStateCreateInfo				multisample_info    = {};
+	VkPipelineDepthStencilStateCreateInfo				depth_stencil_info  = {};
+	VkPipelineColorBlendStateCreateInfo				color_blend_info    = {};
 };
 
-VkViewport pipeline_create_viewport(const Swapchain& swapchain);
+struct pipeline_config_t
+{
+	std::vector<shader_module_ref_t>			shader_module_refs = {};
+	VkViewport						viewport	   = {};
+	VkRect2D						scissor            = {};
+	VkPipelineColorBlendAttachmentState			attachment         = {};
+	std::vector<VkDynamicState>				dynamic_states     = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+};
 
-VkRect2D pipeline_create_scissor(const Swapchain& swapchain);
+VkViewport pipeline_create_viewport(const swapchain_state_t& st);
+
+VkRect2D pipeline_create_scissor(const swapchain_state_t& st);
 
 VkPipelineColorBlendAttachmentState pipeline_create_color_blend_attachment();
 
 VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info();
 
-void pipeline_create_shader_modules(Pipeline* pipeline, const LogicalDevice& device);
+std::vector<shader_module_ref_t> pipeline_create_shader_module_refs(const std::array<shader_module_t, 2>& shader_modules);
 
-std::array<VkPipelineShaderStageCreateInfo, 2> pipeline_create_shader_stage_info();
+VkPipelineShaderStageCreateInfo pipeline_create_shader_stage_info(const shader_module_ref_t& shader_module);
+
+std::vector<VkPipelineShaderStageCreateInfo> pipeline_create_shader_stage_infos(const pipeline_config_t& cfg);
 
 VkPipelineDynamicStateCreateInfo pipeline_create_dynamic_state_info();
 
@@ -55,8 +68,10 @@ VkPipelineMultisampleStateCreateInfo pipeline_create_multisample_info();
 
 VkPipelineColorBlendStateCreateInfo pipeline_create_color_blend_info(const VkPipelineColorBlendAttachmentState* attachment);
 
-VkGraphicsPipelineCreateInfo pipeline_create_info(const PipelineState& state, const PipelineLayout& layout, const RenderPass& render_pass);
+VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info_t& info, const pipeline_layout_t& layout, const render_pass_t& render_pass);
 
-void pipeline_create(Pipeline* pipeline, const LogicalDevice& device, const Swapchain& swapchain, const PipelineLayout& layout, const RenderPass& render_pass);
+void pipeline_create(pipeline_t* pipeline, const device_t& device, const swapchain_state_t& st, const pipeline_layout_t& pipeline_layout, const render_pass_t& render_pass, const std::array<shader_module_t, 2> shader_modules);
 
-void pipeline_destroy(const Pipeline& pipeline, const LogicalDevice& device);
+void pipeline_destroy(const pipeline_t& pipeline, const device_t& device);
+
+#endif

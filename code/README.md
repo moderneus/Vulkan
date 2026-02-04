@@ -38,6 +38,8 @@ code
 │   │
 │   ├── engine
 │   │   ├── Engine.hpp
+│   │   ├── events
+│   │   │   └── EventManager.hpp
 │   │   ├── gfx
 │   │   │   └── Renderer.hpp
 │   │   └── window
@@ -45,12 +47,11 @@ code
 │   │
 │   └── util
 │       ├── Constants.hpp
-│       ├── debug
-│       │   ├── Logger.hpp
-│       │   └── ValidationLayers.hpp
-│       ├── EventManager.hpp
-│       ├── File.hpp
-│       └── String.hpp
+│       ├── File.hpp
+│       ├── String.hpp
+│       └── debug
+│           ├── Logger.hpp
+│           └── ValidationLayers.hpp         
 │
 ├── libs
 │   ├── SDL
@@ -96,22 +97,22 @@ code
 │   │               ├── Fence.cpp
 │   │               └── Semaphore.cpp
 │   │
-│   ├── engine
-│   │   ├── Engine.cpp
-│   │   ├── gfx
-│   │   │   └── Renderer.cpp
-│   │   └── window
-│   │       └── Window.cpp
+│   ├── engine
+│   │   ├── Engine.cpp
+│   │   ├── events
+│   │   │   └── EventManager.cpp
+│   │   ├── gfx
+│   │   │   └── Renderer.cpp
+│   │   └── window
+│   │       └── Window.cpp
 │   │   
-│   ├── util
-│   │   ├── debug
-│   │   │   ├── Logger.cpp
-│   │   │   └── ValidationLayers.cpp
-│   │   ├── EventManager.cpp
-│   │   ├── File.cpp
-│   │   └── String.cpp
+│   ├── util
+│   │      ├── File.cpp
+│   │      ├── String.cpp
+│   │      └── debug
+│   │          ├── Logger.cpp
+│   │          └── ValidationLayers.cpp
 │   └── Vulkan.cpp
 │
-├── README.md 
 └── CMakeLists.txt
 ```

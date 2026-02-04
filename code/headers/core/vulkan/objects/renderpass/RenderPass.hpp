@@ -1,17 +1,19 @@
-#pragma once
+#ifndef MOD_RENDER_PASS_HPP
+#define MOD_RENDER_PASS_HPP
 
 #include <vulkan/vulkan.h>
 
-struct LogicalDevice;
-struct Swapchain;
+struct swapchain_state_t;
+struct device_t;
 
-struct RenderPass {
-    VkRenderPass handle = VK_NULL_HANDLE;
+struct render_pass_t 
+{
+	VkRenderPass handle = VK_NULL_HANDLE;
 };
 
-VkRenderPassBeginInfo render_pass_create_begin_info(const RenderPass &render_pass, const Swapchain &swapchain, uint32_t img_idx, const VkClearValue clear_color);
+VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass_t& render_pass, const swapchain_state_t& st, uint32_t img_idx, const VkClearValue clear_color);
 
-VkAttachmentDescription render_pass_create_attachment_description(const Swapchain& swapchain);
+VkAttachmentDescription render_pass_create_attachment_description(const swapchain_state_t& st);
 
 VkAttachmentReference render_pass_create_attachment_reference();
 
@@ -21,6 +23,8 @@ VkSubpassDependency render_pass_create_subpass_dependency();
 
 VkRenderPassCreateInfo render_pass_create_info(VkAttachmentDescription* pattachemnt_description, VkSubpassDescription* psubpass, VkSubpassDependency* subpass_dependency);
 
-void render_pass_create(RenderPass* render_pass, const LogicalDevice& device, const Swapchain& swapchain);
+void render_pass_create(render_pass_t* render_pass, const device_t& device, const swapchain_state_t& st);
     
-void render_pass_destroy(RenderPass* render_pass, const LogicalDevice& device);
+void render_pass_destroy(render_pass_t* render_pass, const device_t& device);
+
+#endif
