@@ -4,6 +4,7 @@
 #include "core/vulkan/objects/swapchain/Swapchain.hpp"
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "core/vulkan/objects/renderpass/RenderPass.hpp"
+#include "core/vulkan/objects/buffers/types/Vertex.hpp"
 #include "util/debug/Logger.hpp"
 
 VkViewport pipeline_create_viewport(const swapchain_state_t& st) 
@@ -99,16 +100,16 @@ VkPipelineDynamicStateCreateInfo pipeline_create_dynamic_state_info(const std::v
 	return create_info;
 }
 
-VkPipelineVertexInputStateCreateInfo pipeline_create_vertex_input_info() 
+VkPipelineVertexInputStateCreateInfo pipeline_create_vertex_input_info(const pipeline_config_t& cfg) 
 {
 	log_info("Creating a Vertex Input Info...");
 
 	VkPipelineVertexInputStateCreateInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-	create_info.vertexBindingDescriptionCount = 0;
-	create_info.pVertexBindingDescriptions = nullptr;
-	create_info.vertexAttributeDescriptionCount = 0;
-	create_info.pVertexAttributeDescriptions = nullptr;
+	create_info.vertexBindingDescriptionCount = 1;
+	create_info.pVertexBindingDescriptions = &cfg.binding_description;
+	create_info.vertexAttributeDescriptionCount = static_cast<uint32_t>(cfg.attrib_description.size());
+	create_info.pVertexAttributeDescriptions = cfg.attrib_description.data();
 
 	log_info("The Vertex Input Info was Created.");
 
@@ -236,10 +237,12 @@ void pipeline_create(pipeline_t* pipeline, const device_t& device, const swapcha
 	cfg.viewport = pipeline_create_viewport(st);
 	cfg.scissor = pipeline_create_scissor(st);
 	cfg.attachment = pipeline_create_color_blend_attachment();
+	cfg.binding_description = vertex_get_binding_description();
+	cfg.attrib_description = vertex_get_attrib_description();
 
 	pipeline_info_t info = {};
 	info.shader_stage_info = pipeline_create_shader_stage_infos(cfg);
-	info.vertex_input_info = pipeline_create_vertex_input_info();
+	info.vertex_input_info = pipeline_create_vertex_input_info(cfg);
 	info.input_assembly_info = pipeline_create_input_assembly_info();
 	info.viewport_info = pipeline_create_viewport_info(cfg.viewport, cfg.scissor);
 	info.rasterization_info = pipeline_create_rasterization_info();

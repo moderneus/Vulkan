@@ -8,6 +8,7 @@
 #include "engine/window/Window.hpp"
 #include "util/debug/Logger.hpp"
 
+#include <array>
 #include <limits>
 #include <algorithm>
 
@@ -142,12 +143,12 @@ VkSwapchainCreateInfoKHR swapchain_create_info
 	create_info.imageArrayLayers = 1;
 	create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-	uint32_t queue_family_indices[] = {queue_family.graphics.value(), queue_family.present.value()};
+	const std::array<uint32_t, 2> queue_family_indices = {queue_family.graphics.value(), queue_family.present.value()};
 
 	if(queue_family.graphics != queue_family.present) {
 		create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
 		create_info.queueFamilyIndexCount = 2;
-		create_info.pQueueFamilyIndices = queue_family_indices;
+		create_info.pQueueFamilyIndices = queue_family_indices.data();
 	} else {
 		create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		create_info.queueFamilyIndexCount = 0;

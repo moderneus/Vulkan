@@ -33,11 +33,13 @@ struct pipeline_info_t
 
 struct pipeline_config_t
 {
-	std::vector<shader_module_ref_t>			shader_module_refs = {};
-	VkViewport						viewport	   = {};
-	VkRect2D						scissor            = {};
-	VkPipelineColorBlendAttachmentState			attachment         = {};
-	std::vector<VkDynamicState>				dynamic_states     = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+	std::vector<shader_module_ref_t>				shader_module_refs  = {};
+	VkViewport							viewport	    = {};
+	VkRect2D							scissor             = {};
+	VkPipelineColorBlendAttachmentState				attachment          = {};
+	std::vector<VkDynamicState>					dynamic_states      = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+	VkVertexInputBindingDescription					binding_description = {};
+	std::array<VkVertexInputAttributeDescription, 2>		attrib_description  = {};
 };
 
 VkViewport pipeline_create_viewport(const swapchain_state_t& st);
@@ -56,7 +58,7 @@ std::vector<VkPipelineShaderStageCreateInfo> pipeline_create_shader_stage_infos(
 
 VkPipelineDynamicStateCreateInfo pipeline_create_dynamic_state_info();
 
-VkPipelineVertexInputStateCreateInfo pipeline_create_vertex_input_info();
+VkPipelineVertexInputStateCreateInfo pipeline_create_vertex_input_info(const pipeline_config_t& cfg);
 
 VkPipelineInputAssemblyStateCreateInfo pipeline_create_input_assembly_info();
 
