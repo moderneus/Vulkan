@@ -1,3 +1,6 @@
+#ifndef MOD_VERTEX_HPP
+#define MOD_VERTEX_HPP
+
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 
@@ -21,3 +24,5 @@ const std::vector<vertex_t> vertices =
 VkVertexInputBindingDescription vertex_get_binding_description();
 
 std::array<VkVertexInputAttributeDescription, 2> vertex_get_attrib_description();
+
+#endif

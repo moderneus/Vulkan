@@ -3,8 +3,12 @@
 #include "core/vulkan/objects/renderpass/RenderPass.hpp"
 #include "core/vulkan/objects/pipeline/Pipeline.hpp"
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
+#include "core/vulkan/objects/buffers/types/Vertex.hpp"
+#include "core/vulkan/objects/buffers/VertexBuffer.hpp"
 #include "util/debug/Logger.hpp"
 #include "util/Constants.hpp"
+
+#include <array>
 
 VkCommandBufferBeginInfo command_buffer_create_begin_info() 
 {
@@ -15,7 +19,7 @@ VkCommandBufferBeginInfo command_buffer_create_begin_info()
 	return create_info;
 }
 
-void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_state_t& st, const uint32_t img_idx) 
+void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_state_t& st, const vertex_buffer_t& vertex_buf, const uint32_t img_idx) 
 {
 	VkCommandBufferBeginInfo command_buffer_begin_info = command_buffer_create_begin_info();
 
@@ -33,7 +37,12 @@ void command_buffer_record(const command_buffer_t& command_buffer, const pipelin
 		vkCmdSetViewport(command_buffer.handle, 0, 1, &viewport);
 		VkRect2D scissor = pipeline_create_scissor(st);
 		vkCmdSetScissor(command_buffer.handle, 0, 1, &scissor);
-		vkCmdDraw(command_buffer.handle, 3, 1, 0, 0);
+
+		std::array<VkBuffer, 1> vertex_bufs = {vertex_buf.handle};
+		std::array<VkDeviceSize, 1> offsets = {0};
+		vkCmdBindVertexBuffers(command_buffer.handle, 0, 1, vertex_bufs.data(), offsets.data());
+
+		vkCmdDraw(command_buffer.handle, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
 
 	vkCmdEndRenderPass(command_buffer.handle);
 

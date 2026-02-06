@@ -54,7 +54,7 @@ void renderer_draw(const renderer_t& renderer, renderer_state_t* st, core_t* vk_
 	vkResetFences(vk_core->device.handle, 1, &vk_core->in_flight_fences[st->current_frame].handle);
 
 	vkResetCommandBuffer(vk_core->command_buffers[st->current_frame].handle, 0);
-	command_buffer_record(vk_core->command_buffers[st->current_frame], vk_core->pipeline, vk_core->render_pass, vk_core->swapchain_state, img_idx);
+	command_buffer_record(vk_core->command_buffers[st->current_frame], vk_core->pipeline, vk_core->render_pass, vk_core->swapchain_state, vk_core->vertex_buf, img_idx);
 
 	std::array<VkSemaphore, 1> wait_semaphores = {vk_core->img_available_semaphores[st->current_frame].handle};
 	std::array<VkPipelineStageFlags, 1> wait_stages = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};

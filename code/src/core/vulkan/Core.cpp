@@ -18,6 +18,8 @@ void vk_core_init(core_t* vk_core, const window_t& window)
 	pipeline_layout_create(&vk_core->pipeline_layout, vk_core->device);
 	render_pass_create(&vk_core->render_pass, vk_core->device, vk_core->swapchain_state);
 	shader_modules_create(&vk_core->shader_modules, vk_core->device);
+	vertex_buffer_create(&vk_core->vertex_buf, vk_core->device);
+	vertex_buffer_alloc_mem(&vk_core->vertex_buf_mem, vk_core->vertex_buf, vk_core->device, vk_core->phys_device);
 	pipeline_create(&vk_core->pipeline, vk_core->device, vk_core->swapchain_state, vk_core->pipeline_layout, vk_core->render_pass, vk_core->shader_modules);
 	framebuffers_create(&vk_core->swapchain_state, vk_core->device, vk_core->render_pass);
 	command_pool_create(&vk_core->command_pool, vk_core->device, vk_core->queue_family);
@@ -39,6 +41,8 @@ void vk_core_destroy(core_t* vk_core)
 	command_pool_destroy(vk_core->command_pool, vk_core->device);
 	framebuffers_destroy(vk_core->swapchain_state, vk_core->device);
 	pipeline_destroy(vk_core->pipeline, vk_core->device);
+	vertex_buffer_destroy(vk_core->vertex_buf, vk_core->device);
+	vertex_buffer_mem_free(vk_core->vertex_buf_mem, vk_core->device);
 	shader_modules_destroy(vk_core->shader_modules, vk_core->device);
 	render_pass_destroy(&vk_core->render_pass, vk_core->device);
 	pipeline_layout_destroy(vk_core->pipeline_layout, vk_core->device);

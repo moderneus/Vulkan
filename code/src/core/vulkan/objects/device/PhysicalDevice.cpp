@@ -99,3 +99,16 @@ VkPhysicalDeviceFeatures phys_device_get_features(const phys_device_t& phys_devi
 
 	return phys_device_features;
 }
+
+uint32_t phys_device_find_mem_type(const phys_device_t& phys_device, uint32_t type_filter, VkMemoryPropertyFlags props)
+{
+	VkPhysicalDeviceMemoryProperties mem_props = {};
+	vkGetPhysicalDeviceMemoryProperties(phys_device.handle, &mem_props);
+
+	for(uint32_t i = 0; i < mem_props.memoryTypeCount; ++i) {
+		if ((type_filter & (1 << i)) && (mem_props.memoryTypes[i].propertyFlags & props) == props) {
+			return i;
+		}
+	}
+	return -1;
+}

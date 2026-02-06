@@ -28,4 +28,6 @@ void phys_device_pick(phys_device_t* phys_device, const instance_t& instance, co
 
 VkPhysicalDeviceFeatures phys_device_get_features(const phys_device_t& phys_device);
 
+uint32_t phys_device_find_mem_type(const phys_device_t& phys_device, uint32_t type_filter, VkMemoryPropertyFlags props);
+
 #endif

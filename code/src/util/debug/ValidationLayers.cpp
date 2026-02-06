@@ -13,18 +13,15 @@ bool check_validation_layers_support()
 	vkEnumerateInstanceLayerProperties(&layer_count, layers.data());
 
 	for(const char* layer_name : validationLayers) {
-
 		bool layerFound = false;
 
 		for(const auto& layer_props: layers) {
-
 			if (strcmp(layer_name, layer_props.layerName) == 0) {
 				layerFound = true;
 				break;
 			}
 		}
-
-		if (!layerFound){
+		if (!layerFound) {
 			return false;
 		}
 	}

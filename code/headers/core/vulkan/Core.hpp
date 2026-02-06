@@ -9,6 +9,7 @@
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "core/vulkan/objects/swapchain/Swapchain.hpp"
 #include "core/vulkan/objects/pipeline/PipelineLayout.hpp"
+#include "core/vulkan/objects/buffers/VertexBuffer.hpp"
 #include "core/vulkan/objects/pipeline/Pipeline.hpp"
 #include "core/vulkan/objects/renderpass/RenderPass.hpp"
 #include "core/vulkan/objects/commands/CommandPool.hpp"
@@ -36,6 +37,8 @@ struct core_t
 	swapchain_state_t			swapchain_state;
 	pipeline_layout_t			pipeline_layout;
 	std::array<shader_module_t, 2>		shader_modules;
+	vertex_buffer_t				vertex_buf;
+	vertex_buffer_mem_t			vertex_buf_mem;
 	pipeline_t				pipeline;
 	render_pass_t				render_pass;
 	command_pool_t				command_pool;
