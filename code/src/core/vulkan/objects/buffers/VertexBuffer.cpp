@@ -4,7 +4,7 @@
 #include "core/vulkan/objects/device/PhysicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 
-#include <cstdlib>
+#include <cstring>
 
 VkBufferCreateInfo vertex_buffer_create_info()
 {
@@ -61,7 +61,7 @@ void vertex_buffer_mem_cpy(const vertex_buffer_mem_t& buf_mem, const device_t& d
 {
 	void* data;
 	vkMapMemory(device.handle, buf_mem.handle, 0, info.size, 0, &data);
-		memcpy(data, vertices.data(), (size_t)info.size);
+		memcpy(data, vertices.data(), info.size);
 	vkUnmapMemory(device.handle, buf_mem.handle);
 }
 
