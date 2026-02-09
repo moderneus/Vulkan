@@ -5,9 +5,9 @@
 
 struct window_t 
 {
-	SDL_Window*	pwindow = nullptr;
-	uint32_t	width = 640;
-	uint32_t	height = 480;
+	SDL_Window*	phandle	  = nullptr;
+	uint32_t	width     = 640;
+	uint32_t	height	  = 480;
 	bool		is_closed = false;
 };
 

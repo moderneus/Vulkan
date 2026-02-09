@@ -3,41 +3,41 @@
 #include "core/vulkan/objects/device/QueueFamily.hpp"
 #include "util/debug/Logger.hpp"
 
-VkCommandPoolCreateInfo command_pool_create_info(const queue_family_t& queue_family) 
+VkCommandPoolCreateInfo cmd_pool_create_info(const queue_family_t &qf) 
 {
 	log_info("Creating the Command Pool Info...");
 
-	VkCommandPoolCreateInfo create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	create_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	create_info.queueFamilyIndex = queue_family.graphics.value();
+	VkCommandPoolCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+	info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	info.queueFamilyIndex = qf.graphics.value();
 
 	log_info("The Command Pool Info was Created.");
 
-	return create_info;
+	return info;
 }
 
-void command_pool_create(command_pool_t* command_pool, const device_t& device, const queue_family_t& queue_family) 
+void cmd_pool_create(command_pool_t *cmd_pool, const device_t &dev, const queue_family_t &qf) 
 {
 	log_info("Creating a Command Pool...");
 
-	VkCommandPoolCreateInfo command_pool_info = command_pool_create_info(queue_family);
+	VkCommandPoolCreateInfo cmd_pool_info = cmd_pool_create_info(qf);
 
-	if (vkCreateCommandPool(device.handle, &command_pool_info, nullptr, &command_pool->handle) != VK_SUCCESS) {
+	if (vkCreateCommandPool(dev.handle, &cmd_pool_info, nullptr, &cmd_pool->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Command Pool.");
 	}
 
 	log_info("The Command Pool was Created.");
 }
 
-void command_pool_destroy(const command_pool_t& command_pool, const device_t& device) 
+void cmd_pool_destroy(const command_pool_t &cmd_pool, const device_t &dev) 
 {
 	log_info("Destroying the Command Pool...");
 
-	if (command_pool.handle == VK_NULL_HANDLE) {
+	if (cmd_pool.handle == VK_NULL_HANDLE) {
 		log_error("Cannot Destroy the Command Pool::Command Pool is not Created.");
 	}
-	vkDestroyCommandPool(device.handle, command_pool.handle, nullptr);
+	vkDestroyCommandPool(dev.handle, cmd_pool.handle, nullptr);
 
 	log_info("The Command Pool was Destroyed.");
 }

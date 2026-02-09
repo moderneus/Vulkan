@@ -11,8 +11,8 @@ struct surface_t
 	VkSurfaceKHR handle = VK_NULL_HANDLE;
 };
 
-void surface_create(surface_t* surface, const instance_t& instance, const window_t& window);
+void surface_create(surface_t *surface, const instance_t &instance, const window_t &window);
 
-void surface_destroy(const surface_t& surface, const instance_t& instance);
+void surface_destroy(const surface_t &surface, const instance_t &instance);
 
 #endif

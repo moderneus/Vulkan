@@ -1,5 +1,5 @@
-#ifndef MOD_LOGICAL_DEVICE_HPP
-#define MOD_LOGICAL_DEVICE_HPP
+#ifndef MOD_DEV_HPP
+#define MOD_DEV_HPP
 
 #include <vulkan/vulkan.h>
 
@@ -14,16 +14,16 @@ struct device_t
 	VkDevice handle = VK_NULL_HANDLE;
 };
 
-VkPhysicalDeviceFeatures device_get_enabled_features(const phys_device_t& phys_device);
+VkPhysicalDeviceFeatures dev_get_enabled_features(const phys_device_t &phys_dev);
 
-std::vector<VkDeviceQueueCreateInfo> device_create_queue_infos(const queue_family_t& queue_family, const float& queue_priority);
+std::vector<VkDeviceQueueCreateInfo> dev_create_queue_infos(const queue_family_t &qf, const float &prior);
 
-VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx, const float& queue_priority);
+VkDeviceQueueCreateInfo dev_create_queue_info(const uint32_t qf_idx, const float &prior);
 
-VkDeviceCreateInfo device_create_info(const std::vector<VkDeviceQueueCreateInfo>& queue_info, const VkPhysicalDeviceFeatures& phys_device_features);
+VkDeviceCreateInfo dev_create_info(const std::vector<VkDeviceQueueCreateInfo> &info, const VkPhysicalDeviceFeatures &features);
 
-void device_create(device_t* device, queue_t* queue, const queue_family_t& queue_family, const phys_device_t& phys_device);
+void dev_create(device_t *dev, queue_t *q, const queue_family_t &qf, const phys_device_t &phys_dev);
 
-void device_destroy(const device_t& device);
+void dev_destroy(const device_t &dev);
 
 #endif

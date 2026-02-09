@@ -18,18 +18,18 @@ struct queue_t
 
 VkSubmitInfo queue_create_submit_info
 (
-	const uint32_t&					current_frame, 
-	const std::array<VkSemaphore, 1>&		wait_semaphores,
-	const std::array<VkSemaphore, 1>&		signal_semaphores,
-	const std::array<VkPipelineStageFlags, 1>&	wait_stages, 
-	const std::vector<command_buffer_t>&		command_buffers
+	const uint32_t						&frame, 
+	const std::array<VkSemaphore, 1>			&waits,
+	const std::array<VkSemaphore, 1>			&signals,
+	const std::array<VkPipelineStageFlags, 1>		&stages, 
+	const std::vector<command_buffer_t>			&cmd_bufs
 );
 
-VkPresentInfoKHR queue_create_present_info
+VkPresentInfoKHR queue_create_pres_info
 (
-	const std::array<VkSemaphore, 1>&		signal_semaphores,
-	const std::array<VkSwapchainKHR, 1>&		swapchains, 
-	const uint32_t&					img_idx
+	const std::array<VkSemaphore, 1>			&signals,
+	const std::array<VkSwapchainKHR, 1>			&swapchains, 
+	const uint32_t						&img_idx
 );
 
 #endif

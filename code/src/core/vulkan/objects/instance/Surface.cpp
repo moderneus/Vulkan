@@ -6,18 +6,18 @@
 #include "SDL3/SDL_error.h"
 #include "SDL3/SDL_vulkan.h"
 
-void surface_create(surface_t* surface, const instance_t& instance, const window_t& window) 
+void surface_create(surface_t *surface, const instance_t &instance, const window_t &window) 
 {
 	log_info("Creating a Surface...");
 
-	if (!SDL_Vulkan_CreateSurface(window.pwindow, instance.handle, nullptr, &surface->handle)) {
+	if (!SDL_Vulkan_CreateSurface(window.phandle, instance.handle, nullptr, &surface->handle)) {
 		log_critical("Failed to Create the Surface::", SDL_GetError()); 
 	}
 
 	log_info("The Surface was Created.");
 }
 
-void surface_destroy(const surface_t& surface, const instance_t& instance) 
+void surface_destroy(const surface_t &surface, const instance_t &instance) 
 {
 	log_info("Destroying the Surface...");
 

@@ -10,7 +10,7 @@
 
 #include <cstdint>
 
-std::vector<const char*> instance_get_required_exts() 
+std::vector<const char*> instance_get_req_exts() 
 {
 	uint32_t exts_count = 0;
 	const char* const* exts = SDL_Vulkan_GetInstanceExtensions(&exts_count);
@@ -28,59 +28,59 @@ VkApplicationInfo instance_create_app_info()
 {
 	log_info("Creating an Application Info...");
 
-	VkApplicationInfo create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	create_info.applicationVersion = VK_MAKE_VERSION(1, 0, 5);
-	create_info.engineVersion = VK_MAKE_VERSION(0, 1, 0);
-	create_info.apiVersion = VK_API_VERSION_1_4;
+	VkApplicationInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	info.applicationVersion = VK_MAKE_VERSION(1, 1, 0);
+	info.engineVersion = VK_MAKE_VERSION(0, 1, 2);
+	info.apiVersion = VK_API_VERSION_1_4;
 
 	log_info("The Application Info created.");
 
-	return create_info;
+	return info;
 }
 
 VkInstanceCreateInfo instance_create_info
 (
-	const VkApplicationInfo* app_info, 
-	const VkDebugUtilsMessengerCreateInfoEXT* debug_info, 
-	const std::vector<const char*>& exts
+	const VkApplicationInfo					*app_info, 
+	const VkDebugUtilsMessengerCreateInfoEXT		*msgr_info, 
+	const std::vector<const char*>				&exts
 ) 
 {
 	log_info("Creating the Instance Info...");
 
-	VkInstanceCreateInfo create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	create_info.pNext = nullptr;
-	create_info.pApplicationInfo = app_info;
-	create_info.enabledExtensionCount = static_cast<uint32_t>(exts.size());
-	create_info.ppEnabledExtensionNames = reinterpret_cast<const char* const*>(exts.data());
+	VkInstanceCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	info.pNext = nullptr;
+	info.pApplicationInfo = app_info;
+	info.enabledExtensionCount = static_cast<uint32_t>(exts.size());
+	info.ppEnabledExtensionNames = reinterpret_cast<const char* const*>(exts.data());
 
 	log_info("Checking a Valiation Layers Support...");
 
 	if (check_validation_layers_support()) {
 		log_info("The Validation layers is supported.");
-		create_info.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-		create_info.ppEnabledLayerNames = validationLayers.data();
-		create_info.pNext = debug_info;
+		info.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+		info.ppEnabledLayerNames = validationLayers.data();
+		info.pNext = msgr_info;
 	} else {
 		log_error("The Validation Layers doesn't supported.");
-		create_info.enabledLayerCount = 0;
-		create_info.ppEnabledLayerNames = nullptr;
+		info.enabledLayerCount = 0;
+		info.ppEnabledLayerNames = nullptr;
 	}
 
 	log_info("The Instance info was created.");
 
-	return create_info;
+	return info;
 }
 
-void instance_create(instance_t* instance) 
+void instance_create(instance_t *instance) 
 {
 	log_info("Creating an Instance...");
 
 	VkApplicationInfo app_info = instance_create_app_info();
-	VkDebugUtilsMessengerCreateInfoEXT debug_info = debug_msgr_create_info();
-	std::vector<const char*> exts = instance_get_required_exts();
-	VkInstanceCreateInfo instance_info = instance_create_info(&app_info, &debug_info, exts);
+	VkDebugUtilsMessengerCreateInfoEXT msgr_info = dbg_msgr_create_info();
+	std::vector<const char*> exts = instance_get_req_exts();
+	VkInstanceCreateInfo instance_info = instance_create_info(&app_info, &msgr_info, exts);
 
 	if (vkCreateInstance(&instance_info, nullptr, &instance->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create Instance.");
@@ -89,7 +89,7 @@ void instance_create(instance_t* instance)
 	log_info("The Instance was Created.");
 }
 
-void instance_destroy(const instance_t& instance) 
+void instance_destroy(const instance_t &instance) 
 {
 	log_info("Destroying the Instance...");
 

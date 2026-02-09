@@ -1,5 +1,5 @@
-#ifndef MOD_QUEUE_FAMILY_HPP
-#define MOD_QUEUE_FAMILY_HPP
+#ifndef MOD_QF_HPP
+#define MOD_QF_HPP
 
 #include <vulkan/vulkan.h>
 
@@ -15,8 +15,8 @@ struct queue_family_t
 	std::optional<uint32_t>		present;
 };
 
-bool queue_family_is_complete();
+bool qf_is_complete();
 
-void queue_family_find(queue_family_t* queue_family, const phys_device_t& phys_device, const surface_t& surface);
+void qf_find(queue_family_t *qf, const phys_device_t &phys_dev, const surface_t &surface);
 
 #endif

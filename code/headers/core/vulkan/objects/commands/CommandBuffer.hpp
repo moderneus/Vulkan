@@ -17,12 +17,12 @@ struct command_buffer_t
 	VkCommandBuffer handle = VK_NULL_HANDLE;
 };
 
-VkCommandBufferBeginInfo command_buffer_create_begin_info();
+VkCommandBufferBeginInfo cmd_buf_create_begin_info();
 
-void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_state_t& st, const vertex_buffer_t& vertex_buf, const uint32_t img_idx);
+void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline, const render_pass_t &render_pass, const swapchain_state_t &st, const vertex_buffer_t &buf, const uint32_t img_idx);
 
-VkCommandBufferAllocateInfo command_buffer_create_allocate_info(const command_pool_t& command_pool, const std::vector<command_buffer_t>& command_buffers);
+VkCommandBufferAllocateInfo cmd_buf_create_alloc_info(const command_pool_t &cmd_pool, const std::vector<command_buffer_t> &cmd_bufs);
 
-void command_buffers_create(std::vector<command_buffer_t>* command_buffer, const device_t& device, const command_pool_t& command_pool);
+void cmd_bufs_create(std::vector<command_buffer_t> *cmd_buf, const device_t &dev, const command_pool_t &cmd_pool);
 
 #endif

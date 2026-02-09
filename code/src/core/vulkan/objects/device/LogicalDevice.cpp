@@ -8,91 +8,90 @@
 
 #include <cstdint>
 
-VkPhysicalDeviceFeatures device_get_enabled_features(const phys_device_t& phys_device) 
+VkPhysicalDeviceFeatures dev_get_enabled_features(const phys_device_t &phys_dev) 
 {
 	VkPhysicalDeviceFeatures features = {};
-	features.geometryShader = phys_device_get_features(phys_device).geometryShader;
+	features.geometryShader = phys_dev_get_features(phys_dev).geometryShader;
 	return features;
 }
 
-std::vector<VkDeviceQueueCreateInfo> device_create_queue_infos(const queue_family_t& queue_family, const float& queue_priority)
+std::vector<VkDeviceQueueCreateInfo> dev_create_queue_infos(const queue_family_t &qf, const float &prior)
 {
 	log_info("Creating the Queue Infos...");
 
-	std::vector<VkDeviceQueueCreateInfo> queue_infos;
-	if (queue_family.graphics == queue_family.present) {
-		queue_infos.push_back(device_create_queue_info(queue_family.graphics.value(), queue_priority));
+	std::vector<VkDeviceQueueCreateInfo> infos;
+	if (qf.graphics == qf.present) {
+		infos.push_back(dev_create_queue_info(qf.graphics.value(), prior));
 	} else {
-		queue_infos.push_back(device_create_queue_info(queue_family.graphics.value(), queue_priority));
-		queue_infos.push_back(device_create_queue_info(queue_family.present.value(), queue_priority));
+		infos.push_back(dev_create_queue_info(qf.graphics.value(), prior));
+		infos.push_back(dev_create_queue_info(qf.present.value(), prior));
 	}
 
 	log_info("The Queue Infos were Created.");
 
-	return queue_infos;
-
+	return infos;
 }
 
-VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx, const float& queue_priority)
+VkDeviceQueueCreateInfo dev_create_queue_info(const uint32_t qf_idx, const float &prior)
 {
 	log_info("Creating the Queue Info..."); 
 
-	VkDeviceQueueCreateInfo create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-	create_info.queueFamilyIndex = queue_family_idx;
-	create_info.queueCount = 1;
-	create_info.pQueuePriorities = &queue_priority;
+	VkDeviceQueueCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+	info.queueFamilyIndex = qf_idx;
+	info.queueCount = 1;
+	info.pQueuePriorities = &prior;
 
 	log_info("The Queue Info was Created.");
 
-	return create_info;
+	return info;
 }
 
-VkDeviceCreateInfo device_create_info(const std::vector<VkDeviceQueueCreateInfo>& queue_infos, const VkPhysicalDeviceFeatures& phys_device_features) 
+VkDeviceCreateInfo dev_create_info(const std::vector<VkDeviceQueueCreateInfo> &q_infos, const VkPhysicalDeviceFeatures &features) 
 {
 	log_info("Creating the Logical Device Info...");
 
-	VkDeviceCreateInfo create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	create_info.queueCreateInfoCount = static_cast<uint32_t>(queue_infos.size());
-	create_info.pQueueCreateInfos = queue_infos.data();
-	create_info.pEnabledFeatures = &phys_device_features;
-	create_info.enabledExtensionCount = static_cast<uint32_t>(phys_device_exts.size());
-	create_info.ppEnabledExtensionNames = phys_device_exts.data();
+	VkDeviceCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	info.queueCreateInfoCount = static_cast<uint32_t>(q_infos.size());
+	info.pQueueCreateInfos = q_infos.data();
+	info.pEnabledFeatures = &features;
+	info.enabledExtensionCount = static_cast<uint32_t>(phys_dev_exts.size());
+	info.ppEnabledExtensionNames = phys_dev_exts.data();
 
 	log_info("The Logical Device Info was Created.");
 
-	return create_info;
+	return info;
 }
 
-void device_create(device_t* device, queue_t* queue, const queue_family_t& queue_family, const phys_device_t& phys_device)
+void dev_create(device_t *dev, queue_t *q, const queue_family_t& qf, const phys_device_t &phys_dev)
 {
 	log_info("Creating a Logical Device...");
 
-	const float queue_priority = 1.0f;
-	std::vector<VkDeviceQueueCreateInfo> queue_infos = device_create_queue_infos(queue_family, queue_priority);
-	VkPhysicalDeviceFeatures phys_device_features = device_get_enabled_features(phys_device);
-	VkDeviceCreateInfo device_info = device_create_info(queue_infos, phys_device_features);
+	const float q_prior = 1.0f;
+	std::vector<VkDeviceQueueCreateInfo> q_infos = dev_create_queue_infos(qf, q_prior);
+	VkPhysicalDeviceFeatures features = dev_get_enabled_features(phys_dev);
+	VkDeviceCreateInfo dev_info = dev_create_info(q_infos, features);
 
-	if (vkCreateDevice(phys_device.handle, &device_info, nullptr, &device->handle) != VK_SUCCESS) {
+	if (vkCreateDevice(phys_dev.handle, &dev_info, nullptr, &dev->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Logical Device!");
 	}
 
-	vkGetDeviceQueue(device->handle, queue_family.graphics.value(), 0, &queue->graphics);
-	vkGetDeviceQueue(device->handle, queue_family.present.value(), 0, &queue->present);
+	vkGetDeviceQueue(dev->handle, qf.graphics.value(), 0, &q->graphics);
+	vkGetDeviceQueue(dev->handle, qf.present.value(), 0, &q->present);
 
 	log_info("The Logical Device was created.");
 }
 
-void device_destroy(const device_t& device)
+void dev_destroy(const device_t& dev)
 {
 	log_info("Destroying the Logical Device...");
 
-	if (device.handle == VK_NULL_HANDLE) {
+	if (dev.handle == VK_NULL_HANDLE) {
 		log_error("Cannot Destroy the Logical Device::Logical Device is not Created.");
 	}
 	
-	vkDestroyDevice(device.handle, nullptr);
+	vkDestroyDevice(dev.handle, nullptr);
 
 	log_info("The Logical Device was Destroyed.");
 }

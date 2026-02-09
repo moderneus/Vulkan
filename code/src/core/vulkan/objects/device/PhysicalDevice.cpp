@@ -11,99 +11,99 @@
 #include <map>
 #include <set>
 
-uint32_t phys_device_rate(const VkPhysicalDevice& phys_device) 
+uint32_t phys_dev_rate(const VkPhysicalDevice &phys_dev) 
 {
-	VkPhysicalDeviceProperties phys_device_props;
-	vkGetPhysicalDeviceProperties(phys_device, &phys_device_props);
+	VkPhysicalDeviceProperties props;
+	vkGetPhysicalDeviceProperties(phys_dev, &props);
 
-	uint32_t score = 0;
+	uint32_t scr = 0;
 
-	if (phys_device_props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-		score += 1000;
+	if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+		scr += 1000;
 	}
 
-	score += phys_device_props.limits.maxImageDimension2D;
+	scr += props.limits.maxImageDimension2D;
 
-	return score;
+	return scr;
 }
 
-std::string phys_device_get_name(const phys_device_t& phys_device)
+std::string phys_dev_get_name(const phys_device_t &phys_dev)
 {
-	VkPhysicalDeviceProperties phys_device_props;
-	vkGetPhysicalDeviceProperties(phys_device.handle, &phys_device_props);
-	return phys_device_props.deviceName;
+	VkPhysicalDeviceProperties props;
+	vkGetPhysicalDeviceProperties(phys_dev.handle, &props);
+	return props.deviceName;
 }
 
-bool phys_device_check_ext_support(const VkPhysicalDevice& phys_device)
+bool phys_dev_check_ext_support(const VkPhysicalDevice &phys_dev)
 {
 	uint32_t ext_count;
-	vkEnumerateDeviceExtensionProperties(phys_device, nullptr, &ext_count, nullptr);
+	vkEnumerateDeviceExtensionProperties(phys_dev, nullptr, &ext_count, nullptr);
 
 	std::vector<VkExtensionProperties> exts(ext_count);
-	vkEnumerateDeviceExtensionProperties(phys_device, nullptr, &ext_count, exts.data());
+	vkEnumerateDeviceExtensionProperties(phys_dev, nullptr, &ext_count, exts.data());
 
-	std::set<std::string> required_exts(phys_device_exts.begin(), phys_device_exts.end());
+	std::set<std::string> req_exts(phys_dev_exts.begin(), phys_dev_exts.end());
 
 	for(const auto& ext : exts) {
-		required_exts.erase(ext.extensionName);
+		req_exts.erase(ext.extensionName);
 	}
 
-	return required_exts.empty();
+	return req_exts.empty();
 }
 
-bool phys_device_is_suitable(const VkPhysicalDevice& phys_device, const surface_t& surface)
+bool phys_dev_is_suitable(const VkPhysicalDevice &phys_dev, const surface_t &surface)
 {
-	return phys_device_check_ext_support(phys_device) && swapchain_is_adequate(phys_device, surface.handle);
+	return phys_dev_check_ext_support(phys_dev) && swapchain_is_adequate(phys_dev, surface.handle);
 }
 
-void phys_device_pick(phys_device_t* phys_device, const instance_t& instance, const surface_t& surface)
+void phys_dev_pick(phys_device_t *phys_dev, const instance_t &instance, const surface_t &surface)
 {
 	log_info("Searching a Suitable GPU...");
 
-	uint32_t phys_device_count = 0;
-	vkEnumeratePhysicalDevices(instance.handle, &phys_device_count, nullptr);
+	uint32_t phys_dev_count = 0;
+	vkEnumeratePhysicalDevices(instance.handle, &phys_dev_count, nullptr);
 
-	if (phys_device_count == 0) {
+	if (phys_dev_count== 0) {
 		log_critical("Failed to find GPU with Vulkan support.");
 	}
 
-	std::vector<VkPhysicalDevice> phys_devices(phys_device_count);
-	vkEnumeratePhysicalDevices(instance.handle, &phys_device_count, phys_devices.data());
+	std::vector<VkPhysicalDevice> phys_devices(phys_dev_count);
+	vkEnumeratePhysicalDevices(instance.handle, &phys_dev_count, phys_devices.data());
 
-	std::multimap<int, VkPhysicalDevice> candidates;
+	std::multimap<uint32_t, VkPhysicalDevice> candidates;
 
-	for(const VkPhysicalDevice& phys_device : phys_devices) {
-		if (phys_device_is_suitable(phys_device, surface)) {
-			uint32_t score = phys_device_rate(phys_device);
-			candidates.insert(std::make_pair(score, phys_device));
+	for(const VkPhysicalDevice& phys_dev : phys_devices) {
+		if (phys_dev_is_suitable(phys_dev, surface)) {
+			uint32_t scr = phys_dev_rate(phys_dev);
+			candidates.insert(std::make_pair(scr, phys_dev));
 		}
 	}
 
 	if (candidates.rbegin()->first > 0) {
-		phys_device->handle = candidates.rbegin()->second;
+		phys_dev->handle = candidates.rbegin()->second;
 	} else {
 		log_critical("Failed to Find any Suitable GPU.");
 	}
 
-	log_info("Selected GPU = ", phys_device_get_name(*phys_device));
+	log_info("Selected GPU = ", phys_dev_get_name(*phys_dev));
 }
 
-VkPhysicalDeviceFeatures phys_device_get_features(const phys_device_t& phys_device) 
+VkPhysicalDeviceFeatures phys_dev_get_features(const phys_device_t &phys_dev) 
 {
-	VkPhysicalDeviceFeatures phys_device_features = {};
-	vkGetPhysicalDeviceFeatures(phys_device.handle, &phys_device_features);
+	VkPhysicalDeviceFeatures features = {};
+	vkGetPhysicalDeviceFeatures(phys_dev.handle, &features);
 
-	if (phys_device_features.geometryShader != VK_TRUE) {
+	if (features.geometryShader != VK_TRUE) {
 		log_critical("The found GPU doesn't have a Geometry Shader Feature.");
 	}
 
-	return phys_device_features;
+	return features;
 }
 
-uint32_t phys_device_find_mem_type(const phys_device_t& phys_device, uint32_t type_filter, VkMemoryPropertyFlags props)
+uint32_t phys_dev_find_mem_type(const phys_device_t &phys_dev, uint32_t type_filter, VkMemoryPropertyFlags props)
 {
 	VkPhysicalDeviceMemoryProperties mem_props = {};
-	vkGetPhysicalDeviceMemoryProperties(phys_device.handle, &mem_props);
+	vkGetPhysicalDeviceMemoryProperties(phys_dev.handle, &mem_props);
 
 	for(uint32_t i = 0; i < mem_props.memoryTypeCount; ++i) {
 		if ((type_filter & (1 << i)) && (mem_props.memoryTypes[i].propertyFlags & props) == props) {

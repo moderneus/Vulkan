@@ -10,70 +10,70 @@
 
 #include <array>
 
-VkCommandBufferBeginInfo command_buffer_create_begin_info() 
+VkCommandBufferBeginInfo cmd_buf_create_begin_info() 
 {
-	VkCommandBufferBeginInfo create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	create_info.flags = 0;
-	create_info.pInheritanceInfo = nullptr;
-	return create_info;
+	VkCommandBufferBeginInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	info.flags = 0;
+	info.pInheritanceInfo = nullptr;
+	return info;
 }
 
-void command_buffer_record(const command_buffer_t& command_buffer, const pipeline_t& pipeline, const render_pass_t& render_pass, const swapchain_state_t& st, const vertex_buffer_t& vertex_buf, const uint32_t img_idx) 
+void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline, const render_pass_t &render_pass, const swapchain_state_t &st, const vertex_buffer_t &buf, const uint32_t img_idx) 
 {
-	VkCommandBufferBeginInfo command_buffer_begin_info = command_buffer_create_begin_info();
+	VkCommandBufferBeginInfo cmd_buf_begin_info = cmd_buf_create_begin_info();
 
-	if (vkBeginCommandBuffer(command_buffer.handle, &command_buffer_begin_info) != VK_SUCCESS) {
+	if (vkBeginCommandBuffer(cmd_buf.handle, &cmd_buf_begin_info) != VK_SUCCESS) {
 		log_critical("Failed to Begin Recording Command Buffer.");
 	}
 
-	VkClearValue clear_color = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-	VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, st, img_idx, clear_color);
+	VkClearValue clear_col = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+	VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, st, img_idx, clear_col);
 
-	vkCmdBeginRenderPass(command_buffer.handle, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdBeginRenderPass(cmd_buf.handle, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
 
-		vkCmdBindPipeline(command_buffer.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);
+		vkCmdBindPipeline(cmd_buf.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);
 		VkViewport viewport = pipeline_create_viewport(st);
-		vkCmdSetViewport(command_buffer.handle, 0, 1, &viewport);
+		vkCmdSetViewport(cmd_buf.handle, 0, 1, &viewport);
 		VkRect2D scissor = pipeline_create_scissor(st);
-		vkCmdSetScissor(command_buffer.handle, 0, 1, &scissor);
+		vkCmdSetScissor(cmd_buf.handle, 0, 1, &scissor);
 
-		std::array<VkBuffer, 1> vertex_bufs = {vertex_buf.handle};
+		std::array<VkBuffer, 1> bufs = {buf.handle};
 		std::array<VkDeviceSize, 1> offsets = {0};
-		vkCmdBindVertexBuffers(command_buffer.handle, 0, 1, vertex_bufs.data(), offsets.data());
+		vkCmdBindVertexBuffers(cmd_buf.handle, 0, 1, bufs.data(), offsets.data());
 
-		vkCmdDraw(command_buffer.handle, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+		vkCmdDraw(cmd_buf.handle, static_cast<uint32_t>(verts.size()), 1, 0, 0);
 
-	vkCmdEndRenderPass(command_buffer.handle);
+	vkCmdEndRenderPass(cmd_buf.handle);
 
-	if (vkEndCommandBuffer(command_buffer.handle) != VK_SUCCESS) {
+	if (vkEndCommandBuffer(cmd_buf.handle) != VK_SUCCESS) {
 		log_critical("Failed to End Recording Command Buffer.");
 	}
 }
 
-VkCommandBufferAllocateInfo command_buffer_create_allocate_info(const command_pool_t& command_pool, const std::vector<command_buffer_t>& command_buffers)
+VkCommandBufferAllocateInfo cmd_buf_create_alloc_info(const command_pool_t &cmd_pool, const std::vector<command_buffer_t> &cmd_bufs)
 {
 	log_info("Creating Command Buffer Allocate Info...");
 
-	VkCommandBufferAllocateInfo create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	create_info.commandPool = command_pool.handle;
-	create_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	create_info.commandBufferCount = static_cast<uint32_t>(command_buffers.size());
+	VkCommandBufferAllocateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	info.commandPool = cmd_pool.handle;
+	info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	info.commandBufferCount = static_cast<uint32_t>(cmd_bufs.size());
 
 	log_info("The Command Buffer Allocate Info was Created.");
 
-	return create_info;
+	return info;
 }
 
-void command_buffers_create(std::vector<command_buffer_t>* command_buffers, const device_t& device, const command_pool_t& command_pool)
+void cmd_bufs_create(std::vector<command_buffer_t> *cmd_bufs, const device_t &dev, const command_pool_t &cmd_pool)
 {
 	log_info("Creating a Command Buffer...");
 
-	command_buffers->resize(MAX_FRAMES_IN_FLIGHT);
-	VkCommandBufferAllocateInfo command_buffer_allocate_info = command_buffer_create_allocate_info(command_pool, *command_buffers);
+	cmd_bufs->resize(MAX_FRAMES_IN_FLIGHT);
+	VkCommandBufferAllocateInfo cmd_buf_alloc_info = cmd_buf_create_alloc_info(cmd_pool, *cmd_bufs);
 
-	if (vkAllocateCommandBuffers(device.handle, &command_buffer_allocate_info, &command_buffers->data()->handle) != VK_SUCCESS) {
+	if (vkAllocateCommandBuffers(dev.handle, &cmd_buf_alloc_info, &cmd_bufs->data()->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Command Buffer...");
 	}
 

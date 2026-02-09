@@ -14,15 +14,15 @@ VkApplicationInfo instance_create_app_info();
 
 VkInstanceCreateInfo instance_create_info
 (
-	const VkApplicationInfo*			app_info, 
-	const VkDebugUtilsMessengerCreateInfoEXT*	debug_info, 
-	const std::vector<const char*>&			exts
+	const VkApplicationInfo					*app_info, 
+	const VkDebugUtilsMessengerCreateInfoEXT		*dbg_info, 
+	const std::vector<const char*>				&exts
 );
 
-std::vector<const char*> instance_get_required_exts();
+std::vector<const char*> instance_get_req_exts();
 
-void instance_create(instance_t* instance);
+void instance_create(instance_t *instance);
 
-void instance_destroy(const instance_t& instance);
+void instance_destroy(const instance_t &instance);
 
 #endif

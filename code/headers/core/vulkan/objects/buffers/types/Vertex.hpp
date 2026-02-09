@@ -14,7 +14,7 @@ struct vertex_t
 	glm::vec3 col;
 };
 
-const std::vector<vertex_t> vertices = 
+const std::vector<vertex_t> verts = 
 {
     {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
     {{0.5f,  0.5f}, {0.0f, 1.0f, 0.0f}},
