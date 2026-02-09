@@ -16,15 +16,6 @@ VkBufferCreateInfo vertex_buffer_create_info()
 	return create_info;
 }
 
-void vertex_buffer_create(vertex_buffer_t* buf, const device_t& device)
-{
-	VkBufferCreateInfo buf_info = vertex_buffer_create_info();
-
-	if (vkCreateBuffer(device.handle, &buf_info, nullptr, &buf->handle) != VK_SUCCESS) {
-		log_critical("Failed to Create a Vertex Buffer.");
-	}
-}
-
 VkMemoryRequirements vertex_buffer_get_mem_reqs(const vertex_buffer_t& buf, const device_t& device)
 {
 	VkMemoryRequirements mem_reqs = {};
@@ -49,12 +40,6 @@ void vertex_buffer_alloc_mem(vertex_buffer_mem_t* buf_mem, const vertex_buffer_t
 	if (vkAllocateMemory(device.handle, &alloc_info, nullptr, &buf_mem->handle) != VK_SUCCESS) { 
 		log_critical("Failed to Allocate Vertex Buffer Memory.");
 	}
-
-	VkBufferCreateInfo buf_info = vertex_buffer_create_info();
-
-	vkBindBufferMemory(device.handle, buf.handle, buf_mem->handle, 0);
-
-	vertex_buffer_mem_cpy(*buf_mem, device, buf_info);
 }
 
 void vertex_buffer_mem_cpy(const vertex_buffer_mem_t& buf_mem, const device_t& device, const VkBufferCreateInfo info)
@@ -65,12 +50,19 @@ void vertex_buffer_mem_cpy(const vertex_buffer_mem_t& buf_mem, const device_t& d
 	vkUnmapMemory(device.handle, buf_mem.handle);
 }
 
-void vertex_buffer_destroy(const vertex_buffer_t& buf, const device_t& device)
+void vertex_buffer_create(vertex_buffer_t* buf, vertex_buffer_mem_t* buf_mem, const device_t& device, const phys_device_t& phys_device)
 {
-	if (buf.handle == VK_NULL_HANDLE) {
-		log_error("Cannot Destroy the Vertex Buffer::Vertex Buffer is not Created.");
+	VkBufferCreateInfo buf_info = vertex_buffer_create_info();
+
+	if (vkCreateBuffer(device.handle, &buf_info, nullptr, &buf->handle) != VK_SUCCESS) {
+		log_critical("Failed to Create a Vertex Buffer.");
 	}
-	vkDestroyBuffer(device.handle, buf.handle, nullptr);
+
+	vertex_buffer_alloc_mem(buf_mem, *buf, device, phys_device);
+
+	vkBindBufferMemory(device.handle, buf->handle, buf_mem->handle, 0);
+
+	vertex_buffer_mem_cpy(*buf_mem, device, buf_info);
 }
 
 void vertex_buffer_mem_free(const vertex_buffer_mem_t& buf_mem, const device_t& device)
@@ -79,4 +71,14 @@ void vertex_buffer_mem_free(const vertex_buffer_mem_t& buf_mem, const device_t& 
 		log_error("Failed to Free Vertex Buffer Memory::Vertex Buffer Memory is not Allocated.");
 	}
 	vkFreeMemory(device.handle, buf_mem.handle, nullptr);
+}
+
+void vertex_buffer_destroy(const vertex_buffer_t& buf, const vertex_buffer_mem_t& buf_mem, const device_t& device)
+{
+	if (buf.handle == VK_NULL_HANDLE) {
+		log_error("Cannot Destroy the Vertex Buffer::Vertex Buffer is not Created.");
+	}
+	vkDestroyBuffer(device.handle, buf.handle, nullptr);
+
+	vertex_buffer_mem_free(buf_mem, device);
 }

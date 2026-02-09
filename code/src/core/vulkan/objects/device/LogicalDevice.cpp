@@ -26,9 +26,11 @@ std::vector<VkDeviceQueueCreateInfo> device_create_queue_infos(const queue_famil
 		queue_infos.push_back(device_create_queue_info(queue_family.graphics.value(), queue_priority));
 		queue_infos.push_back(device_create_queue_info(queue_family.present.value(), queue_priority));
 	}
-	return queue_infos;
 
 	log_info("The Queue Infos were Created.");
+
+	return queue_infos;
+
 }
 
 VkDeviceQueueCreateInfo device_create_queue_info(const uint32_t queue_family_idx, const float& queue_priority)
