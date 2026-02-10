@@ -10,19 +10,19 @@ struct instance_t
 	VkInstance handle = VK_NULL_HANDLE;
 };
 
-VkApplicationInfo instance_create_app_info();
+VkApplicationInfo inst_create_app_info();
 
-VkInstanceCreateInfo instance_create_info
+VkInstanceCreateInfo inst_create_info
 (
 	const VkApplicationInfo					*app_info, 
 	const VkDebugUtilsMessengerCreateInfoEXT		*dbg_info, 
 	const std::vector<const char*>				&exts
 );
 
-std::vector<const char*> instance_get_req_exts();
+std::vector<const char*> inst_get_req_exts();
 
-void instance_create(instance_t *instance);
+void inst_create(instance_t *inst);
 
-void instance_destroy(const instance_t &instance);
+void inst_destroy(const instance_t &inst);
 
 #endif

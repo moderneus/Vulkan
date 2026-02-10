@@ -9,15 +9,15 @@
 
 VKAPI_ATTR VkBool32 VKAPI_CALL callback
 (
-	VkDebugUtilsMessageSeverityFlagBitsEXT				 msg_sev,
-	VkDebugUtilsMessageTypeFlagsEXT					 msg_type,
+	VkDebugUtilsMessageSeverityFlagBitsEXT				 sev,
+	VkDebugUtilsMessageTypeFlagsEXT					 type,
 	const VkDebugUtilsMessengerCallbackDataEXT			*cb_data,
 	void								*user_data
 )
 {
 	fmt::color col;
 
-	switch(msg_sev) {
+	switch(sev) {
 	default:
 		col = fmt::color::white;
 	break;
@@ -72,7 +72,7 @@ VkDebugUtilsMessengerCreateInfoEXT dbg_msgr_create_info()
 VkResult dbg_msgr_create
 (
 	debug_msgr_t							*msgr,
-	const instance_t						&instance,
+	const instance_t						&inst,
 	const VkDebugUtilsMessengerCreateInfoEXT			*info, 
 	const VkAllocationCallbacks					*alloc
 ) 
@@ -82,7 +82,7 @@ VkResult dbg_msgr_create
 	auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.handle, "vkCreateDebugUtilsMessengerEXT");
 
 	if (func != nullptr) {
-		func(instance.handle, info, alloc, &msgr->handle);
+		func(inst.handle, info, alloc, &msgr->handle);
 	} else {
 		log_error("Failed to Create the Debug Messegner::Extension not Present!");
 		return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -93,13 +93,13 @@ VkResult dbg_msgr_create
 	return VK_SUCCESS;
 }
 
-VkResult dbg_msgr_destroy(const debug_msgr_t &msgr, const instance_t &instance) 
+VkResult dbg_msgr_destroy(const debug_msgr_t &msgr, const instance_t &inst) 
 {
 	log_info("Destroying the Debug Messenger...");
 
 	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.handle, "vkDestroyDebugUtilsMessengerEXT");
 	if (func != nullptr) {
-		func(instance.handle, msgr.handle, nullptr);
+		func(inst.handle, msgr.handle, nullptr);
 	} else {
 		log_error("Failed to Destroy the Debug Messenger::Extension not Present!");
 		return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -110,12 +110,12 @@ VkResult dbg_msgr_destroy(const debug_msgr_t &msgr, const instance_t &instance)
 	return VK_SUCCESS;
 }
 
-void dbg_msgr_setup(debug_msgr_t *msgr, const instance_t &instance) 
+void dbg_msgr_setup(debug_msgr_t *msgr, const instance_t &inst) 
 {
 	log_info("Setting up a Debug Messenger...");
 
-	VkDebugUtilsMessengerCreateInfoEXT msgr_info = dbg_msgr_create_info();
-	if (dbg_msgr_create(msgr, instance, &msgr_info, nullptr) != VK_SUCCESS) {
+	VkDebugUtilsMessengerCreateInfoEXT info = dbg_msgr_create_info();
+	if (dbg_msgr_create(msgr, inst, &info, nullptr) != VK_SUCCESS) {
 		log_error("Failed to Create the Debug Messenger.");
 	}
 

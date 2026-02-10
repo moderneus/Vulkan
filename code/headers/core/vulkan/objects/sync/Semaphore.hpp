@@ -12,10 +12,10 @@ struct semaphore_t
 	VkSemaphore handle = VK_NULL_HANDLE;
 };
 
-VkSemaphoreCreateInfo semaphore_create_info();
+VkSemaphoreCreateInfo sem_create_info();
 
-void semaphores_create(std::vector<semaphore_t>* semaphores, const device_t& device);
+void sem_create(std::vector<semaphore_t> *sems, const device_t &dev);
 
-void semaphores_destroy(const std::vector<semaphore_t>& semaphores, const device_t& device);
+void sem_destroy(const std::vector<semaphore_t> &sems, const device_t &dev);
 
 #endif

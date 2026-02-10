@@ -3,24 +3,24 @@
 
 #include <fstream>
 
-std::vector<char> read_file(const std::string& path) 
+std::vector<char> file_read(const std::string& path) 
 {
 	log_info("Reading a File... Path = ", path);
 
-	std::ifstream file(path, std::ios::ate | std::ios::binary);
+	std::ifstream f(path, std::ios::ate | std::ios::binary);
 
-	if (!file.is_open()) {
+	if (!f.is_open()) {
 		log_error("Failed to Open File by Path: ", path);
 	}
 
-	size_t fileSize = (size_t)file.tellg();
-	std::vector<char> buffer(fileSize);
+	size_t size = (size_t)f.tellg();
+	std::vector<char> buf(size);
 
-	file.seekg(0);
-	file.read(buffer.data(), fileSize);
-	file.close();
+	f.seekg(0);
+	f.read(buf.data(), size);
+	f.close();
 
 	log_info("The File was Read by Path = ", path);
 
-	return buffer;
+	return buf;
 }

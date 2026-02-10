@@ -11,20 +11,20 @@ struct render_pass_t
 	VkRenderPass handle = VK_NULL_HANDLE;
 };
 
-VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass_t& render_pass, const swapchain_state_t& st, uint32_t img_idx, const VkClearValue clear_color);
+VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapchain_state_t& st, uint32_t img_idx, const VkClearValue col);
 
-VkAttachmentDescription render_pass_create_attachment_description(const swapchain_state_t& st);
+VkAttachmentDescription rp_create_att_desc(const swapchain_state_t& st);
 
-VkAttachmentReference render_pass_create_attachment_reference();
+VkAttachmentReference rp_create_att_ref();
 
-VkSubpassDescription render_pass_create_subpass_description(VkAttachmentReference* pattachment_ref);
+VkSubpassDescription rp_create_subp_desc(VkAttachmentReference *ref);
 
-VkSubpassDependency render_pass_create_subpass_dependency();
+VkSubpassDependency rp_create_subp_dep();
 
-VkRenderPassCreateInfo render_pass_create_info(VkAttachmentDescription* pattachemnt_description, VkSubpassDescription* psubpass, VkSubpassDependency* subpass_dependency);
+VkRenderPassCreateInfo rp_create_info(VkAttachmentDescription *att, VkSubpassDescription *subp, VkSubpassDependency *dep);
 
-void render_pass_create(render_pass_t* render_pass, const device_t& device, const swapchain_state_t& st);
+void rp_create(render_pass_t *rp, const device_t &dev, const swapchain_state_t &st);
     
-void render_pass_destroy(render_pass_t* render_pass, const device_t& device);
+void rp_destroy(render_pass_t &rp, const device_t &dev);
 
 #endif

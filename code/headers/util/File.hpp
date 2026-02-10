@@ -4,6 +4,6 @@
 #include <vector>
 #include <string>
 
-std::vector<char> read_file(const std::string& path);
+std::vector<char> file_read(const std::string& path);
 
 #endif

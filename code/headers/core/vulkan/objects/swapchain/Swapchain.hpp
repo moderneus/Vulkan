@@ -12,65 +12,65 @@ struct render_pass_t;
 struct device_t;
 struct surface_t;
 
-struct swapchain_support_detailts_t
-{
-	VkSurfaceCapabilitiesKHR			capabilities;
-	std::vector<VkSurfaceFormatKHR>			formats;
-	std::vector<VkPresentModeKHR>			present_modes;
-};
-
 struct swapchain_t
 {
 	VkSwapchainKHR handle = VK_NULL_HANDLE;
 };
 
+struct swapchain_support_detailts_t
+{
+	VkSurfaceCapabilitiesKHR			caps;
+	std::vector<VkSurfaceFormatKHR>			fmts;
+	std::vector<VkPresentModeKHR>			p_modes;
+};
+
 struct swapchain_state_t
 {
 	VkExtent2D					extent = {};
-	VkFormat					format = VK_FORMAT_UNDEFINED;
-	VkColorSpaceKHR					color_space = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-	std::vector<VkFramebuffer>			frame_buffers;
+	VkFormat					fmt = VK_FORMAT_UNDEFINED;
+	VkColorSpaceKHR					colspc = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+	std::vector<VkFramebuffer>			fbs;
 	std::vector<VkImageView>			views; 
 	std::vector<VkImage>				imgs;
 };
 
-swapchain_support_detailts_t swapchain_query_support_details(const phys_device_t& phys_device, const surface_t& surface);
+swapchain_support_detailts_t swp_query_supp_details(const phys_device_t &phys_dev, const surface_t &surf);
 
-VkSurfaceFormatKHR swapchain_choose_format(const std::vector<VkSurfaceFormatKHR>& formats);
+VkSurfaceFormatKHR swp_choose_fmt(const std::vector<VkSurfaceFormatKHR> &fmts);
 
-VkPresentModeKHR swapchain_choose_present_mode(const std::vector<VkPresentModeKHR>& present_modes);
+VkPresentModeKHR swp_choose_p_mode(const std::vector<VkPresentModeKHR> &pms);
 
-VkExtent2D swapchain_choose_extent(const window_t& window, const VkSurfaceCapabilitiesKHR& capabilities);
+VkExtent2D swp_choose_extent(const window_t &window, const VkSurfaceCapabilitiesKHR &caps);
 
-VkSwapchainCreateInfoKHR swapchain_create_info
+VkSwapchainCreateInfoKHR swp_create_info
 (
-	const queue_family_t&				queue_family,
-	const surface_t&				surface,
-	const VkSurfaceFormatKHR&			format, 
-	const VkPresentModeKHR&				present_mode, 
-	const VkExtent2D&				extent, 
-	const VkSurfaceCapabilitiesKHR&			capabilities, 
-	const uint32_t					img_count
+	const queue_family_t				&qf,
+	const surface_t					&surf,
+	const VkSurfaceFormatKHR			&fmt, 
+	const VkPresentModeKHR				&pm, 
+	const VkExtent2D				&extent, 
+	const VkSurfaceCapabilitiesKHR			&caps, 
+	const uint32_t					 img_cnt
 );
 
-bool swapchain_is_adequate(const VkPhysicalDevice& phys_device, const VkSurfaceKHR& surface);
+bool swp_is_adequate(const VkPhysicalDevice &phys_dev, const VkSurfaceKHR &surf);
 
-void swapchain_config_setup(swapchain_state_t* st, const swapchain_t& swapchain, const device_t& device, const VkSurfaceFormatKHR& format, const VkExtent2D& extent);
+void swp_cfg_setup(swapchain_state_t *st, const swapchain_t &swp, const device_t &dev, const VkSurfaceFormatKHR &fmt, const VkExtent2D& extent);
 
-void swapchain_recreate
+void swp_recreate
 (
-	swapchain_t*				swapchain, 
-	swapchain_state_t*			st, 
-	const device_t&				device, 
-	const phys_device_t&			phys_device, 
-	const render_pass_t&			render_pass, 
-	const queue_family_t&			queue_family, 
-	const surface_t&			surface, 
-	const window_t&				window
+	swapchain_t				*swp, 
+	swapchain_state_t			*st, 
+	const device_t				&dev, 
+	const phys_device_t			&phys_dev, 
+	const render_pass_t			&rp, 
+	const queue_family_t			&qf, 
+	const surface_t				&surf, 
+	const window_t				&win
 );
 
-void swapchain_create(swapchain_t* swapchain, swapchain_state_t* st, const device_t& device, const phys_device_t& phys_device, const queue_family_t& queue_family, const surface_t& surface, const window_t& window);
+void swp_create(swapchain_t *swp, swapchain_state_t *st, const device_t &dev, const phys_device_t &phys_dev, const queue_family_t &qf, const surface_t &surf, const window_t &win);
 
-void swapchain_destroy(const swapchain_t& swapchain, const device_t& device);
+void swp_destroy(const swapchain_t &swp, const device_t &dev);
 
 #endif

@@ -19,18 +19,18 @@ VkCommandBufferBeginInfo cmd_buf_create_begin_info()
 	return info;
 }
 
-void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline, const render_pass_t &render_pass, const swapchain_state_t &st, const vertex_buffer_t &buf, const uint32_t img_idx) 
+void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline, const render_pass_t &rp, const swapchain_state_t &st, const vertex_buffer_t &buf, const uint32_t img_idx)
 {
-	VkCommandBufferBeginInfo cmd_buf_begin_info = cmd_buf_create_begin_info();
+	VkCommandBufferBeginInfo cmd_info = cmd_buf_create_begin_info();
 
-	if (vkBeginCommandBuffer(cmd_buf.handle, &cmd_buf_begin_info) != VK_SUCCESS) {
+	if (vkBeginCommandBuffer(cmd_buf.handle, &cmd_info) != VK_SUCCESS) {
 		log_critical("Failed to Begin Recording Command Buffer.");
 	}
 
 	VkClearValue clear_col = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-	VkRenderPassBeginInfo render_pass_begin_info = render_pass_create_begin_info(render_pass, st, img_idx, clear_col);
+	VkRenderPassBeginInfo rp_info = render_pass_create_begin_info(rp, st, img_idx, clear_col);
 
-	vkCmdBeginRenderPass(cmd_buf.handle, &render_pass_begin_info, VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdBeginRenderPass(cmd_buf.handle, &rp_info, VK_SUBPASS_CONTENTS_INLINE);
 
 		vkCmdBindPipeline(cmd_buf.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);
 		VkViewport viewport = pipeline_create_viewport(st);

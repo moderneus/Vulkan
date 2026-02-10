@@ -19,7 +19,7 @@ struct command_buffer_t
 
 VkCommandBufferBeginInfo cmd_buf_create_begin_info();
 
-void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline, const render_pass_t &render_pass, const swapchain_state_t &st, const vertex_buffer_t &buf, const uint32_t img_idx);
+void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline, const render_pass_t &rp, const swapchain_state_t &st, const vertex_buffer_t &buf, const uint32_t img_idx);
 
 VkCommandBufferAllocateInfo cmd_buf_create_alloc_info(const command_pool_t &cmd_pool, const std::vector<command_buffer_t> &cmd_bufs);
 

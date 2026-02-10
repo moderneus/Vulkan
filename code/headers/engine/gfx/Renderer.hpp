@@ -9,21 +9,21 @@ struct core_t;
 
 struct renderer_t
 {
-	window_t* pwindow;
+	window_t* pwin;
 };
 
 struct renderer_state_t
 {
-	uint32_t current_frame = 0;
-	bool framebuffer_resized = false;
+	uint32_t frame = 0;
+	bool fb_resized = false;
 };
 
-void renderer_init(renderer_t* renderer, window_t* pwindow);
+void rndr_init(renderer_t *r, window_t *win);
 
-void renderer_destroy(renderer_t* renderer);
+void rndr_destroy(renderer_t *r);
 
-void renderer_loop(renderer_t* renderer, event_manager_t* event_manager, core_t* vk_core);
+void rndr_loop(renderer_t *r, event_manager_t *ev_m, core_t *core);
 
-void renderer_draw(const renderer_t& renderer, renderer_state_t* st, core_t* vk_core);
+void rndr_draw(const renderer_t &r, renderer_state_t *st, core_t *core);
 
 #endif

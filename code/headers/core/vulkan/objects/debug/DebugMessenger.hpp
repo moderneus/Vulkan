@@ -12,8 +12,8 @@ struct debug_msgr_t
 
 VKAPI_ATTR VkBool32 VKAPI_CALL callback
 (
-	VkDebugUtilsMessageSeverityFlagBitsEXT				msg_sev,
-	VkDebugUtilsMessageTypeFlagsEXT					msg_type,
+	VkDebugUtilsMessageSeverityFlagBitsEXT				sev,
+	VkDebugUtilsMessageTypeFlagsEXT					type,
 	const VkDebugUtilsMessengerCallbackDataEXT		       *cb_data,
 	void							       *usr_data 
 );
@@ -23,7 +23,7 @@ VkDebugUtilsMessengerCreateInfoEXT dbg_msgr_create_info();
 VkResult dbg_msgr_create
 (
 	debug_msgr_t						       *msgr,
-	const instance_t					       &instance,
+	const instance_t					       &inst,
 	const VkDebugUtilsMessengerCreateInfoEXT		       *info,
 	const VkAllocationCallbacks				       *alloc
 );

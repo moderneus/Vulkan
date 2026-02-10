@@ -7,10 +7,10 @@ struct swapchain_state_t;
 struct device_t;
 struct render_pass_t;
 
-VkFramebufferCreateInfo framebuffer_create_info(const swapchain_state_t& st, const render_pass_t& render_pass, const VkImageView* attachments);
+VkFramebufferCreateInfo fb_create_info(const swapchain_state_t &st, const render_pass_t &rp, const VkImageView *atts);
 
-void framebuffers_create(swapchain_state_t* st, const device_t& device, const render_pass_t& render_pass);
+void fbs_create(swapchain_state_t *st, const device_t &dev, const render_pass_t &rp);
 
-void framebuffers_destroy(const swapchain_state_t& st, const device_t& device);
+void fbs_destroy(const swapchain_state_t &st, const device_t &dev);
 
 #endif

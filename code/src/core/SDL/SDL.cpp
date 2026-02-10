@@ -6,7 +6,7 @@
 
 bool is_init = false;
 
-void SDL_context_init() 
+void SDL_ctx_init() 
 {
 	log_info("Initializing the SDL...");
 
@@ -19,7 +19,7 @@ void SDL_context_init()
 	log_info("The SDL was initialiazed.");
 }
 
-void SDL_context_destroy() 
+void SDL_ctx_destroy() 
 {
 	log_info("Quitting SDL...");
 

@@ -4,29 +4,29 @@
 #include "core/vulkan/objects/renderpass/RenderPass.hpp"
 #include "util/debug/Logger.hpp"
 
-VkFramebufferCreateInfo framebuffer_create_info(const swapchain_state_t& st, const render_pass_t& render_pass, const VkImageView* attachments) 
+VkFramebufferCreateInfo fb_create_info(const swapchain_state_t &st, const render_pass_t &rp, const VkImageView *atts) 
 {
-	VkFramebufferCreateInfo create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-	create_info.renderPass = render_pass.handle;
-	create_info.attachmentCount = 1;
-	create_info.pAttachments = attachments;
-	create_info.width = st.extent.width;
-	create_info.height = st.extent.height;
-	create_info.layers = 1;
-	return create_info;
+	VkFramebufferCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+	info.renderPass = rp.handle;
+	info.attachmentCount = 1;
+	info.pAttachments = atts;
+	info.width = st.extent.width;
+	info.height = st.extent.height;
+	info.layers = 1;
+	return info;
 }
 
-void framebuffers_create(swapchain_state_t* st, const device_t& device, const render_pass_t& render_pass) 
+void fbs_create(swapchain_state_t *st, const device_t &dev, const render_pass_t &rp) 
 {
 	log_info("Creating a Framebuffers...");
 
-	st->frame_buffers.resize(st->views.size());
+	st->fbs.resize(st->views.size());
 
 	for(uint32_t i = 0; i < st->views.size(); ++i) {
-		VkFramebufferCreateInfo framebuffer_info = framebuffer_create_info(*st, render_pass, &st->views[i]);
+		VkFramebufferCreateInfo info = fb_create_info(*st, rp, &st->views[i]);
 
-		if (vkCreateFramebuffer(device.handle, &framebuffer_info, nullptr, &st->frame_buffers[i]) != VK_SUCCESS) {
+		if (vkCreateFramebuffer(dev.handle, &info, nullptr, &st->fbs[i]) != VK_SUCCESS) {
 			log_critical("Failed to Create the Framebuffers.");
 		}
 	}
@@ -34,12 +34,12 @@ void framebuffers_create(swapchain_state_t* st, const device_t& device, const re
 	log_info("The Framebuffers were Created.");
 }
 
-void framebuffers_destroy(const swapchain_state_t& st, const device_t& device) 
+void fbs_destroy(const swapchain_state_t &st, const device_t &dev) 
 {
 	log_info("Destroying the Framebuffers...");
 
-	for(const auto& framebuffer : st.frame_buffers) {
-		vkDestroyFramebuffer(device.handle, framebuffer, nullptr);
+	for(const auto &fb: st.fbs) {
+		vkDestroyFramebuffer(dev.handle, fb, nullptr);
 	}
 
 	log_info("The Framebuffers were Destroyed.");
