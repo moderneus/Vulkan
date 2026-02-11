@@ -10,7 +10,7 @@ void surf_create(surface_t *surf, const instance_t &inst, const window_t &win)
 {
 	log_info("Creating a Surface...");
 
-	if (!SDL_Vulkan_CreateSurface(win.phandle, inst.handle, nullptr, &surf->handle)) {
+	if (!SDL_Vulkan_CreateSurface(win.handle, inst.handle, nullptr, &surf->handle)) {
 		log_critical("Failed to Create the Surface::", SDL_GetError()); 
 	}
 

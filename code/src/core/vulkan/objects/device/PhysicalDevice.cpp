@@ -34,7 +34,7 @@ std::string phys_dev_get_name(const phys_device_t &phys_dev)
 	return props.deviceName;
 }
 
-bool phys_dev_check_ext_support(const VkPhysicalDevice &phys_dev)
+bool phys_dev_check_ext_supp(const VkPhysicalDevice &phys_dev)
 {
 	uint32_t ext_count;
 	vkEnumerateDeviceExtensionProperties(phys_dev, nullptr, &ext_count, nullptr);
@@ -53,7 +53,7 @@ bool phys_dev_check_ext_support(const VkPhysicalDevice &phys_dev)
 
 bool phys_dev_is_suitable(const VkPhysicalDevice &phys_dev, const surface_t &surface)
 {
-	return phys_dev_check_ext_support(phys_dev) && swapchain_is_adequate(phys_dev, surface.handle);
+	return phys_dev_check_ext_supp(phys_dev) && swp_is_adequate(phys_dev, surface.handle);
 }
 
 void phys_dev_pick(phys_device_t *phys_dev, const instance_t &instance, const surface_t &surface)

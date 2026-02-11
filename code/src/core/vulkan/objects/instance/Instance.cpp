@@ -73,7 +73,7 @@ VkInstanceCreateInfo inst_create_info
 	return info;
 }
 
-void instance_create(instance_t *inst) 
+void inst_create(instance_t *inst) 
 {
 	log_info("Creating an Instance...");
 
@@ -89,11 +89,11 @@ void instance_create(instance_t *inst)
 	log_info("The Instance was Created.");
 }
 
-void instance_destroy(const instance_t &inst) 
+void inst_destroy(const instance_t &inst) 
 {
 	log_info("Destroying the Instance...");
 
-	if (instance.handle == VK_NULL_HANDLE) {
+	if (inst.handle == VK_NULL_HANDLE) {
 		log_error("Cannot Destroy the Instance::Instance is not Created.");
 	}
 

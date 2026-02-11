@@ -4,7 +4,7 @@
 
 #include <vulkan/vulkan.h>
 
-VkPipelineLayoutCreateInfo pipeline_layout_create_info() 
+VkPipelineLayoutCreateInfo layout_create_info() 
 {
 	log_info("Creating the Pipeline Layout Info...");
 	
@@ -19,11 +19,11 @@ VkPipelineLayoutCreateInfo pipeline_layout_create_info()
 	return info;
 }
 
-void pipeline_layout_create(pipeline_layout_t *layout, const device_t &dev) 
+void layout_create(layout_t *layout, const device_t &dev) 
 {
 	log_info("Creating a Pipeline Layout...");
 
-	VkPipelineLayoutCreateInfo info = pipeline_layout_create_info();
+	VkPipelineLayoutCreateInfo info = layout_create_info();
 
 	if (vkCreatePipelineLayout(dev.handle, &info, nullptr, &layout->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Pipeline Layout.");
@@ -32,7 +32,7 @@ void pipeline_layout_create(pipeline_layout_t *layout, const device_t &dev)
 	log_info("The Pipeline Layout was Created.");
 }
 
-void pipeline_layout_destroy(const pipeline_layout_t &layout, const device_t &dev) 
+void layout_destroy(const layout_t &layout, const device_t &dev) 
 {
 	log_info("Destroying the Pipeline Layout...");
 

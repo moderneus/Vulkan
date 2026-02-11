@@ -21,8 +21,8 @@ const std::vector<vertex_t> verts =
     {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 };
 
-VkVertexInputBindingDescription vertex_get_binding_description();
+VkVertexInputBindingDescription vert_get_bind_desc();
 
-std::array<VkVertexInputAttributeDescription, 2> vertex_get_attrib_description();
+std::array<VkVertexInputAttributeDescription, 2> vert_get_attrib_desc();
 
 #endif

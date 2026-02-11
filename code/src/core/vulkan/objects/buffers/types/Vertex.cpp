@@ -1,25 +1,25 @@
 #include "core/vulkan/objects/buffers/types/Vertex.hpp"
 
-VkVertexInputBindingDescription vertex_get_binding_description()
+VkVertexInputBindingDescription vert_get_bind_desc()
 {
-	VkVertexInputBindingDescription description = {};
-	description.binding = 0;
-	description.stride = sizeof(vertex_t);
-	description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-	return description;
+	VkVertexInputBindingDescription desc = {};
+	desc.binding = 0;
+	desc.stride = sizeof(vertex_t);
+	desc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+	return desc;
 }
 
-std::array<VkVertexInputAttributeDescription, 2> vertex_get_attrib_description()
+std::array<VkVertexInputAttributeDescription, 2> vert_get_attrib_desc()
 {
-	std::array<VkVertexInputAttributeDescription, 2> attrrib_descriptions = {};
-	attrrib_descriptions[0].binding = 0;
-	attrrib_descriptions[0].location = 0;
-	attrrib_descriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-	attrrib_descriptions[0].offset = offsetof(vertex_t, pos);
+	std::array<VkVertexInputAttributeDescription, 2> descs = {};
+	descs[0].binding = 0;
+	descs[0].location = 0;
+	descs[0].format = VK_FORMAT_R32G32_SFLOAT;
+	descs[0].offset = offsetof(vertex_t, pos);
 
-	attrrib_descriptions[1].binding = 0;
-	attrrib_descriptions[1].location = 1;
-	attrrib_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-	attrrib_descriptions[1].offset = offsetof(vertex_t, col);
-	return attrrib_descriptions;
+	descs[1].binding = 0;
+	descs[1].location = 1;
+	descs[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+	descs[1].offset = offsetof(vertex_t, col);
+	return descs;
 }

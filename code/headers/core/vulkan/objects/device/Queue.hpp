@@ -12,11 +12,11 @@ struct semaphore_t;
 
 struct queue_t
 {
-	VkQueue		graphics = VK_NULL_HANDLE;
-	VkQueue		present  = VK_NULL_HANDLE;
+	VkQueue		gfx = VK_NULL_HANDLE;
+	VkQueue		pres = VK_NULL_HANDLE;
 };
 
-VkSubmitInfo queue_create_submit_info
+VkSubmitInfo q_create_submit_info
 (
 	const uint32_t						&frame, 
 	const std::array<VkSemaphore, 1>			&waits,
@@ -25,7 +25,7 @@ VkSubmitInfo queue_create_submit_info
 	const std::vector<command_buffer_t>			&cmd_bufs
 );
 
-VkPresentInfoKHR queue_create_pres_info
+VkPresentInfoKHR q_create_pres_info
 (
 	const std::array<VkSemaphore, 1>			&signals,
 	const std::array<VkSwapchainKHR, 1>			&swapchains, 

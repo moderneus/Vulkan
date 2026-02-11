@@ -10,7 +10,7 @@
 
 bool qf_is_complete(const queue_family_t &qf) 
 {
-    return qf.graphics.has_value() && qf.present.has_value();
+    return qf.gfx.has_value() && qf.pres.has_value();
 }
 
 void qf_find(queue_family_t *qf, const phys_device_t &phys_dev, const surface_t &surface) 
@@ -25,14 +25,14 @@ void qf_find(queue_family_t *qf, const phys_device_t &phys_dev, const surface_t 
 
 	for (uint32_t i = 0; i < qf_count; ++i) {
 		if (qfs[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-			qf->graphics = i;
+			qf->gfx= i;
 		}
 
 		VkBool32 pres_supp = false;
 		vkGetPhysicalDeviceSurfaceSupportKHR(phys_dev.handle, i, surface.handle, &pres_supp);
 
 		if (pres_supp) {
-			qf->present = i;
+			qf->pres= i;
 		} 
 
 		if (qf_is_complete(*qf)) {

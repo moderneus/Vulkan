@@ -21,7 +21,7 @@ struct swapchain_support_detailts_t
 {
 	VkSurfaceCapabilitiesKHR			caps;
 	std::vector<VkSurfaceFormatKHR>			fmts;
-	std::vector<VkPresentModeKHR>			p_modes;
+	std::vector<VkPresentModeKHR>			pms;
 };
 
 struct swapchain_state_t
@@ -38,7 +38,7 @@ swapchain_support_detailts_t swp_query_supp_details(const phys_device_t &phys_de
 
 VkSurfaceFormatKHR swp_choose_fmt(const std::vector<VkSurfaceFormatKHR> &fmts);
 
-VkPresentModeKHR swp_choose_p_mode(const std::vector<VkPresentModeKHR> &pms);
+VkPresentModeKHR swp_choose_pm(const std::vector<VkPresentModeKHR> &pms);
 
 VkExtent2D swp_choose_extent(const window_t &window, const VkSurfaceCapabilitiesKHR &caps);
 
@@ -55,7 +55,7 @@ VkSwapchainCreateInfoKHR swp_create_info
 
 bool swp_is_adequate(const VkPhysicalDevice &phys_dev, const VkSurfaceKHR &surf);
 
-void swp_cfg_setup(swapchain_state_t *st, const swapchain_t &swp, const device_t &dev, const VkSurfaceFormatKHR &fmt, const VkExtent2D& extent);
+void swp_st_setup(swapchain_state_t *st, const swapchain_t &swp, const device_t &dev, const VkSurfaceFormatKHR &fmt, const VkExtent2D& extent);
 
 void swp_recreate
 (

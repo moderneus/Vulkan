@@ -79,7 +79,7 @@ VkResult dbg_msgr_create
 {    
 	log_info("Creating a Debug Messenger...");
 
-	auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.handle, "vkCreateDebugUtilsMessengerEXT");
+	auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(inst.handle, "vkCreateDebugUtilsMessengerEXT");
 
 	if (func != nullptr) {
 		func(inst.handle, info, alloc, &msgr->handle);
@@ -89,23 +89,6 @@ VkResult dbg_msgr_create
 	}
 
 	log_info("The Debug Messenger was Created.");
-
-	return VK_SUCCESS;
-}
-
-VkResult dbg_msgr_destroy(const debug_msgr_t &msgr, const instance_t &inst) 
-{
-	log_info("Destroying the Debug Messenger...");
-
-	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.handle, "vkDestroyDebugUtilsMessengerEXT");
-	if (func != nullptr) {
-		func(inst.handle, msgr.handle, nullptr);
-	} else {
-		log_error("Failed to Destroy the Debug Messenger::Extension not Present!");
-		return VK_ERROR_EXTENSION_NOT_PRESENT;
-	}
-
-	log_info("The Debug Messenger was Destroyed.");
 
 	return VK_SUCCESS;
 }
@@ -120,4 +103,21 @@ void dbg_msgr_setup(debug_msgr_t *msgr, const instance_t &inst)
 	}
 
 	log_info("The Debug Messenger was Setted up.");
+}
+
+VkResult dbg_msgr_destroy(const debug_msgr_t &msgr, const instance_t &inst) 
+{
+	log_info("Destroying the Debug Messenger...");
+
+	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(inst.handle, "vkDestroyDebugUtilsMessengerEXT");
+	if (func != nullptr) {
+		func(inst.handle, msgr.handle, nullptr);
+	} else {
+		log_error("Failed to Destroy the Debug Messenger::Extension not Present!");
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
+	}
+
+	log_info("The Debug Messenger was Destroyed.");
+
+	return VK_SUCCESS;
 }

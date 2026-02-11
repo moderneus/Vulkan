@@ -20,11 +20,11 @@ std::vector<VkDeviceQueueCreateInfo> dev_create_queue_infos(const queue_family_t
 	log_info("Creating the Queue Infos...");
 
 	std::vector<VkDeviceQueueCreateInfo> infos;
-	if (qf.graphics == qf.present) {
-		infos.push_back(dev_create_queue_info(qf.graphics.value(), prior));
+	if (qf.gfx == qf.pres) {
+		infos.push_back(dev_create_queue_info(qf.gfx.value(), prior));
 	} else {
-		infos.push_back(dev_create_queue_info(qf.graphics.value(), prior));
-		infos.push_back(dev_create_queue_info(qf.present.value(), prior));
+		infos.push_back(dev_create_queue_info(qf.gfx.value(), prior));
+		infos.push_back(dev_create_queue_info(qf.pres.value(), prior));
 	}
 
 	log_info("The Queue Infos were Created.");
@@ -77,13 +77,13 @@ void dev_create(device_t *dev, queue_t *q, const queue_family_t& qf, const phys_
 		log_critical("Failed to Create the Logical Device!");
 	}
 
-	vkGetDeviceQueue(dev->handle, qf.graphics.value(), 0, &q->graphics);
-	vkGetDeviceQueue(dev->handle, qf.present.value(), 0, &q->present);
+	vkGetDeviceQueue(dev->handle, qf.gfx.value(), 0, &q->gfx);
+	vkGetDeviceQueue(dev->handle, qf.pres.value(), 0, &q->pres);
 
 	log_info("The Logical Device was created.");
 }
 
-void dev_destroy(const device_t& dev)
+void dev_destroy(const device_t &dev)
 {
 	log_info("Destroying the Logical Device...");
 

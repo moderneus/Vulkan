@@ -3,7 +3,7 @@
 
 #include <vulkan/vulkan.h>
 
-VkSubmitInfo queue_create_submit_info
+VkSubmitInfo q_create_submit_info
 (
 	const uint32_t						&frame,
 	const std::array<VkSemaphore, 1>			&waits,
@@ -24,7 +24,7 @@ VkSubmitInfo queue_create_submit_info
 	return info;
 }
 
-VkPresentInfoKHR queue_create_present_info
+VkPresentInfoKHR q_create_pres_info
 (
 	const std::array<VkSemaphore, 1>			&signals,
 	const std::array<VkSwapchainKHR, 1>			&swapchains, 

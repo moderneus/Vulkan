@@ -2,16 +2,16 @@
 #include "engine/gfx/Renderer.hpp"
 #include "engine/window/Window.hpp"
 
-void event_manager_poll_events(event_manager_t* event_manager, renderer_state_t* st, window_t* window) 
+void ev_m_poll(event_manager_t *ev_m, renderer_state_t *st, window_t *win) 
 {
-	while(SDL_PollEvent(&event_manager->event)) {
-		switch(event_manager->event.type) {
+	while(SDL_PollEvent(&ev_m->e)) {
+		switch(ev_m->e.type) {
 		case SDL_EVENT_QUIT:
-			window->is_closed = true;
+			win->is_closed = true;
 		break;
 
 		case SDL_EVENT_WINDOW_RESIZED:
-			st->framebuffer_resized = true;
+			st->fb_resized= true;
 		break;
 		}
 	}

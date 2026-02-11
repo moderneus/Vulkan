@@ -3,13 +3,13 @@
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 
-VkImageViewCreateInfo img_view_create_info(const VkImage &img, const VkFormat &format) 
+VkImageViewCreateInfo img_view_create_info(const VkImage &img, const VkFormat &fmt) 
 {
 	VkImageViewCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	info.image = img;
 	info.viewType = VK_IMAGE_VIEW_TYPE_2D;
-	info.format = format;
+	info.format = fmt;
 	info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
 	info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
 	info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -29,7 +29,7 @@ void img_views_create(swapchain_state_t *st, const device_t &dev)
 	st->views.resize(st->imgs.size());
 
 	for(uint32_t i = 0; i < st->imgs.size(); ++i) {
-		VkImageViewCreateInfo info = img_view_create_info(st->imgs[i], st->format);
+		VkImageViewCreateInfo info = img_view_create_info(st->imgs[i], st->fmt);
 
 		if (vkCreateImageView(dev.handle, &info, nullptr, &st->views[i]) != VK_SUCCESS) {
 			log_critical("Failed to Create the ImageView.");

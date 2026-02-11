@@ -20,7 +20,7 @@ uint32_t phys_dev_rate(const phys_device_t &phys_dev);
 
 std::string phys_dev_get_name(const phys_device_t &phys_dev);
 
-bool phys_dev_check_ext_support(const phys_device_t &phys_dev);
+bool phys_dev_check_ext_supp(const phys_device_t &phys_dev);
 
 bool phys_dev_is_suitable(const phys_device_t &phys_dev, const surface_t &surface);
 

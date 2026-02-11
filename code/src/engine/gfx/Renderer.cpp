@@ -54,7 +54,7 @@ void rndr_draw(const renderer_t &r, renderer_state_t *st, core_t *core)
 	vkResetFences(core->dev.handle, 1, &core->frm_fences[st->frame].handle);
 
 	vkResetCommandBuffer(core->cmd_bufs[st->frame].handle, 0);
-	cmd_buf_record(core->cmd_bufs[st->frame], core->pipeline, vk_core->rp, core->swp_st, core->vert_buf, img_idx);
+	cmd_buf_record(core->cmd_bufs[st->frame], core->pl, core->rp, core->swp_st, core->buf, img_idx);
 
 	std::array<VkSemaphore, 1> waits = {core->img_avail_sems[st->frame].handle};
 	std::array<VkPipelineStageFlags, 1> stages = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
@@ -62,14 +62,14 @@ void rndr_draw(const renderer_t &r, renderer_state_t *st, core_t *core)
 
 	VkSubmitInfo submit_info = q_create_submit_info(st->frame, waits, signals, stages, core->cmd_bufs);
 
-	if (vkQueueSubmit(core->q.graphics, 1, &submit_info, core->frm_fences[st->frame].handle) != VK_SUCCESS) {
+	if (vkQueueSubmit(core->q.gfx, 1, &submit_info, core->frm_fences[st->frame].handle) != VK_SUCCESS) {
 		log_critical("Failed to Submit Draw Command Buffer.");
 	}
 
 	std::array<VkSwapchainKHR, 1> swps = {core->swp.handle};
 	VkPresentInfoKHR p_info = q_create_pres_info(signals, swps, img_idx);
 
-	vkQueuePresentKHR(core->q.present, &p_info);
+	vkQueuePresentKHR(core->q.pres, &p_info);
 
 	if (res == VK_ERROR_OUT_OF_DATE_KHR || res == VK_SUBOPTIMAL_KHR || st->fb_resized) {
 		st->fb_resized = false;

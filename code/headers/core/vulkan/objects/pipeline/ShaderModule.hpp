@@ -20,14 +20,14 @@ struct shader_ref_t
 	VkShaderStageFlagBits stage;
 };
 
-VkShaderModuleCreateInfo shader_create_info(const std::vector<char>& src);
+VkShaderModuleCreateInfo shdr_create_info(const std::vector<char>& src);
 
-void shader_create(shader_t *shader, const device_t &dev, const std::string &path);
+void shdr_create(shader_t *shdr, const device_t &dev, const std::string &path);
 
-void shader_destroy(const shader_t &shader, const device_t &dev);
+void shdr_destroy(const shader_t &shdr, const device_t &dev);
 
-void shaders_create(std::array<shader_t, 2> *shaders, const device_t &dev); 
+void shdrs_create(std::array<shader_t, 2> *shdrs, const device_t &dev); 
 
-void shaders_destroy(const std::array<shader_t, 2> &shaders, const device_t &dev);
+void shdrs_destroy(const std::array<shader_t, 2> &shdrs, const device_t &dev);
 
 #endif

@@ -28,15 +28,15 @@ void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline,
 	}
 
 	VkClearValue clear_col = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-	VkRenderPassBeginInfo rp_info = render_pass_create_begin_info(rp, st, img_idx, clear_col);
+	VkRenderPassBeginInfo rp_info = rp_create_begin_info(rp, st, img_idx, clear_col);
 
 	vkCmdBeginRenderPass(cmd_buf.handle, &rp_info, VK_SUBPASS_CONTENTS_INLINE);
 
 		vkCmdBindPipeline(cmd_buf.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);
-		VkViewport viewport = pipeline_create_viewport(st);
-		vkCmdSetViewport(cmd_buf.handle, 0, 1, &viewport);
-		VkRect2D scissor = pipeline_create_scissor(st);
-		vkCmdSetScissor(cmd_buf.handle, 0, 1, &scissor);
+		VkViewport vp = pl_create_vp(st);
+		vkCmdSetViewport(cmd_buf.handle, 0, 1, &vp);
+		VkRect2D sci = pl_create_sci(st);
+		vkCmdSetScissor(cmd_buf.handle, 0, 1, &sci);
 
 		std::array<VkBuffer, 1> bufs = {buf.handle};
 		std::array<VkDeviceSize, 1> offsets = {0};

@@ -10,7 +10,7 @@ VkCommandPoolCreateInfo cmd_pool_create_info(const queue_family_t &qf)
 	VkCommandPoolCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	info.queueFamilyIndex = qf.graphics.value();
+	info.queueFamilyIndex = qf.gfx.value();
 
 	log_info("The Command Pool Info was Created.");
 

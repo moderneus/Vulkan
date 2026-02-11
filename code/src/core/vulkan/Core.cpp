@@ -3,53 +3,53 @@
 #include "core/vulkan/objects/swapchain/Framebuffer.hpp"
 #include "util/debug/Logger.hpp"
 
-void vk_core_init(core_t* vk_core, const window_t& window) 
+void core_init(core_t *core, const window_t &win) 
 {
 	log_info("Initializing a Core...");
 
-	instance_create(&vk_core->instance);
-	debug_msgr_setup(&vk_core->debug_msgr, vk_core->instance);
-	surface_create(&vk_core->surface, vk_core->instance, window);
-	phys_device_pick(&vk_core->phys_device, vk_core->instance, vk_core->surface);
-	queue_family_find(&vk_core->queue_family, vk_core->phys_device, vk_core->surface);
-	device_create(&vk_core->device, &vk_core->queue, vk_core->queue_family, vk_core->phys_device);
-	swapchain_create(&vk_core->swapchain, &vk_core->swapchain_state, vk_core->device, vk_core->phys_device, vk_core->queue_family, vk_core->surface, window);
-	img_views_create(&vk_core->swapchain_state, vk_core->device);
-	pipeline_layout_create(&vk_core->pipeline_layout, vk_core->device);
-	render_pass_create(&vk_core->render_pass, vk_core->device, vk_core->swapchain_state);
-	shader_modules_create(&vk_core->shader_modules, vk_core->device);
-	vertex_buffer_create(&vk_core->vertex_buf, &vk_core->vertex_buf_mem, vk_core->device, vk_core->phys_device);
-	pipeline_create(&vk_core->pipeline, vk_core->device, vk_core->swapchain_state, vk_core->pipeline_layout, vk_core->render_pass, vk_core->shader_modules);
-	framebuffers_create(&vk_core->swapchain_state, vk_core->device, vk_core->render_pass);
-	command_pool_create(&vk_core->command_pool, vk_core->device, vk_core->queue_family);
-	command_buffers_create(&vk_core->command_buffers, vk_core->device, vk_core->command_pool);
-	semaphores_create(&vk_core->img_available_semaphores, vk_core->device);
-	semaphores_create(&vk_core->render_finished_semaphores, vk_core->device);
-	fences_create(&vk_core->in_flight_fences, vk_core->device);
+	inst_create(&core->inst);
+	dbg_msgr_setup(&core->msgr, core->inst);
+	surf_create(&core->surf, core->inst, win);
+	phys_dev_pick(&core->phys_dev, core->inst, core->surf);
+	qf_find(&core->qf, core->phys_dev, core->surf);
+	dev_create(&core->dev, &core->q, core->qf, core->phys_dev);
+	swp_create(&core->swp, &core->swp_st, core->dev, core->phys_dev, core->qf, core->surf, win);
+	img_views_create(&core->swp_st, core->dev);
+	layout_create(&core->layout, core->dev);
+	rp_create(&core->rp, core->dev, core->swp_st);
+	shdrs_create(&core->shdrs, core->dev);
+	vert_buf_create(&core->buf, &core->mem, core->dev, core->phys_dev);
+	pl_create(&core->pl, core->dev, core->layout, core->rp, core->swp_st, core->shdrs);
+	fbs_create(&core->swp_st, core->dev, core->rp);
+	cmd_pool_create(&core->cmd_pool, core->dev, core->qf);
+	cmd_bufs_create(&core->cmd_bufs, core->dev, core->cmd_pool);
+	sems_create(&core->img_avail_sems, core->dev);
+	sems_create(&core->rnd_done_sems, core->dev);
+	fences_create(&core->frm_fences, core->dev);
 
 	log_info("The Core was Initialized."); 
 }
 
-void vk_core_destroy(core_t* vk_core) 
+void core_destroy(core_t* core) 
 {
 	log_info("Destroying the Core...");
 
-	fences_destroy(vk_core->in_flight_fences, vk_core->device);
-	semaphores_destroy(vk_core->render_finished_semaphores, vk_core->device);
-	semaphores_destroy(vk_core->img_available_semaphores, vk_core->device);
-	command_pool_destroy(vk_core->command_pool, vk_core->device);
-	framebuffers_destroy(vk_core->swapchain_state, vk_core->device);
-	pipeline_destroy(vk_core->pipeline, vk_core->device);
-	vertex_buffer_destroy(vk_core->vertex_buf, vk_core->vertex_buf_mem, vk_core->device);
-	shader_modules_destroy(vk_core->shader_modules, vk_core->device);
-	render_pass_destroy(&vk_core->render_pass, vk_core->device);
-	pipeline_layout_destroy(vk_core->pipeline_layout, vk_core->device);
-	img_views_destroy(vk_core->swapchain_state, vk_core->device);
-	swapchain_destroy(vk_core->swapchain, vk_core->device);
-	device_destroy(vk_core->device);
-	surface_destroy(vk_core->surface, vk_core->instance);
-	debug_msgr_destroy(&vk_core->debug_msgr, vk_core->instance);
-	instance_destroy(vk_core->instance);
+	fences_destroy(core->frm_fences, core->dev);
+	sems_destroy(core->rnd_done_sems, core->dev);
+	sems_destroy(core->img_avail_sems, core->dev);
+	cmd_pool_destroy(core->cmd_pool, core->dev);
+	fbs_destroy(core->swp_st, core->dev);
+	pl_destroy(core->pl, core->dev);
+	vert_buf_destroy(core->buf, core->mem, core->dev);
+	shdrs_destroy(core->shdrs, core->dev);
+	rp_destroy(core->rp, core->dev);
+	layout_destroy(core->layout, core->dev);
+	img_views_destroy(core->swp_st, core->dev);
+	swp_destroy(core->swp, core->dev);
+	dev_destroy(core->dev);
+	surf_destroy(core->surf, core->inst);
+	dbg_msgr_destroy(core->msgr, core->inst);
+	inst_destroy(core->inst);
 
 	log_info("The Core was Destroyed.");
 }

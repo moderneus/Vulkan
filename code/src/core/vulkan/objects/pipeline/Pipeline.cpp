@@ -7,7 +7,7 @@
 #include "core/vulkan/objects/buffers/types/Vertex.hpp"
 #include "util/debug/Logger.hpp"
 
-VkViewport pipeline_create_viewport(const swapchain_state_t &st) 
+VkViewport pl_create_vp(const swapchain_state_t &st) 
 {
 	VkViewport vp = {};
 	vp.x = 0.0f;
@@ -19,7 +19,7 @@ VkViewport pipeline_create_viewport(const swapchain_state_t &st)
 	return vp;
 }
 
-VkRect2D pipeline_create_scissor(const swapchain_state_t &st) 
+VkRect2D pl_create_sci(const swapchain_state_t &st) 
 {
 	VkRect2D sc = {};
 	sc.offset = {0, 0};
@@ -27,7 +27,7 @@ VkRect2D pipeline_create_scissor(const swapchain_state_t &st)
 	return sc;
 }
 
-VkPipelineColorBlendAttachmentState pipeline_create_col_blend_att() 
+VkPipelineColorBlendAttachmentState pl_create_col_blend_att() 
 {
 	log_info("Creating a Color Blend Attachment...");
 
@@ -46,20 +46,20 @@ VkPipelineColorBlendAttachmentState pipeline_create_col_blend_att()
 	return att;
 }
 
-std::vector<shader_module_ref_t> pipeline_create_shader_module_refs(const std::array<shader_module_t, 2> &shaders)
+std::vector<shader_ref_t> pl_create_shdr_refs(const std::array<shader_t, 2> &shdrs)
 {
 	log_info("Creating the Shader Modules References...");
 
-	std::vector<shader_module_ref_t> refs;
-	refs.push_back({shaders[0].handle, VK_SHADER_STAGE_VERTEX_BIT});
-	refs.push_back({shaders[1].handle, VK_SHADER_STAGE_FRAGMENT_BIT});
+	std::vector<shader_ref_t> refs;
+	refs.push_back({shdrs[0].handle, VK_SHADER_STAGE_VERTEX_BIT});
+	refs.push_back({shdrs[1].handle, VK_SHADER_STAGE_FRAGMENT_BIT});
 
 	log_info("The Shader Module References were Created.");
 
 	return refs;
 }
 
-VkPipelineShaderStageCreateInfo pipeline_create_shader_stage_info(const shader_module_ref_t &ref) 
+VkPipelineShaderStageCreateInfo pl_create_shdr_stage_info(const shader_ref_t &ref) 
 {
 	log_info("Creating the Shader Stage Info...");
 
@@ -74,13 +74,13 @@ VkPipelineShaderStageCreateInfo pipeline_create_shader_stage_info(const shader_m
 	return info;
 }
 
-std::vector<VkPipelineShaderStageCreateInfo> pipeline_create_shader_stage_infos(const pipeline_config_t &cfg)
+std::vector<VkPipelineShaderStageCreateInfo> pl_create_shdr_stage_infos(const pipeline_cfg_t &cfg)
 {
 	log_info("Creating the Shader Stage Infos...");
 
 	std::vector<VkPipelineShaderStageCreateInfo> infos;
-	for(const auto& ref : cfg.shader_refs) {
-		infos.push_back(pipeline_create_shader_stage_info(ref));
+	for(const auto& ref : cfg.shdr_refs) {
+		infos.push_back(pl_create_shdr_stage_info(ref));
 	}
 
 	log_info("The Shader Stage Infos were Created!");
@@ -88,21 +88,21 @@ std::vector<VkPipelineShaderStageCreateInfo> pipeline_create_shader_stage_infos(
 	return infos;
 }
 
-VkPipelineDynamicStateCreateInfo pipeline_create_dynamic_state_info(const pipeline_config_t &cfg) 
+VkPipelineDynamicStateCreateInfo pl_create_dyn_state_info(const pipeline_cfg_t &cfg) 
 {
 	log_info("Creating a Dynamic State Info...");
 
 	VkPipelineDynamicStateCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-	info.dynamicStateCount = static_cast<uint32_t>(cfg.dynamic_states.size());
-	info.pDynamicStates = cfg.dynamic_states.data();
+	info.dynamicStateCount = static_cast<uint32_t>(cfg.dyn_st.size());
+	info.pDynamicStates = cfg.dyn_st.data();
 
 	log_info("The Dynamic State Info was Created.");
 
 	return info;
 }
 
-VkPipelineVertexInputStateCreateInfo pipeline_create_vert_input_info(const pipeline_config_t &cfg) 
+VkPipelineVertexInputStateCreateInfo pl_create_vert_input_info(const pipeline_cfg_t &cfg) 
 {
 	log_info("Creating a Vertex Input Info...");
 
@@ -118,7 +118,7 @@ VkPipelineVertexInputStateCreateInfo pipeline_create_vert_input_info(const pipel
 	return info;
 }
 
-VkPipelineInputAssemblyStateCreateInfo pipeline_create_input_asm_info() 
+VkPipelineInputAssemblyStateCreateInfo pl_create_input_asm_info() 
 {
 	log_info("Creating a Input Assembly Info...");
 
@@ -132,23 +132,23 @@ VkPipelineInputAssemblyStateCreateInfo pipeline_create_input_asm_info()
 	return info;
 }
 
-VkPipelineViewportStateCreateInfo pipeline_create_viewport_info(const pipeline_config_t &cfg) 
+VkPipelineViewportStateCreateInfo pl_create_vp_info(const pipeline_cfg_t &cfg) 
 {
 	log_info("Creating the Viewport Info...");
 
 	VkPipelineViewportStateCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 	info.viewportCount = 1;
-	info.pViewports = &cfg.viewport;
+	info.pViewports = &cfg.vp;
 	info.scissorCount = 1;
-	info.pScissors = &cfg.scissor;
+	info.pScissors = &cfg.sci;
 
 	log_info("The Viewport Info was Created.");
 
 	return info;
 }
 
-VkPipelineRasterizationStateCreateInfo pipeline_create_rasterization_info() 
+VkPipelineRasterizationStateCreateInfo pl_create_rast_info() 
 {
 	log_info("Creating a Rasterization Info...");
 
@@ -170,7 +170,7 @@ VkPipelineRasterizationStateCreateInfo pipeline_create_rasterization_info()
 	return info;
 }
 
-VkPipelineMultisampleStateCreateInfo pipeline_create_multisample_info() 
+VkPipelineMultisampleStateCreateInfo pl_create_msaa_info() 
 {
 	log_info("Creating a Multisampling Info...");
 
@@ -190,7 +190,7 @@ VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info() {
 }
 #endif
 
-VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipeline_config_t &cfg) 
+VkPipelineColorBlendStateCreateInfo pl_create_col_blend_info(const pipeline_cfg_t &cfg) 
 {
 	log_info("Creating the Color Blend Info...");
 
@@ -198,31 +198,31 @@ VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipelin
 	info.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
 	info.logicOpEnable = VK_FALSE;
 	info.attachmentCount = 1;
-	info.pAttachments = &cfg.attachment;
+	info.pAttachments = &cfg.att;
 
 	log_info("The Color Blend Info was Created.");
 
 	return info;
 }
 
-VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info_t &pipe_info, const pipeline_layout_t &layout, const render_pass_t &render_pass)
+VkGraphicsPipelineCreateInfo pl_create_info(const pipeline_info_t &pl_info, const layout_t &layout, const render_pass_t &rp)
 {
 	log_info("Creating the Pipeline Info...");
 
 	VkGraphicsPipelineCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	info.stageCount = 2;
-	info.pStages = pipe_info.shader_stages.data();
-	info.pVertexInputState = &pipe_info.vert_input;
-	info.pInputAssemblyState = &pipe_info.input_asm;
-	info.pViewportState = &pipe_info.viewport;
-	info.pRasterizationState = &pipe_info.rasterization;
-	info.pMultisampleState = &pipe_info.multisample;
+	info.pStages = pl_info.shdr_stages.data();
+	info.pVertexInputState = &pl_info.vert_input;
+	info.pInputAssemblyState = &pl_info.asm_input;
+	info.pViewportState = &pl_info.vp;
+	info.pRasterizationState = &pl_info.rast;
+	info.pMultisampleState = &pl_info.msaa;
 	info.pDepthStencilState = nullptr;
-	info.pColorBlendState = &pipe_info.col_blend;
-	info.pDynamicState = &pipe_info.dynamic_state;
+	info.pColorBlendState = &pl_info.col_blend;
+	info.pDynamicState = &pl_info.dyn_st;
 	info.layout = layout.handle;
-	info.renderPass = render_pass.handle;
+	info.renderPass = rp.handle;
 	info.subpass = 0;
 
 	log_info("The Pipeline Info was Created.");
@@ -230,46 +230,46 @@ VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info_t &pipe_in
 	return info;
 }
 
-void pipeline_create(pipeline_t *pipeline, const device_t &dev, const pipeline_layout_t &layout, const render_pass_t &rp, const swapchain_state_t &st, const std::array<shader_module_t, 2> &shaders) 
+void pl_create(pipeline_t *pl, const device_t &dev, const layout_t &layout, const render_pass_t &rp, const swapchain_state_t &st, const std::array<shader_t, 2> &shaders) 
 {
 	log_info("Creating a Pipeline...");
 
-	pipeline_config_t cfg = {};
-	cfg.shader_refs= pipeline_create_shader_module_refs(shaders);
-	cfg.viewport = pipeline_create_viewport(st);
-	cfg.scissor = pipeline_create_scissor(st);
-	cfg.attachment = pipeline_create_col_blend_att();
-	cfg.bind_desc= vertex_get_binding_description();
-	cfg.attrib_desc= vertex_get_attrib_description();
+	pipeline_cfg_t cfg = {};
+	cfg.shdr_refs= pl_create_shdr_refs(shaders);
+	cfg.vp = pl_create_vp(st);
+	cfg.sci = pl_create_sci(st);
+	cfg.att = pl_create_col_blend_att();
+	cfg.bind_desc= vert_get_bind_desc();
+	cfg.attrib_desc= vert_get_attrib_desc();
 
 	pipeline_info_t info = {};
-	info.shader_stages= pipeline_create_shader_stage_infos(cfg);
-	info.vert_input = pipeline_create_vert_input_info(cfg);
-	info.input_asm  = pipeline_create_input_asm_info();
-	info.viewport = pipeline_create_viewport_info(cfg);
-	info.rasterization = pipeline_create_rasterization_info();
-	info.multisample = pipeline_create_multisample_info();
-	info.col_blend = pipeline_create_col_blend_info(cfg);
-	info.dynamic_state = pipeline_create_dynamic_state_info(cfg);
+	info.shdr_stages = pl_create_shdr_stage_infos(cfg);
+	info.vert_input = pl_create_vert_input_info(cfg);
+	info.asm_input = pl_create_input_asm_info();
+	info.vp = pl_create_vp_info(cfg);
+	info.rast = pl_create_rast_info();
+	info.msaa = pl_create_msaa_info();
+	info.col_blend = pl_create_col_blend_info(cfg);
+	info.dyn_st = pl_create_dyn_state_info(cfg);
 
-	VkGraphicsPipelineCreateInfo pipe_info = pipeline_create_info(info, layout, rp);
+	VkGraphicsPipelineCreateInfo pl_info = pl_create_info(info, layout, rp);
 
-	if (vkCreateGraphicsPipelines(dev.handle, VK_NULL_HANDLE, 1, &pipe_info, nullptr, &pipeline->handle) != VK_SUCCESS) {
+	if (vkCreateGraphicsPipelines(dev.handle, VK_NULL_HANDLE, 1, &pl_info, nullptr, &pl->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Graphics Pipeline.");
 	}
 
 	log_info("The Pipeline was Created.");
 }
 
-void pipeline_destroy(const pipeline_t &pipeline, const device_t &dev) 
+void pl_destroy(const pipeline_t &pl, const device_t &dev) 
 {
 	log_info("Destroying the Pipeline...");
 
-	if (pipeline.handle == VK_NULL_HANDLE) {
+	if (pl.handle == VK_NULL_HANDLE) {
 		log_error("Cannot Destroy the Pipeline::Pipeline is not Created.");
 	}
 
-	vkDestroyPipeline(dev.handle, pipeline.handle, nullptr);
+	vkDestroyPipeline(dev.handle, pl.handle, nullptr);
 
 	log_info("The Pipeline was Destroyed.");
 }

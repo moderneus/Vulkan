@@ -4,24 +4,24 @@
 
 #include <cstring>
 
-bool check_validation_layers_support() 
+bool val_layers_check_supp()
 {
-	uint32_t layer_count;
-	vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
+	uint32_t layer_cnt;
+	vkEnumerateInstanceLayerProperties(&layer_cnt, nullptr);
 
-	std::vector<VkLayerProperties> layers(layer_count);
-	vkEnumerateInstanceLayerProperties(&layer_count, layers.data());
+	std::vector<VkLayerProperties> layers(layer_cnt);
+	vkEnumerateInstanceLayerProperties(&layer_cnt, layers.data());
 
-	for(const char* layer_name : validationLayers) {
-		bool layerFound = false;
+	for(const char* layer_name : val_layers) {
+		bool found = false;
 
-		for(const auto& layer_props: layers) {
+		for(const auto& layer_props : layers) {
 			if (strcmp(layer_name, layer_props.layerName) == 0) {
-				layerFound = true;
+				found = true;
 				break;
 			}
 		}
-		if (!layerFound) {
+		if (!found) {
 			return false;
 		}
 	}

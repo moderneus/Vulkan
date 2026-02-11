@@ -11,11 +11,11 @@ struct surface_t;
 
 struct queue_family_t
 {
-	std::optional<uint32_t>		graphics;
-	std::optional<uint32_t>		present;
+	std::optional<uint32_t>		gfx;
+	std::optional<uint32_t>		pres;
 };
 
-bool qf_is_complete();
+bool qf_is_complete(const queue_family_t &qf);
 
 void qf_find(queue_family_t *qf, const phys_device_t &phys_dev, const surface_t &surface);
 

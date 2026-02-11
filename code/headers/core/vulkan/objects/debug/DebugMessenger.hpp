@@ -28,8 +28,8 @@ VkResult dbg_msgr_create
 	const VkAllocationCallbacks				       *alloc
 );
 
-VkResult dbg_msgr_destroy(debug_msgr_t *msgr, const instance_t &instance);
+void dbg_msgr_setup(debug_msgr_t *msgr, const instance_t &inst);
 
-void dbg_msgr_setup(debug_msgr_t *msgr, const instance_t &instance);
+VkResult dbg_msgr_destroy(const debug_msgr_t &msgr, const instance_t &inst);
 
 #endif

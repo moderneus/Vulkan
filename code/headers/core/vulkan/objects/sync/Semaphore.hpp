@@ -14,8 +14,8 @@ struct semaphore_t
 
 VkSemaphoreCreateInfo sem_create_info();
 
-void sem_create(std::vector<semaphore_t> *sems, const device_t &dev);
+void sems_create(std::vector<semaphore_t> *sems, const device_t &dev);
 
-void sem_destroy(const std::vector<semaphore_t> &sems, const device_t &dev);
+void sems_destroy(const std::vector<semaphore_t> &sems, const device_t &dev);
 
 #endif

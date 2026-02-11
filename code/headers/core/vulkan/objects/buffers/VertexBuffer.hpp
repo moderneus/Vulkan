@@ -16,20 +16,20 @@ struct vertex_buffer_mem_t
 	VkDeviceMemory handle = VK_NULL_HANDLE;
 };
 
-VkBufferCreateInfo vertex_buffer_create_info();
+VkBufferCreateInfo vert_buf_create_info();
 
-VkMemoryRequirements vertex_buffer_get_mem_reqs(const vertex_buffer_t& buf, const device_t& device);
+VkMemoryRequirements vert_buf_get_mem_reqs(const vertex_buffer_t &buf, const device_t &dev);
 
-VkMemoryAllocateInfo vertex_buffer_create_alloc_info(const phys_device_t& phys_device, const VkMemoryRequirements mem_reqs);
+VkMemoryAllocateInfo vert_buf_create_alloc_info(const phys_device_t &phys_dev, const VkMemoryRequirements reqs);
 
-void vertex_buffer_alloc_mem(vertex_buffer_mem_t* buf_mem, const vertex_buffer_t& buf, const device_t& device, const phys_device_t& phys_device);
+void vert_buf_alloc_mem(vertex_buffer_mem_t *mem, const vertex_buffer_t &buf, const device_t &dev, const phys_device_t &phys_dev);
 
-void vertex_buffer_mem_cpy(const vertex_buffer_mem_t& buf_mem, const device_t& device, const VkBufferCreateInfo info);
+void vert_buf_mem_cpy(const vertex_buffer_mem_t &mem, const device_t &dev, const VkBufferCreateInfo info);
 
-void vertex_buffer_create(vertex_buffer_t* buf, vertex_buffer_mem_t* buf_mem, const device_t& device, const phys_device_t& phys_device);
+void vert_buf_create(vertex_buffer_t *buf, vertex_buffer_mem_t *mem, const device_t &dev, const phys_device_t &phys_dev);
 
-void vertex_buffer_mem_free(const vertex_buffer_mem_t& buf_mem, const device_t& device);
+void vert_buf_mem_free(const vertex_buffer_mem_t &mem, const device_t &dev);
 
-void vertex_buffer_destroy(const vertex_buffer_t& buf, const vertex_buffer_mem_t& buf_mem, const device_t& device);
+void vert_buf_destroy(const vertex_buffer_t &buf, const vertex_buffer_mem_t &mem, const device_t &dev);
 
 #endif

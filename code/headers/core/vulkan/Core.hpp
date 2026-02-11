@@ -26,30 +26,30 @@ struct window_t;
 
 struct core_t
 {
-	instance_t					instance;
-	surface_t					surface;
-	debug_msgr_t					debug_msgr;
-	queue_family_t					queue_family;
-	queue_t						queue;
-	phys_device_t					phys_device;
-	device_t					device;
-	swapchain_t					swapchain;
-	swapchain_state_t				swapchain_state;
-	pipeline_layout_t				pipeline_layout;
-	std::array<shader_module_t, 2>			shader_modules;
-	vertex_buffer_t					vertex_buf;
-	vertex_buffer_mem_t				vertex_buf_mem;
-	pipeline_t					pipeline;
-	render_pass_t					render_pass;
-	command_pool_t					command_pool;
-	std::vector<command_buffer_t>			command_buffers;
-	std::vector<semaphore_t>			img_available_semaphores;
-	std::vector<semaphore_t>			render_finished_semaphores;
-	std::vector<fence_t>				in_flight_fences;
+	instance_t					inst;
+	surface_t					surf;
+	debug_msgr_t					msgr;
+	queue_family_t					qf;
+	queue_t						q;
+	phys_device_t					phys_dev;
+	device_t					dev;
+	swapchain_t					swp;
+	swapchain_state_t				swp_st;
+	layout_t					layout;
+	std::array<shader_t, 2>				shdrs;
+	vertex_buffer_t					buf;
+	vertex_buffer_mem_t				mem;
+	pipeline_t					pl;
+	render_pass_t					rp;
+	command_pool_t					cmd_pool;
+	std::vector<command_buffer_t>			cmd_bufs;
+	std::vector<semaphore_t>			img_avail_sems;
+	std::vector<semaphore_t>			rnd_done_sems;
+	std::vector<fence_t>				frm_fences;
 };
 
-void vk_core_init(core_t* vk_core, const window_t& window);
+void core_init(core_t *core, const window_t &win);
 
-void vk_core_destroy(core_t* vk_core);
+void core_destroy(core_t *core);
 
 #endif

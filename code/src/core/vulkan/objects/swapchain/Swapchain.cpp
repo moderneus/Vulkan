@@ -29,8 +29,8 @@ swapchain_support_detailts_t swp_query_supp_details(const VkPhysicalDevice &phys
 	vkGetPhysicalDeviceSurfacePresentModesKHR(phys_dev, surf, &pm_cnt, nullptr);
 
 	if (pm_cnt != 0) {
-		d.p_modes.resize(pm_cnt);
-		vkGetPhysicalDeviceSurfacePresentModesKHR(phys_dev, surf, &pm_cnt, d.p_modes.data());
+		d.pms.resize(pm_cnt);
+		vkGetPhysicalDeviceSurfacePresentModesKHR(phys_dev, surf, &pm_cnt, d.pms.data());
 	}
 
 	return d;
@@ -40,21 +40,21 @@ bool swp_is_adequate(const VkPhysicalDevice &phys_dev, const VkSurfaceKHR &surf)
 {
 	swapchain_support_detailts_t d = swp_query_supp_details(phys_dev, surf);
 
-	bool has_srgb = false;
+	bool srgb_ok = false;
 	for(const auto &fmt : d.fmts) {
 		if ((fmt.format == VK_FORMAT_B8G8R8A8_SRGB || fmt.format == VK_FORMAT_UNDEFINED) && fmt.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-			has_srgb = true;
+			srgb_ok = true;
 		}
 	}
 
-	bool has_mailbox_or_fifo = false;
-	for(const auto &pm: d.p_modes) {
+	bool pm_ok = false;
+	for(const auto &pm: d.pms) {
 		if (pm == VK_PRESENT_MODE_MAILBOX_KHR || pm == VK_PRESENT_MODE_FIFO_KHR) {
-			has_mailbox_or_fifo = true;
+			pm_ok = true;
 		}
 	}
 
-	return has_srgb && has_mailbox_or_fifo;
+	return srgb_ok && pm_ok;
 }
 
 VkSurfaceFormatKHR swp_choose_fmt(const std::vector<VkSurfaceFormatKHR> &fmts) 
@@ -103,7 +103,7 @@ VkExtent2D swp_choose_extent(const window_t &win, const VkSurfaceCapabilitiesKHR
 		return caps.currentExtent;
 	} else {
 		int w, h;
-		SDL_GetWindowSizeInPixels(win.phandle, &w, &h); 
+		SDL_GetWindowSizeInPixels(win.handle, &w, &h); 
 
 		VkExtent2D extent 
 		{
@@ -143,9 +143,9 @@ VkSwapchainCreateInfoKHR swp_create_info
 	info.imageArrayLayers = 1;
 	info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-	const std::array<uint32_t, 2> qf_idxs = {qf.graphics.value(), qf.present.value()};
+	const std::array<uint32_t, 2> qf_idxs = {qf.gfx.value(), qf.pres.value()};
 
-	if(qf.graphics != qf.present) {
+	if(qf.gfx!= qf.pres) {
 		info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
 		info.queueFamilyIndexCount = 2;
 		info.pQueueFamilyIndices = qf_idxs.data();
@@ -166,7 +166,7 @@ VkSwapchainCreateInfoKHR swp_create_info
 	return info;
 }
 
-void swp_cfg_setup(swapchain_state_t *st, const swapchain_t &swp, const device_t &dev, const VkSurfaceFormatKHR &fmt, const VkExtent2D &extent)
+void swp_st_setup(swapchain_state_t *st, const swapchain_t &swp, const device_t &dev, const VkSurfaceFormatKHR &fmt, const VkExtent2D &extent)
 {
 	st->fmt = fmt.format;
 	st->extent = extent;
@@ -178,7 +178,7 @@ void swp_cfg_setup(swapchain_state_t *st, const swapchain_t &swp, const device_t
 	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, st->imgs.data());
 }
 
-void swapchain_recreate
+void swp_recreate
 (
 	swapchain_t				*swp, 
 	swapchain_state_t			*st, 
@@ -207,7 +207,7 @@ void swp_create(swapchain_t *swp, swapchain_state_t *st, const device_t &dev, co
 
 	swapchain_support_detailts_t d = swp_query_supp_details(phys_dev.handle, surf.handle);
 	VkSurfaceFormatKHR fmt = swp_choose_fmt(d.fmts);
-	VkPresentModeKHR pm = swp_choose_p_mode(d.p_modes);
+	VkPresentModeKHR pm = swp_choose_p_mode(d.pms);
 	VkExtent2D extent = swp_choose_extent(win, d.caps);
 
 	uint32_t img_cnt = d.caps.minImageCount + 1;
@@ -222,7 +222,7 @@ void swp_create(swapchain_t *swp, swapchain_state_t *st, const device_t &dev, co
 		log_critical("Failed to Create the Swapchain.");
 	}
 
-	swp_cfg_setup(st, *swp, dev, fmt, extent);
+	swp_st_setup(st, *swp, dev, fmt, extent);
 
 	log_info("The Swapchain was Created.");
 }

@@ -6,7 +6,7 @@
 
 #include <cstdint>
 
-VkShaderModuleCreateInfo shader_create_info(const std::vector<char> &src) 
+VkShaderModuleCreateInfo shdr_create_info(const std::vector<char> &src) 
 {
 	log_info("Creating the Shader Module Info..."); 
 
@@ -20,50 +20,50 @@ VkShaderModuleCreateInfo shader_create_info(const std::vector<char> &src)
 	return info;
 }
 
-void shader_create(shader_t *shader, const device_t &dev, const std::string &path) 
+void shdr_create(shader_t *shdr, const device_t &dev, const std::string &path) 
 {
 	log_info("Creating a Shader Module...");
 
-	const std::vector<char> src = read_file(path);
-	VkShaderModuleCreateInfo info = shader_create_info(src);
+	const std::vector<char> src = file_read(path);
+	VkShaderModuleCreateInfo info = shdr_create_info(src);
 
-	if (vkCreateShaderModule(dev.handle, &info, nullptr, &shader->handle) != VK_SUCCESS) {
+	if (vkCreateShaderModule(dev.handle, &info, nullptr, &shdr->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the ShaderModule.");
 	}
 
 	log_info("The Shader Module was Created.");
 }
 
-void shader_destroy(const shader_t &shader, const device_t &dev) 
+void shdr_destroy(const shader_t &shdr, const device_t &dev) 
 {
 	log_info("Destroying the Shader Module...");
 
-	if (shader.handle == VK_NULL_HANDLE) {
+	if (shdr.handle == VK_NULL_HANDLE) {
 		log_error("Cannot Destroy the Shader Module::Shader Module is not Created.");
 	}
 
-	vkDestroyShaderModule(dev.handle, shader.handle, nullptr);
+	vkDestroyShaderModule(dev.handle, shdr.handle, nullptr);
 
 	log_info("The Shader Module was Destroyed.");
 }
 
-void shaders_create(std::array<shader_t, 2> *shaders, const device_t &dev) 
+void shdrs_create(std::array<shader_t, 2> *shdrs, const device_t &dev) 
 {
 	log_info("Creating the Shader Modules...");
 
-	for(uint32_t i = 0; i < shaders->size(); ++i) {
-		shader_module_create(&shaders->data()[i], dev, shader_paths[i]);
+	for(uint32_t i = 0; i < shdrs->size(); ++i) {
+		shdr_create(&shdrs->data()[i], dev, shdr_paths[i]);
 	}
 
 	log_info("The Shader Modules were Created.");
 }
 
-void shaders_destroy(const std::array<shader_t, 2> &shaders, const device_t &dev)
+void shdrs_destroy(const std::array<shader_t, 2> &shdrs, const device_t &dev)
 {
 	log_info("Destroying the Shader Modules...");
 
-	for(const auto &shader : shaders) {
-		vkDestroyShaderModule(dev.handle, shader.handle, nullptr);
+	for(const auto &shdr : shdrs) {
+		vkDestroyShaderModule(dev.handle, shdr.handle, nullptr);
 	}
 
 	log_info("The Shader Modules were Destroyed.");

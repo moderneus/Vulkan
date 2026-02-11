@@ -8,7 +8,7 @@ VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapch
 	VkRenderPassBeginInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	info.renderPass = rp.handle;
-	info.framebuffer = st.frame_buffers[img_idx];
+	info.framebuffer = st.fbs[img_idx];
 	info.renderArea.offset = {0, 0};
 	info.renderArea.extent = st.extent;
 	info.clearValueCount = 1;
@@ -21,7 +21,7 @@ VkAttachmentDescription rp_create_att_desc(const swapchain_state_t &st)
 	log_info("Creating an Attachment Description...");
 
 	VkAttachmentDescription desc = {};
-	desc.format = st.format;
+	desc.format = st.fmt;
 	desc.samples = VK_SAMPLE_COUNT_1_BIT;
 	desc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	desc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -69,9 +69,9 @@ VkSubpassDependency rp_create_subp_dep()
 	dep.dstSubpass = 0;
 	dep.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	dep.srcAccessMask = 0;
-	dp.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dp.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-	return dp;
+	dep.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	dep.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	return dep;
 }
 
 VkRenderPassCreateInfo rp_create_info(VkAttachmentDescription *att, VkSubpassDescription *subp, VkSubpassDependency *dep) 
@@ -109,7 +109,7 @@ void rp_create(render_pass_t *rp, const device_t &dev, const swapchain_state_t& 
 	log_info("The Render Pass was Created.");
 }
 
-void render_pass_destroy(const render_pass_t &rp, const device_t &dev) 
+void rp_destroy(const render_pass_t &rp, const device_t &dev) 
 {
 	log_info("Destroying the Render Pass...");
 

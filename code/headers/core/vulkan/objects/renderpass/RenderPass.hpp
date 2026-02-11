@@ -25,6 +25,6 @@ VkRenderPassCreateInfo rp_create_info(VkAttachmentDescription *att, VkSubpassDes
 
 void rp_create(render_pass_t *rp, const device_t &dev, const swapchain_state_t &st);
     
-void rp_destroy(render_pass_t &rp, const device_t &dev);
+void rp_destroy(const render_pass_t &rp, const device_t &dev);
 
 #endif

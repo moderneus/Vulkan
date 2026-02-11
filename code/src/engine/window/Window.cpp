@@ -2,28 +2,28 @@
 #include "util/String.hpp"
 #include "util/debug/Logger.hpp"
 
-void window_create(window_t* window, const char* title, const uint32_t width, const uint32_t height) 
+void win_create(window_t *win, const char *title, const uint32_t w, const uint32_t h) 
 {
 	log_info("Creating a Window...");
 
-	window->pwindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
+	win->handle = SDL_CreateWindow(title, w, h, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 
-	if (!window->pwindow) {
+	if (!win->handle) {
 		log_critical("Failed to create the Window::" + cstr_to_str(SDL_GetError()));
 	}
 
 	log_info("The Window was Created.");
 }
 
-void window_destroy(const window_t& window) 
+void win_destroy(const window_t &win) 
 {
 	log_info("Destroying the Window...");
 
-	if (window.pwindow == nullptr) {
+	if (win.handle == nullptr) {
 		log_critical("Cannot Destroy the Window::Window is not Created.");
 	}
 
-	SDL_DestroyWindow(window.pwindow);
+	SDL_DestroyWindow(win.handle);
 
 	log_info("The Window was Destroyed.");
 }

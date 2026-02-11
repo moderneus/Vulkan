@@ -8,9 +8,9 @@ struct renderer_state_t;
 
 struct event_manager_t
 {
-	SDL_Event event;
+	SDL_Event e;
 };
 
-void event_manager_poll_events(event_manager_t* event_manager, renderer_state_t* st, window_t* window);
+void ev_m_poll(event_manager_t *ev_m, renderer_state_t *st, window_t *win);
 
 #endif
