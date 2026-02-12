@@ -105,8 +105,7 @@ VkExtent2D swp_choose_extent(const window_t &win, const VkSurfaceCapabilitiesKHR
 		int w, h;
 		SDL_GetWindowSizeInPixels(win.handle, &w, &h); 
 
-		VkExtent2D extent 
-		{
+		VkExtent2D extent {
 			static_cast<uint32_t>(w),
 			static_cast<uint32_t>(h)
 		};

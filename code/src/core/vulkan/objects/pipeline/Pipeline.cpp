@@ -7,7 +7,7 @@
 #include "core/vulkan/objects/buffers/types/Vertex.hpp"
 #include "util/debug/Logger.hpp"
 
-VkViewport pl_create_vp(const swapchain_state_t &st) 
+VkViewport pl_create_viewport(const swapchain_state_t &st) 
 {
 	VkViewport vp = {};
 	vp.x = 0.0f;
@@ -19,7 +19,7 @@ VkViewport pl_create_vp(const swapchain_state_t &st)
 	return vp;
 }
 
-VkRect2D pl_create_sci(const swapchain_state_t &st) 
+VkRect2D pl_create_scissor(const swapchain_state_t &st) 
 {
 	VkRect2D sc = {};
 	sc.offset = {0, 0};
@@ -230,14 +230,14 @@ VkGraphicsPipelineCreateInfo pl_create_info(const pipeline_info_t &pl_info, cons
 	return info;
 }
 
-void pl_create(pipeline_t *pl, const device_t &dev, const layout_t &layout, const render_pass_t &rp, const swapchain_state_t &st, const std::array<shader_t, 2> &shaders) 
+void pl_create(pipeline_t *pl, const device_t &dev, const layout_t &layout, const render_pass_t &rp, const swapchain_state_t &st, const std::array<shader_t, 2> &shdrs)
 {
 	log_info("Creating a Pipeline...");
 
 	pipeline_cfg_t cfg = {};
-	cfg.shdr_refs= pl_create_shdr_refs(shaders);
-	cfg.vp = pl_create_vp(st);
-	cfg.sci = pl_create_sci(st);
+	cfg.shdr_refs= pl_create_shdr_refs(shdrs);
+	cfg.vp = pl_create_viewport(st);
+	cfg.sci = pl_create_scissor(st);
 	cfg.att = pl_create_col_blend_att();
 	cfg.bind_desc= vert_get_bind_desc();
 	cfg.attrib_desc= vert_get_attrib_desc();

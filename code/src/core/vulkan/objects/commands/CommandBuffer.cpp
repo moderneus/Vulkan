@@ -33,10 +33,10 @@ void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline,
 	vkCmdBeginRenderPass(cmd_buf.handle, &rp_info, VK_SUBPASS_CONTENTS_INLINE);
 
 		vkCmdBindPipeline(cmd_buf.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);
-		VkViewport vp = pl_create_vp(st);
+		VkViewport vp = pl_create_viewport(st);
 		vkCmdSetViewport(cmd_buf.handle, 0, 1, &vp);
-		VkRect2D sci = pl_create_sci(st);
-		vkCmdSetScissor(cmd_buf.handle, 0, 1, &sci);
+		VkRect2D sc = pl_create_scissor(st);
+		vkCmdSetScissor(cmd_buf.handle, 0, 1, &sc);
 
 		std::array<VkBuffer, 1> bufs = {buf.handle};
 		std::array<VkDeviceSize, 1> offsets = {0};

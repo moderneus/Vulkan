@@ -5,10 +5,10 @@
 
 struct window_t 
 {
-	SDL_Window*	handle	  = nullptr;
-	uint32_t	width     = 640;
-	uint32_t	height	  = 480;
-	bool		is_closed = false;
+	SDL_Window		*handle	  = nullptr;
+	uint32_t		width     = 640;
+	uint32_t		height	  = 480;
+	bool			is_closed = false;
 };
 
 void win_create(window_t *win, const char *title, const uint32_t w, const uint32_t h);

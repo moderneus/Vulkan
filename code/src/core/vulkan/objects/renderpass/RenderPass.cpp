@@ -3,7 +3,7 @@
 #include "core/vulkan/objects/device/LogicalDevice.hpp"
 #include "util/debug/Logger.hpp"
 
-VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapchain_state_t& st, uint32_t img_idx, const VkClearValue clear_col) 
+VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapchain_state_t &st, uint32_t img_idx, const VkClearValue clear_col) 
 {
 	VkRenderPassBeginInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -92,15 +92,15 @@ VkRenderPassCreateInfo rp_create_info(VkAttachmentDescription *att, VkSubpassDes
 	return info;
 }
 
-void rp_create(render_pass_t *rp, const device_t &dev, const swapchain_state_t& st) 
+void rp_create(render_pass_t *rp, const device_t &dev, const swapchain_state_t &st) 
 {
 	log_info("Creating a Render Pass...");
 
 	VkAttachmentDescription att_desc = rp_create_att_desc(st);
 	VkAttachmentReference att_ref = rp_create_att_ref();
 	VkSubpassDescription subp = rp_create_subp_desc(&att_ref);
-	VkSubpassDependency subp_dep = rp_create_subp_dep();
-	VkRenderPassCreateInfo info = rp_create_info(&att_desc, &subp, &subp_dep);
+	VkSubpassDependency dep = rp_create_subp_dep();
+	VkRenderPassCreateInfo info = rp_create_info(&att_desc, &subp, &dep);
 
 	if (vkCreateRenderPass(dev.handle, &info, nullptr, &rp->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Render Pass.");

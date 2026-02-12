@@ -11,9 +11,9 @@ struct render_pass_t
 	VkRenderPass handle = VK_NULL_HANDLE;
 };
 
-VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapchain_state_t& st, uint32_t img_idx, const VkClearValue col);
+VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapchain_state_t &st, uint32_t img_idx, const VkClearValue col);
 
-VkAttachmentDescription rp_create_att_desc(const swapchain_state_t& st);
+VkAttachmentDescription rp_create_att_desc(const swapchain_state_t &st);
 
 VkAttachmentReference rp_create_att_ref();
 

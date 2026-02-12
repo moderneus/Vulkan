@@ -15,24 +15,7 @@ VkPhysicalDeviceFeatures dev_get_enabled_features(const phys_device_t &phys_dev)
 	return features;
 }
 
-std::vector<VkDeviceQueueCreateInfo> dev_create_queue_infos(const queue_family_t &qf, const float &prior)
-{
-	log_info("Creating the Queue Infos...");
-
-	std::vector<VkDeviceQueueCreateInfo> infos;
-	if (qf.gfx == qf.pres) {
-		infos.push_back(dev_create_queue_info(qf.gfx.value(), prior));
-	} else {
-		infos.push_back(dev_create_queue_info(qf.gfx.value(), prior));
-		infos.push_back(dev_create_queue_info(qf.pres.value(), prior));
-	}
-
-	log_info("The Queue Infos were Created.");
-
-	return infos;
-}
-
-VkDeviceQueueCreateInfo dev_create_queue_info(const uint32_t qf_idx, const float &prior)
+VkDeviceQueueCreateInfo dev_create_q_info(const uint32_t qf_idx, const float &prior)
 {
 	log_info("Creating the Queue Info..."); 
 
@@ -45,6 +28,23 @@ VkDeviceQueueCreateInfo dev_create_queue_info(const uint32_t qf_idx, const float
 	log_info("The Queue Info was Created.");
 
 	return info;
+}
+
+std::vector<VkDeviceQueueCreateInfo> dev_create_q_infos(const queue_family_t &qf, const float &prior)
+{
+	log_info("Creating the Queue Infos...");
+
+	std::vector<VkDeviceQueueCreateInfo> infos;
+	if (qf.gfx == qf.pres) {
+		infos.push_back(dev_create_q_info(qf.gfx.value(), prior));
+	} else {
+		infos.push_back(dev_create_q_info(qf.gfx.value(), prior));
+		infos.push_back(dev_create_q_info(qf.pres.value(), prior));
+	}
+
+	log_info("The Queue Infos were Created.");
+
+	return infos;
 }
 
 VkDeviceCreateInfo dev_create_info(const std::vector<VkDeviceQueueCreateInfo> &q_infos, const VkPhysicalDeviceFeatures &features) 
@@ -69,7 +69,7 @@ void dev_create(device_t *dev, queue_t *q, const queue_family_t& qf, const phys_
 	log_info("Creating a Logical Device...");
 
 	const float q_prior = 1.0f;
-	std::vector<VkDeviceQueueCreateInfo> q_infos = dev_create_queue_infos(qf, q_prior);
+	std::vector<VkDeviceQueueCreateInfo> q_infos = dev_create_q_infos(qf, q_prior);
 	VkPhysicalDeviceFeatures features = dev_get_enabled_features(phys_dev);
 	VkDeviceCreateInfo dev_info = dev_create_info(q_infos, features);
 

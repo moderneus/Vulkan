@@ -9,7 +9,7 @@ struct core_t;
 
 struct renderer_t
 {
-	window_t* pwin;
+	window_t *pwin;
 };
 
 struct renderer_state_t

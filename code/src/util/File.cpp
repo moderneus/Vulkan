@@ -3,7 +3,7 @@
 
 #include <fstream>
 
-std::vector<char> file_read(const std::string& path) 
+std::vector<char> file_read(const std::string &path) 
 {
 	log_info("Reading a File... Path = ", path);
 

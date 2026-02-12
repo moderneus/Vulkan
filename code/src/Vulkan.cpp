@@ -2,8 +2,8 @@
 
 int main() 
 {
-	engine_t engine;
-	engine_init(&engine);
-	engine_run(&engine);
-	engine_destroy(&engine);
+	engine_t e;
+	engine_init(&e);
+	engine_run(&e);
+	engine_destroy(&e);
 }

@@ -42,9 +42,9 @@ struct pipeline_cfg_t
 	std::array<VkVertexInputAttributeDescription, 2>		attrib_desc         = {};
 };
 
-VkViewport pl_create_vp(const swapchain_state_t &st);
+VkViewport pl_create_viewport(const swapchain_state_t &st);
 
-VkRect2D pl_create_sci(const swapchain_state_t &st);
+VkRect2D pl_create_scissor(const swapchain_state_t &st);
 
 VkPipelineColorBlendAttachmentState pl_create_col_blend_att();
 
