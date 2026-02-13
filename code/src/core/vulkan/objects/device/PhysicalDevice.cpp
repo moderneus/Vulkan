@@ -51,29 +51,29 @@ bool phys_dev_check_ext_supp(const VkPhysicalDevice &phys_dev)
 	return req_exts.empty();
 }
 
-bool phys_dev_is_suitable(const VkPhysicalDevice &phys_dev, const surface_t &surface)
+bool phys_dev_is_suitable(const VkPhysicalDevice &phys_dev, const surface_t &surf)
 {
-	return phys_dev_check_ext_supp(phys_dev) && swp_is_adequate(phys_dev, surface.handle);
+	return phys_dev_check_ext_supp(phys_dev) && swp_is_adequate(phys_dev, surf.handle);
 }
 
-void phys_dev_pick(phys_device_t *phys_dev, const instance_t &instance, const surface_t &surface)
+void phys_dev_pick(phys_device_t *phys_dev, const instance_t &inst, const surface_t &surf)
 {
 	log_info("Searching a Suitable GPU...");
 
-	uint32_t phys_dev_count = 0;
-	vkEnumeratePhysicalDevices(instance.handle, &phys_dev_count, nullptr);
+	uint32_t phys_dev_cnt = 0;
+	vkEnumeratePhysicalDevices(inst.handle, &phys_dev_cnt, nullptr);
 
-	if (phys_dev_count== 0) {
+	if (phys_dev_cnt == 0) {
 		log_critical("Failed to find GPU with Vulkan support.");
 	}
 
-	std::vector<VkPhysicalDevice> phys_devices(phys_dev_count);
-	vkEnumeratePhysicalDevices(instance.handle, &phys_dev_count, phys_devices.data());
+	std::vector<VkPhysicalDevice> phys_devs(phys_dev_cnt);
+	vkEnumeratePhysicalDevices(inst.handle, &phys_dev_cnt, phys_devs.data());
 
 	std::multimap<uint32_t, VkPhysicalDevice> candidates;
 
-	for(const VkPhysicalDevice& phys_dev : phys_devices) {
-		if (phys_dev_is_suitable(phys_dev, surface)) {
+	for(const VkPhysicalDevice& phys_dev : phys_devs) {
+		if (phys_dev_is_suitable(phys_dev, surf)) {
 			uint32_t scr = phys_dev_rate(phys_dev);
 			candidates.insert(std::make_pair(scr, phys_dev));
 		}

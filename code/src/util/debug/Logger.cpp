@@ -29,69 +29,69 @@ std::string log_get_time()
 #endif
 
 	std::ostringstream oss;
-	oss << '[' << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "]";
+	oss << "[" << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "]";
 
 	return oss.str();
 }
 
-void log_write(const Level level, const std::string& msg, const std::string& value="") 
+void log_write(const Level lvl, const std::string &msg, const std::string &val="") 
 {
-	switch(level) {
+	switch(lvl) {
 	case INFO:
-		log_file << log_get_time() << " [INFO] " << msg << value << std::endl;
+		log_file << log_get_time() << " [INFO] " << msg << val << std::endl;
 	break;
 	    
 	case ERROR:
-		log_file << log_get_time() << " [ERROR] " << msg << value << std::endl;
+		log_file << log_get_time() << " [ERROR] " << msg << val << std::endl;
 	break;
 
 	case CRITICAL:
-		log_file << log_get_time() << " [CRITICAL] " << msg << value << std::endl;
+		log_file << log_get_time() << " [CRITICAL] " << msg << val << std::endl;
 		std::abort();
 	break;
 	}
 	log_file.flush();
 }
 
-void log_info(const std::string& msg) 
+void log_info(const std::string &msg) 
 {
 	log_write(INFO, msg);
 }
 
-void log_info(const std::string& msg, const std::string& value) 
+void log_info(const std::string &msg, const std::string &val) 
 {
-	log_write(INFO, msg, value);
+	log_write(INFO, msg, val);
 }
 
-void log_info(const std::string& msg, const std::vector<std::string>& info) 
+void log_info(const std::string &msg, const std::vector<std::string> &info) 
 {
 	std::string tmp = msg;
 
-	for(const auto& s : info) {
-		tmp += s + " ";
+	for(const auto &str : info) {
+		tmp += str + " ";
 	}
 
 	log_write(INFO, tmp);
 }
     
-void log_error(const std::string& msg) 
+void log_error(const std::string &msg) 
 {
 	log_write(ERROR, msg);
 }
 
-void log_error(const std::string& msg, const std::string& error) 
+void log_error(const std::string &msg, const std::string &err) 
 {
-	log_write(ERROR, msg, error);
+	log_write(ERROR, msg, err);
 }
 
-void log_critical(const std::string& msg) 
+void log_critical(const std::string &msg) 
 {
 	log_write(CRITICAL, msg);
 }
 
-void log_critical(const std::string& msg, const std::string& error) 
+void log_critical(const std::string &msg, const std::string &err) 
 {
-	log_write(CRITICAL, msg, error);
+	log_write(CRITICAL, msg, err);
 }
 
 void log_init() 

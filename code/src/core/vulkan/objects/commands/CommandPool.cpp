@@ -21,9 +21,9 @@ void cmd_pool_create(command_pool_t *cmd_pool, const device_t &dev, const queue_
 {
 	log_info("Creating a Command Pool...");
 
-	VkCommandPoolCreateInfo cmd_pool_info = cmd_pool_create_info(qf);
+	VkCommandPoolCreateInfo info = cmd_pool_create_info(qf);
 
-	if (vkCreateCommandPool(dev.handle, &cmd_pool_info, nullptr, &cmd_pool->handle) != VK_SUCCESS) {
+	if (vkCreateCommandPool(dev.handle, &info, nullptr, &cmd_pool->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Command Pool.");
 	}
 

@@ -22,9 +22,9 @@ std::string phys_dev_get_name(const phys_device_t &phys_dev);
 
 bool phys_dev_check_ext_supp(const phys_device_t &phys_dev);
 
-bool phys_dev_is_suitable(const phys_device_t &phys_dev, const surface_t &surface);
+bool phys_dev_is_suitable(const phys_device_t &phys_dev, const surface_t &surf);
 
-void phys_dev_pick(phys_device_t *phys_dev, const instance_t &instance, const surface_t &surface);
+void phys_dev_pick(phys_device_t *phys_dev, const instance_t &inst, const surface_t &surf);
 
 VkPhysicalDeviceFeatures phys_dev_get_features(const phys_device_t &phys_dev);
 

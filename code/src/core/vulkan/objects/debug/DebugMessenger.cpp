@@ -12,7 +12,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL callback
 	VkDebugUtilsMessageSeverityFlagBitsEXT				 sev,
 	VkDebugUtilsMessageTypeFlagsEXT					 type,
 	const VkDebugUtilsMessengerCallbackDataEXT			*cb_data,
-	void								*user_data
+	void								*usr_data
 )
 {
 	fmt::color col;

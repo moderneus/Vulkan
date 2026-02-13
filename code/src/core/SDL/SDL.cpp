@@ -24,7 +24,7 @@ void SDL_ctx_destroy()
 	log_info("Quitting SDL...");
 
 	if (!is_init) {
-		log_critical("Cannot free the SDL memory::SDL is not Initialiazed.");
+		log_critical("\tCannot free the SDL memory::SDL is not Initialiazed.");
 	}
 
 	SDL_Quit();

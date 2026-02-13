@@ -19,7 +19,7 @@ VkCommandBufferBeginInfo cmd_buf_create_begin_info()
 	return info;
 }
 
-void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline, const render_pass_t &rp, const swapchain_state_t &st, const vertex_buffer_t &buf, const uint32_t img_idx)
+void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pl, const render_pass_t &rp, const swapchain_state_t &st, const vertex_buffer_t &buf, const uint32_t img_idx)
 {
 	VkCommandBufferBeginInfo cmd_info = cmd_buf_create_begin_info();
 
@@ -32,7 +32,7 @@ void cmd_buf_record(const command_buffer_t &cmd_buf, const pipeline_t &pipeline,
 
 	vkCmdBeginRenderPass(cmd_buf.handle, &rp_info, VK_SUBPASS_CONTENTS_INLINE);
 
-		vkCmdBindPipeline(cmd_buf.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.handle);
+		vkCmdBindPipeline(cmd_buf.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, pl.handle);
 		VkViewport vp = pl_create_viewport(st);
 		vkCmdSetViewport(cmd_buf.handle, 0, 1, &vp);
 		VkRect2D sc = pl_create_scissor(st);
@@ -71,10 +71,13 @@ void cmd_bufs_create(std::vector<command_buffer_t> *cmd_bufs, const device_t &de
 	log_info("Creating a Command Buffer...");
 
 	cmd_bufs->resize(MAX_FRAMES_IN_FLIGHT);
-	VkCommandBufferAllocateInfo cmd_buf_alloc_info = cmd_buf_create_alloc_info(cmd_pool, *cmd_bufs);
 
-	if (vkAllocateCommandBuffers(dev.handle, &cmd_buf_alloc_info, &cmd_bufs->data()->handle) != VK_SUCCESS) {
-		log_critical("Failed to Create the Command Buffer...");
+	for(uint32_t i = 0; i < cmd_bufs->size(); ++i) {
+		VkCommandBufferAllocateInfo info = cmd_buf_create_alloc_info(cmd_pool, *cmd_bufs);
+
+		if (vkAllocateCommandBuffers(dev.handle, &info, &cmd_bufs->data()[i].handle) != VK_SUCCESS) {
+			log_critical("Failed to Create the Command Buffer...");
+		}
 	}
 
 	log_info("The Command Buffer was Created.");

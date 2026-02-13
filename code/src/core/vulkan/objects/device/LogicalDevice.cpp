@@ -64,16 +64,16 @@ VkDeviceCreateInfo dev_create_info(const std::vector<VkDeviceQueueCreateInfo> &q
 	return info;
 }
 
-void dev_create(device_t *dev, queue_t *q, const queue_family_t& qf, const phys_device_t &phys_dev)
+void dev_create(device_t *dev, queue_t *q, const queue_family_t &qf, const phys_device_t &phys_dev)
 {
 	log_info("Creating a Logical Device...");
 
 	const float q_prior = 1.0f;
 	std::vector<VkDeviceQueueCreateInfo> q_infos = dev_create_q_infos(qf, q_prior);
 	VkPhysicalDeviceFeatures features = dev_get_enabled_features(phys_dev);
-	VkDeviceCreateInfo dev_info = dev_create_info(q_infos, features);
+	VkDeviceCreateInfo info = dev_create_info(q_infos, features);
 
-	if (vkCreateDevice(phys_dev.handle, &dev_info, nullptr, &dev->handle) != VK_SUCCESS) {
+	if (vkCreateDevice(phys_dev.handle, &info, nullptr, &dev->handle) != VK_SUCCESS) {
 		log_critical("Failed to Create the Logical Device!");
 	}
 
