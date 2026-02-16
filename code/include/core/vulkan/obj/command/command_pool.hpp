@@ -1,20 +1,20 @@
-#ifndef MOD_CMD_POOL_HPP
-#define MOD_CMD_POOL_HPP
+#ifndef MOD_COMMAND_POOL_HPP
+#define MOD_COMMAND_POOL_HPP
 
 #include <vulkan/vulkan.h>
 
-struct queue_family_t;
-struct device_t;
+struct queue_indices;
+struct device;
 
-struct command_pool_t
+struct command_pool
 {
 	VkCommandPool handle = VK_NULL_HANDLE;
 };
 
-VkCommandPoolCreateInfo cmd_pool_create_info(const queue_family_t &qf);
+VkCommandPoolCreateInfo command_pool_create_info(const queue_indices &q_idx);
 
-void cmd_pool_create(command_pool_t *cmd_pool, const device_t &dev, const queue_family_t &qf);
+void command_pool_create(command_pool *pool, const device &dev, const queue_indices &q_idx);
 
-void cmd_pool_destroy(const command_pool_t &cmd_pool, const device_t &dev);
+void command_pool_destroy(const command_pool &pool, const device &dev);
 
 #endif

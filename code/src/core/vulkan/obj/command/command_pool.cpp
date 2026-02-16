@@ -1,43 +1,42 @@
-#include "core/vulkan/objects/commands/CommandPool.hpp"
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-#include "core/vulkan/objects/device/QueueFamily.hpp"
-#include "util/debug/Logger.hpp"
+#include "core/vulkan/obj/command/command_pool.hpp"
+#include "core/vulkan/obj/device/device.hpp"
+#include "core/vulkan/obj/device/queue_indices.hpp"
+#include "util/debug/log.hpp"
 
-VkCommandPoolCreateInfo cmd_pool_create_info(const queue_family_t &qf) 
+VkCommandPoolCreateInfo command_pool_create_info(const queue_indices &q_idx) 
 {
 	log_info("Creating the Command Pool Info...");
 
 	VkCommandPoolCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	info.queueFamilyIndex = qf.gfx.value();
+	info.queueFamilyIndex = q_idx.gfx.value();
 
 	log_info("The Command Pool Info was Created.");
 
 	return info;
 }
 
-void cmd_pool_create(command_pool_t *cmd_pool, const device_t &dev, const queue_family_t &qf) 
+void command_pool_create(command_pool *pool, const device &dev, const queue_indices &q_idx) 
 {
 	log_info("Creating a Command Pool...");
 
-	VkCommandPoolCreateInfo info = cmd_pool_create_info(qf);
+	VkCommandPoolCreateInfo info = command_pool_create_info(q_idx);
 
-	if (vkCreateCommandPool(dev.handle, &info, nullptr, &cmd_pool->handle) != VK_SUCCESS) {
+	if (vkCreateCommandPool(dev.handle, &info, nullptr, &pool->handle) != VK_SUCCESS)
 		log_critical("Failed to Create the Command Pool.");
-	}
 
 	log_info("The Command Pool was Created.");
 }
 
-void cmd_pool_destroy(const command_pool_t &cmd_pool, const device_t &dev) 
+void command_pool_destroy(const command_pool &pool, const device &dev) 
 {
 	log_info("Destroying the Command Pool...");
 
-	if (cmd_pool.handle == VK_NULL_HANDLE) {
+	if (pool.handle == VK_NULL_HANDLE)
 		log_error("Cannot Destroy the Command Pool::Command Pool is not Created.");
-	}
-	vkDestroyCommandPool(dev.handle, cmd_pool.handle, nullptr);
+
+	vkDestroyCommandPool(dev.handle, pool.handle, nullptr);
 
 	log_info("The Command Pool was Destroyed.");
 }

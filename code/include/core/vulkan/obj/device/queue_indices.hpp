@@ -1,22 +1,22 @@
-#ifndef MOD_QF_HPP
-#define MOD_QF_HPP
+#ifndef MOD_QUEUE_INDICES_HPP
+#define MOD_QUEUE_INDICES_HPP
 
 #include <vulkan/vulkan.h>
 
 #include <cstdint>
 #include <optional>
 
-struct phys_device_t;
-struct surface_t;
+struct physical_device;
+struct surface;
 
-struct queue_family_t
+struct queue_indices
 {
 	std::optional<uint32_t>		gfx;
 	std::optional<uint32_t>		pres;
 };
 
-bool qf_is_complete(const queue_family_t &qf);
+bool queue_indices_is_complete(const queue_indices &q_idx);
 
-void qf_find(queue_family_t *qf, const phys_device_t &phys_dev, const surface_t &surface);
+void queue_indices_find(queue_indices *q_idx, const physical_device &gpu, const surface &surf);
 
 #endif

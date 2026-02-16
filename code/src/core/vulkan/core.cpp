@@ -1,55 +1,55 @@
-#include "core/vulkan/Core.hpp"
-#include "core/vulkan/objects/swapchain/ImageView.hpp"
-#include "core/vulkan/objects/swapchain/Framebuffer.hpp"
-#include "util/debug/Logger.hpp"
+#include "core/vulkan/core.hpp"
+#include "core/vulkan/obj/swapchain/image_view.hpp"
+#include "core/vulkan/obj/swapchain/framebuffer.hpp"
+#include "util/debug/log.hpp"
 
-void core_init(core_t *core, const window_t &win) 
+void core_init(core *c, const window &win) 
 {
 	log_info("Initializing a Core...");
 
-	inst_create(&core->inst);
-	dbg_msgr_setup(&core->msgr, core->inst);
-	surf_create(&core->surf, core->inst, win);
-	phys_dev_pick(&core->phys_dev, core->inst, core->surf);
-	qf_find(&core->qf, core->phys_dev, core->surf);
-	dev_create(&core->dev, &core->q, core->qf, core->phys_dev);
-	swp_create(&core->swp, &core->swp_st, core->dev, core->phys_dev, core->qf, core->surf, win);
-	img_views_create(&core->swp_st, core->dev);
-	layout_create(&core->layout, core->dev);
-	rp_create(&core->rp, core->dev, core->swp_st);
-	shdrs_create(&core->shdrs, core->dev);
-	vert_buf_create(&core->buf, &core->mem, core->dev, core->phys_dev);
-	pl_create(&core->pl, core->dev, core->layout, core->rp, core->swp_st, core->shdrs);
-	fbs_create(&core->swp_st, core->dev, core->rp);
-	cmd_pool_create(&core->cmd_pool, core->dev, core->qf);
-	cmd_bufs_create(&core->cmd_bufs, core->dev, core->cmd_pool);
-	sems_create(&core->img_avail_sems, core->dev);
-	sems_create(&core->rnd_done_sems, core->dev);
-	fences_create(&core->frm_fences, core->dev);
+	instance_create(&c->inst);
+	messenger_setup(&c->msgr, c->inst);
+	surface_create(&c->surf, c->inst, win);
+	physical_dev_pick(&c->gpu, c->inst, c->surf);
+	queue_indices_find(&c->q_idx, c->gpu, c->surf);
+	device_create(&c->dev, &c->q, c->q_idx, c->gpu);
+	swapchain_create(&c->swp, &c->swp_st, c->dev, c->gpu, c->q_idx, c->surf, win);
+	image_views_create(&c->swp_st, c->dev);
+	layout_create(&c->lyt, c->dev);
+	render_pass_create(&c->rp, c->dev, c->swp_st);
+	shaders_create(&c->shdrs, c->dev);
+	vertex_buffer_create(&c->buf, &c->mem, c->dev, c->gpu);
+	pipeline_create(&c->pl, c->dev, c->lyt, c->rp, c->swp_st, c->shdrs);
+	framebuffers_create(&c->swp_st, c->dev, c->rp);
+	command_pool_create(&c->cmd_pool, c->dev, c->q_idx);
+	commdn_buffers_create(&c->cmds, c->dev, c->cmd_pool);
+	semaphores_create(&c->img_avail_sems, c->dev);
+	semaphores_create(&c->rnd_done_sems, c->dev);
+	fences_create(&c->frm_fences, c->dev);
 
 	log_info("The Core was Initialized."); 
 }
 
-void core_destroy(core_t* core) 
+void core_destroy(core_t* c) 
 {
 	log_info("Destroying the Core...");
 
-	fences_destroy(core->frm_fences, core->dev);
-	sems_destroy(core->rnd_done_sems, core->dev);
-	sems_destroy(core->img_avail_sems, core->dev);
-	cmd_pool_destroy(core->cmd_pool, core->dev);
-	fbs_destroy(core->swp_st, core->dev);
-	pl_destroy(core->pl, core->dev);
-	vert_buf_destroy(core->buf, core->mem, core->dev);
-	shdrs_destroy(core->shdrs, core->dev);
-	rp_destroy(core->rp, core->dev);
-	layout_destroy(core->layout, core->dev);
-	img_views_destroy(core->swp_st, core->dev);
-	swp_destroy(core->swp, core->dev);
-	dev_destroy(core->dev);
-	surf_destroy(core->surf, core->inst);
-	dbg_msgr_destroy(core->msgr, core->inst);
-	inst_destroy(core->inst);
+	fences_destroy(c->frm_fences, c->dev);
+	semaphores_destroy(c->rnd_done_sems, c->dev);
+	semaphores_destroy(c->img_avail_sems, c->dev);
+	command_pool_destroy(c->cmd_pool, c->dev);
+	framebuffers_destroy(c->swp_st, c->dev);
+	pipeline_destroy(c->pl, c->dev);
+	vertex_buffer_destroy(c->buf, c->mem, c->dev);
+	shaders_destroy(c->shdrs, c->dev);
+	render_pass_destroy(c->rp, c->dev);
+	layout_destroy(c->lyt, c->dev);
+	image_views_destroy(c->swp_st, c->dev);
+	swapchain_destroy(c->swp, c->dev);
+	device_destroy(c->dev);
+	surface_destroy(c->surf, c->inst);
+	messenger_destroy(c->msgr, c->inst);
+	instance_destroy(c->inst);
 
 	log_info("The Core was Destroyed.");
 }

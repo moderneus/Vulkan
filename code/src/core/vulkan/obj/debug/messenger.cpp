@@ -1,20 +1,15 @@
-#include "core/vulkan/objects/debug/DebugMessenger.hpp"
-#include "core/vulkan/objects/instance/Instance.hpp"
-#include "util/debug/Logger.hpp"
+#include "core/vulkan/obj/debug/messenger.hpp"
+#include "core/vulkan/obj/instance/instance.hpp"
+#include "util/debug/log.hpp"
 
 #include "fmt/core.h"
 #include "fmt/color.h"
 
 #include <vulkan/vulkan.h>
 
-VKAPI_ATTR VkBool32 VKAPI_CALL callback
-(
-	VkDebugUtilsMessageSeverityFlagBitsEXT				 sev,
-	VkDebugUtilsMessageTypeFlagsEXT					 type,
-	const VkDebugUtilsMessengerCallbackDataEXT			*cb_data,
-	void								*usr_data
-)
-{
+VKAPI_ATTR VkBool32 VKAPI_CALL callback(VkDebugUtilsMessageSeverityFlagBitsEXT sev, VkDebugUtilsMessageTypeFlagsEXT type, 
+					const VkDebugUtilsMessengerCallbackDataEXT *cb_data, void *usr_data)
+{ 
 	fmt::color col;
 
 	switch(sev) {
@@ -46,7 +41,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL callback
 	return VK_FALSE;
 }
 
-VkDebugUtilsMessengerCreateInfoEXT dbg_msgr_create_info() 
+VkDebugUtilsMessengerCreateInfoEXT messenger_create_info() 
 {
 	log_info("Creating a Debug Messenger Info...");
 
@@ -69,20 +64,15 @@ VkDebugUtilsMessengerCreateInfoEXT dbg_msgr_create_info()
 	return info;
 }
 
-VkResult dbg_msgr_create
-(
-	debug_msgr_t							*msgr,
-	const instance_t						&inst,
-	const VkDebugUtilsMessengerCreateInfoEXT			*info, 
-	const VkAllocationCallbacks					*alloc
-) 
+VkResult messenger_create(messenger *msgr, const instance &inst, const VkDebugUtilsMessengerCreateInfoEXT &info, 
+			  const VkAllocationCallbacks &alloc) 
 {    
 	log_info("Creating a Debug Messenger...");
 
 	auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(inst.handle, "vkCreateDebugUtilsMessengerEXT");
 
 	if (func != nullptr) {
-		func(inst.handle, info, alloc, &msgr->handle);
+		func(inst.handle, &info, &alloc, &msgr->handle);
 	} else {
 		log_error("Failed to Create the Debug Messegner::Extension not Present!");
 		return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -93,23 +83,24 @@ VkResult dbg_msgr_create
 	return VK_SUCCESS;
 }
 
-void dbg_msgr_setup(debug_msgr_t *msgr, const instance_t &inst) 
+void messenger_setup(messenger *msgr, const instance &inst) 
 {
 	log_info("Setting up a Debug Messenger...");
 
-	VkDebugUtilsMessengerCreateInfoEXT info = dbg_msgr_create_info();
-	if (dbg_msgr_create(msgr, inst, &info, nullptr) != VK_SUCCESS) {
+	VkDebugUtilsMessengerCreateInfoEXT info = messenger_create_info();
+
+	if (messenger_create(msgr, inst, info, nullptr) != VK_SUCCESS)
 		log_error("Failed to Create the Debug Messenger.");
-	}
 
 	log_info("The Debug Messenger was Setted up.");
 }
 
-VkResult dbg_msgr_destroy(const debug_msgr_t &msgr, const instance_t &inst) 
+VkResult messenger_destroy(const messenger &msgr, const instance &inst) 
 {
 	log_info("Destroying the Debug Messenger...");
 
 	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(inst.handle, "vkDestroyDebugUtilsMessengerEXT");
+
 	if (func != nullptr) {
 		func(inst.handle, msgr.handle, nullptr);
 	} else {

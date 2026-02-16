@@ -1,7 +1,7 @@
-#ifndef MOD_SDL_HPP
-#define MOD_SDL_HPP
+#ifndef MOD_SDL_CTX_HPP
+#define MOD_SDL_CTX_HPP
 
-void SDL_ctx_init();
-void SDL_ctx_destroy();
+void sdl_ctx_init();
+void sdl_ctx_destroy();
 
 #endif

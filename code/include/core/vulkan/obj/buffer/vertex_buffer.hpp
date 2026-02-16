@@ -3,33 +3,33 @@
 
 #include <vulkan/vulkan.h>
 
-struct phys_device_t;
-struct device_t;
+struct physical_device;
+struct device;
 
-struct vertex_buffer_t
+struct vertex_buffer
 {
 	VkBuffer handle = VK_NULL_HANDLE;
 };
 
-struct vertex_buffer_mem_t 
+struct vertex_buffer_mem
 {
 	VkDeviceMemory handle = VK_NULL_HANDLE;
 };
 
-VkBufferCreateInfo vert_buf_create_info();
+VkBufferCreateInfo vertex_buffer_create_info();
 
-VkMemoryRequirements vert_buf_get_mem_reqs(const vertex_buffer_t &buf, const device_t &dev);
+VkMemoryRequirements vertex_buffer_get_mem_reqs(const vertex_buffer &buf, const device &dev);
 
-VkMemoryAllocateInfo vert_buf_create_alloc_info(const phys_device_t &phys_dev, const VkMemoryRequirements reqs);
+VkMemoryAllocateInfo vertex_buffer_create_alloc_info(const physical_device &gpu, const VkMemoryRequirements reqs);
 
-void vert_buf_alloc_mem(vertex_buffer_mem_t *mem, const vertex_buffer_t &buf, const device_t &dev, const phys_device_t &phys_dev);
+void vertex_buffer_malloc(vertex_buffer_mem *mem, const vertex_buffer &buf, const device &dev, const physical_device &gpu);
 
-void vert_buf_mem_cpy(const vertex_buffer_mem_t &mem, const device_t &dev, const VkBufferCreateInfo info);
+void vertex_buffer_memcpy(const vertex_buffer_mem &mem, const device &dev, const VkBufferCreateInfo info);
 
-void vert_buf_create(vertex_buffer_t *buf, vertex_buffer_mem_t *mem, const device_t &dev, const phys_device_t &phys_dev);
+void vertex_buffer_create(vertex_buffer *buf, vertex_buffer_mem *mem, const device &dev, const physical_device &gpu);
 
-void vert_buf_mem_free(const vertex_buffer_mem_t &mem, const device_t &dev);
+void vertex_buffer_free(const vertex_buffer_mem &mem, const device &dev);
 
-void vert_buf_destroy(const vertex_buffer_t &buf, const vertex_buffer_mem_t &mem, const device_t &dev);
+void vertex_buffer_destroy(const vertex_buffer &buf, const vertex_buffer_mem &mem, const device &dev);
 
 #endif
