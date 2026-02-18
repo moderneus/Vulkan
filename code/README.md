@@ -2,6 +2,7 @@
 ```
 code
 ├── CMakeLists.txt
+│
 ├── include
 │   ├── core
 │   │   ├── sdl
@@ -38,6 +39,7 @@ code
 │   │           └── sync
 │   │               ├── fence.hpp
 │   │               └── semaphore.hpp
+│   │
 │   ├── engine
 │   │   ├── engine.hpp
 │   │   ├── event
@@ -46,6 +48,7 @@ code
 │   │   │   └── renderer.hpp
 │   │   └── window
 │   │       └── window.hpp
+│   │
 │   └── util
 │       ├── constants.hpp
 │       ├── debug
@@ -53,15 +56,18 @@ code
 │       │   └── val_layers.hpp
 │       ├── file.hpp
 │       └── string.hpp
+│ 
 ├── libs
 │   ├── SDL
 │   ├── fmt
 │   └── glm
+│
 ├── shaders
 │   ├── frag
 │   │   └── triangle.frag
 │   └── vert
 │       └── triangle.vert
+│
 └── src
     ├── core
     │   ├── sdl
@@ -98,6 +104,7 @@ code
     │           └── sync
     │               ├── fence.cpp
     │               └── semaphore.cpp
+    │
     ├── engine
     │   ├── engine.cpp
     │   ├── event
@@ -106,11 +113,13 @@ code
     │   │   └── renderer.cpp
     │   └── window
     │       └── window.cpp
+    │
     ├── util
     │   ├── debug
     │   │   ├── log.cpp
     │   │   └── val_layers.cpp
     │   ├── file.cpp
     │   └── string.cpp
+    │
     └── vulkan.cpp
 ```
