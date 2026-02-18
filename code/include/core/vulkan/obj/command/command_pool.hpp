@@ -6,8 +6,7 @@
 struct queue_indices;
 struct device;
 
-struct command_pool
-{
+struct command_pool {
 	VkCommandPool handle = VK_NULL_HANDLE;
 };
 

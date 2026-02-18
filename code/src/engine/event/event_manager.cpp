@@ -1,11 +1,11 @@
-#include "engine/events/EventManager.hpp"
-#include "engine/gfx/Renderer.hpp"
-#include "engine/window/Window.hpp"
+#include "engine/event/event_manager.hpp"
+#include "engine/gfx/renderer.hpp"
+#include "engine/window/window.hpp"
 
-void ev_m_poll(event_manager_t *ev_m, renderer_state_t *st, window_t *win) 
+void event_manager_poll(event_manager *ev_m, renderer_state *st, window *win) 
 {
-	while(SDL_PollEvent(&ev_m->e)) {
-		switch(ev_m->e.type) {
+	while(SDL_PollEvent(&ev_m->event)) {
+		switch(ev_m->event.type) {
 		case SDL_EVENT_QUIT:
 			win->is_closed = true;
 		break;

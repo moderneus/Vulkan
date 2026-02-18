@@ -5,8 +5,7 @@
 
 struct instance;
 
-struct messenger
-{
+struct messenger {
 	VkDebugUtilsMessengerEXT handle = VK_NULL_HANDLE;
 };
 
@@ -16,7 +15,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL callback(VkDebugUtilsMessageSeverityFlagBitsEXT s
 VkDebugUtilsMessengerCreateInfoEXT messenger_create_info();
 
 VkResult messenger_create(messenger *msgr, const instance &inst, const VkDebugUtilsMessengerCreateInfoEXT &info, 
-			  const VkAllocationCallbacks &alloc);
+			  const VkAllocationCallbacks *alloc);
 
 void messenger_setup(messenger *msgr, const instance &inst);
 

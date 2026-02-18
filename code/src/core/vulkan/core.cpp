@@ -10,7 +10,7 @@ void core_init(core *c, const window &win)
 	instance_create(&c->inst);
 	messenger_setup(&c->msgr, c->inst);
 	surface_create(&c->surf, c->inst, win);
-	physical_dev_pick(&c->gpu, c->inst, c->surf);
+	physical_device_pick(&c->gpu, c->inst, c->surf);
 	queue_indices_find(&c->q_idx, c->gpu, c->surf);
 	device_create(&c->dev, &c->q, c->q_idx, c->gpu);
 	swapchain_create(&c->swp, &c->swp_st, c->dev, c->gpu, c->q_idx, c->surf, win);
@@ -22,7 +22,7 @@ void core_init(core *c, const window &win)
 	pipeline_create(&c->pl, c->dev, c->lyt, c->rp, c->swp_st, c->shdrs);
 	framebuffers_create(&c->swp_st, c->dev, c->rp);
 	command_pool_create(&c->cmd_pool, c->dev, c->q_idx);
-	commdn_buffers_create(&c->cmds, c->dev, c->cmd_pool);
+	command_buffers_create(&c->cmds, c->dev, c->cmd_pool);
 	semaphores_create(&c->img_avail_sems, c->dev);
 	semaphores_create(&c->rnd_done_sems, c->dev);
 	fences_create(&c->frm_fences, c->dev);
@@ -30,7 +30,7 @@ void core_init(core *c, const window &win)
 	log_info("The Core was Initialized."); 
 }
 
-void core_destroy(core_t* c) 
+void core_destroy(core *c) 
 {
 	log_info("Destroying the Core...");
 

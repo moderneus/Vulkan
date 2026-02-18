@@ -65,14 +65,14 @@ VkDebugUtilsMessengerCreateInfoEXT messenger_create_info()
 }
 
 VkResult messenger_create(messenger *msgr, const instance &inst, const VkDebugUtilsMessengerCreateInfoEXT &info, 
-			  const VkAllocationCallbacks &alloc) 
+			  const VkAllocationCallbacks *alloc) 
 {    
 	log_info("Creating a Debug Messenger...");
 
 	auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(inst.handle, "vkCreateDebugUtilsMessengerEXT");
 
 	if (func != nullptr) {
-		func(inst.handle, &info, &alloc, &msgr->handle);
+		func(inst.handle, &info, alloc, &msgr->handle);
 	} else {
 		log_error("Failed to Create the Debug Messegner::Extension not Present!");
 		return VK_ERROR_EXTENSION_NOT_PRESENT;

@@ -8,17 +8,15 @@
 
 #include <vector>
 
-struct vertex
-{
+struct vertex {
 	glm::vec2 pos;
 	glm::vec3 col;
 };
 
-const std::vector<vertex_t> triangle_verts = 
-{
-    {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
-    {{0.5f,  0.5f}, {0.0f, 1.0f, 0.0f}},
-    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+const std::vector<vertex> triangle_verts = {
+	{{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
+	{{0.5f,  0.5f}, {0.0f, 1.0f, 0.0f}},
+	{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 };
 
 VkVertexInputBindingDescription vertex_get_bind_desc();

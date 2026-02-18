@@ -1,4 +1,4 @@
-#include "util/debug/Logger.hpp"
+#include "util/debug/log.hpp"
 
 #include "fmt/core.h"
 #include "fmt/color.h"
@@ -34,7 +34,7 @@ std::string log_get_time()
 	return oss.str();
 }
 
-void log_write(const Level lvl, const std::string &msg, const std::string &val="") 
+void log_write(const level lvl, const std::string &msg, const std::string &val="") 
 {
 	switch(lvl) {
 	case INFO:
@@ -67,9 +67,8 @@ void log_info(const std::string &msg, const std::vector<std::string> &info)
 {
 	std::string tmp = msg;
 
-	for(const auto &str : info) {
+	for(const auto &str : info)
 		tmp += str + " ";
-	}
 
 	log_write(INFO, tmp);
 }
@@ -99,11 +98,11 @@ void log_init()
 	std::filesystem::create_directories("logs");
 	log_file.open(path, std::ios::app);
 
-	if (!log_file.is_open()) {
+	if (!log_file.is_open())
 		fmt::print(fmt::fg(fmt::color::red), "\t[ERROR]\tFailed to open file by path: {}\n", path);
-	} else {
+	else
 		log_write(INFO, "The Logger was Initialized.");
-	}
+	
 }
 
 void log_destroy()

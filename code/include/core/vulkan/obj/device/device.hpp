@@ -9,8 +9,7 @@ struct physical_device;
 struct queue_indices;
 struct queue;
 
-struct device
-{
+struct device {
 	VkDevice handle = VK_NULL_HANDLE;
 };
 

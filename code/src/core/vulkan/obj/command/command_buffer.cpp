@@ -1,12 +1,12 @@
-#include "core/vulkan/objects/commands/CommandBuffer.hpp"
-#include "core/vulkan/objects/commands/CommandPool.hpp"
-#include "core/vulkan/objects/renderpass/RenderPass.hpp"
-#include "core/vulkan/objects/pipeline/Pipeline.hpp"
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-#include "core/vulkan/objects/buffers/types/Vertex.hpp"
-#include "core/vulkan/objects/buffers/VertexBuffer.hpp"
-#include "util/debug/Logger.hpp"
-#include "util/Constants.hpp"
+#include "core/vulkan/obj/command/command_buffer.hpp"
+#include "core/vulkan/obj/command/command_pool.hpp"
+#include "core/vulkan/obj/renderpass/render_pass.hpp"
+#include "core/vulkan/obj/pipeline/pipeline.hpp"
+#include "core/vulkan/obj/device/device.hpp"
+#include "core/vulkan/obj/buffer/vertex.hpp"
+#include "core/vulkan/obj/buffer/vertex_buffer.hpp"
+#include "util/debug/log.hpp"
+#include "util/constants.hpp"
 
 #include <array>
 
@@ -28,7 +28,7 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 		log_critical("Failed to Begin Recording Command Buffer.");
 
 	VkClearValue clear_col = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-	VkRenderPassBeginInfo rp_begin = render_pass_create_begin_info(rp, st, img_idx, clear_col);
+	VkRenderPassBeginInfo rp_begin = render_pass_create_begin_info(rp, st, clear_col, img_idx);
 
 	vkCmdBeginRenderPass(cmd.handle, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
 

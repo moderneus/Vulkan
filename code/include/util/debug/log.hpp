@@ -1,14 +1,14 @@
-#ifndef MOD_LOGGER_HPP
-#define MOD_LOGGER_HPP
+#ifndef MOD_LOG_HPP
+#define MOD_LOG_HPP
 
 #include <string>
 #include <vector>
 
-enum Level { INFO, ERROR, CRITICAL };
+enum level { INFO, ERROR, CRITICAL };
     
 std::string log_get_time();
 
-void log_write(const Level lvl, const std::string &msg, const std::string &val);
+void log_write(const level lvl, const std::string &msg, const std::string &val);
 
 void log_info(const std::string &msg);
 

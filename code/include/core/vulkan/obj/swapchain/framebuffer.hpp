@@ -3,14 +3,14 @@
 
 #include <vulkan/vulkan.h>
 
-struct swapchain_state_t;
-struct device_t;
-struct render_pass_t;
+struct swapchain_state;
+struct device;
+struct render_pass;
 
-VkFramebufferCreateInfo fb_create_info(const swapchain_state_t &st, const render_pass_t &rp, const VkImageView *atts);
+VkFramebufferCreateInfo framebuffer_create_info(const swapchain_state &st, const render_pass &rp, const VkImageView &atts);
 
-void fbs_create(swapchain_state_t *st, const device_t &dev, const render_pass_t &rp);
+void framebuffers_create(swapchain_state *st, const device &dev, const render_pass &rp);
 
-void fbs_destroy(const swapchain_state_t &st, const device_t &dev);
+void framebuffers_destroy(const swapchain_state &st, const device &dev);
 
 #endif

@@ -1,33 +1,32 @@
-#ifndef MOD_PHYS_DEV_HPP
-#define MOD_PHYS_DEV_HPP
+#ifndef MOD_PHYSICAL_DEVICE_HPP
+#define MOD_PHYSICAL_DEVICE_HPP
 
 #include <vulkan/vulkan.h>
 
 #include <string>
 #include <vector>
 
-struct surface_t;
-struct instance_t;
+struct surface;
+struct instance;
 
-struct phys_device_t
-{
+struct physical_device {
 	VkPhysicalDevice handle = VK_NULL_HANDLE;
 };
 
-const std::vector<const char*> phys_dev_exts = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+const std::vector<const char*> physical_device_exts = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 
-uint32_t phys_dev_rate(const phys_device_t &phys_dev);
+uint32_t physical_device_rate(const physical_device &gpu);
 
-std::string phys_dev_get_name(const phys_device_t &phys_dev);
+std::string physical_device_get_name(const physical_device &gpu);
 
-bool phys_dev_check_ext_supp(const phys_device_t &phys_dev);
+bool physical_device_check_ext_supp(const physical_device &gpu);
 
-bool phys_dev_is_suitable(const phys_device_t &phys_dev, const surface_t &surf);
+bool physical_device_is_suitable(const physical_device &gpu, const surface &surf);
 
-void phys_dev_pick(phys_device_t *phys_dev, const instance_t &inst, const surface_t &surf);
+void physical_device_pick(physical_device *gpu, const instance &inst, const surface &surf);
 
-VkPhysicalDeviceFeatures phys_dev_get_features(const phys_device_t &phys_dev);
+VkPhysicalDeviceFeatures physical_device_get_features(const physical_device &gpu);
 
-uint32_t phys_dev_find_mem_type(const phys_device_t &phys_dev, uint32_t type_filter, VkMemoryPropertyFlags props);
+uint32_t physical_device_find_mem_type(const physical_device &gpu, uint32_t type_filter, VkMemoryPropertyFlags props);
 
 #endif

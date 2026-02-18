@@ -3,27 +3,25 @@
 
 #include <cstdint>
 
-struct event_manager_t;
-struct window_t;
-struct core_t;
+struct event_manager;
+struct window;
+struct core;
 
-struct renderer_t
-{
-	window_t *pwin;
+struct renderer {
+	window *pwin;
 };
 
-struct renderer_state_t
-{
+struct renderer_state {
 	uint32_t frame = 0;
 	bool fb_resized = false;
 };
 
-void rndr_init(renderer_t *r, window_t *win);
+void renderer_init(renderer *r, window *win);
 
-void rndr_destroy(renderer_t *r);
+void renderer_destroy(renderer *r);
 
-void rndr_loop(renderer_t *r, event_manager_t *ev_m, core_t *core);
+void renderer_loop(renderer *r, event_manager *ev_m, core *c);
 
-void rndr_draw(const renderer_t &r, renderer_state_t *st, core_t *core);
+void renderer_draw(const renderer &r, renderer_state *st, core *c);
 
 #endif

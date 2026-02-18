@@ -3,17 +3,16 @@
 
 #include <vulkan/vulkan.h>
 
-struct device_t;
+struct device;
 
-struct layout_t
-{
+struct layout {
 	VkPipelineLayout handle = VK_NULL_HANDLE;
 };
 
 VkPipelineLayoutCreateInfo layout_create_info();
 
-void layout_create(layout_t *layout, const device_t &dev);
+void layout_create(layout *lyt, const device &dev);
 
-void layout_destroy(const layout_t &layout, const device_t &dev);
+void layout_destroy(const layout &lyt, const device &dev);
 
 #endif

@@ -1,27 +1,25 @@
 #ifndef MOD_PIPELINE_HPP
 #define MOD_PIPELINE_HPP
 
-#include "core/vulkan/objects/pipeline/ShaderModule.hpp"
+#include "core/vulkan/obj/pipeline/shader.hpp"
 
 #include <vulkan/vulkan.h>
 
 #include <vector>
 #include <array>
 
-struct swapchain_state_t;
-struct layout_t;
-struct render_pass_t;
-struct device_t;
+struct swapchain_state;
+struct layout;
+struct render_pass;
+struct device;
 
-struct pipeline_t
-{
+struct pipeline {
 	VkPipeline handle = VK_NULL_HANDLE;
 };
 
-struct pipeline_info_t
-{
+struct pipeline_info {
 	std::vector<VkPipelineShaderStageCreateInfo>			shdr_stages    = {};
-	VkPipelineDynamicStateCreateInfo				dyn_st	       = {};
+	VkPipelineDynamicStateCreateInfo				dyn_state      = {};
 	VkPipelineVertexInputStateCreateInfo				vert_input     = {};
 	VkPipelineInputAssemblyStateCreateInfo				asm_input      = {};
 	VkPipelineViewportStateCreateInfo				vp	       = {};
@@ -31,49 +29,48 @@ struct pipeline_info_t
 	VkPipelineColorBlendStateCreateInfo				col_blend      = {};
 };
 
-struct pipeline_cfg_t
-{
-	std::vector<shader_ref_t>					shdr_refs           = {};
+struct pipeline_config {
+	std::vector<shader_reference>					shdr_refs           = {};
 	VkViewport							vp		    = {};
-	VkRect2D							sci		    = {};
+	VkRect2D							scissor		    = {};
 	VkPipelineColorBlendAttachmentState				att		    = {};
-	std::vector<VkDynamicState>					dyn_st	            = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+	std::vector<VkDynamicState>					dyn_state	    = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
 	VkVertexInputBindingDescription					bind_desc           = {};
 	std::array<VkVertexInputAttributeDescription, 2>		attrib_desc         = {};
 };
 
-VkViewport pl_create_viewport(const swapchain_state_t &st);
+VkViewport pipeline_create_viewport(const swapchain_state &st);
 
-VkRect2D pl_create_scissor(const swapchain_state_t &st);
+VkRect2D pipeline_create_scissor(const swapchain_state &st);
 
-VkPipelineColorBlendAttachmentState pl_create_col_blend_att();
+VkPipelineColorBlendAttachmentState pipeline_create_col_blend_att();
 
-VkPipelineDepthStencilStateCreateInfo pl_create_ds_info();
+VkPipelineDepthStencilStateCreateInfo pipeline_create_ds_info();
 
-std::vector<shader_ref_t> pl_create_shdr_refs(const std::array<shader_t, 2> &shdrs);
+std::vector<shader_reference> pipeline_create_shdr_refs(const std::array<shader, 2> &shdrs);
 
-VkPipelineShaderStageCreateInfo pl_create_shdr_stage_info(const shader_ref_t &ref);
+VkPipelineShaderStageCreateInfo pipeline_create_shdr_stage_info(const shader_reference &ref);
 
-std::vector<VkPipelineShaderStageCreateInfo> pl_create_shdr_stage_infos(const pipeline_cfg_t &cfg);
+std::vector<VkPipelineShaderStageCreateInfo> pipeline_create_shdr_stage_infos(const pipeline_config &cfg);
 
-VkPipelineDynamicStateCreateInfo pl_create_dyn_st_info();
+VkPipelineDynamicStateCreateInfo pipeline_create_dyn_state_info();
 
-VkPipelineVertexInputStateCreateInfo pl_create_vert_input_info(const pipeline_cfg_t &cfg);
+VkPipelineVertexInputStateCreateInfo pipeline_create_vert_input_info(const pipeline_config &cfg);
 
-VkPipelineInputAssemblyStateCreateInfo pl_create_asm_input_info();
+VkPipelineInputAssemblyStateCreateInfo pipeline_create_asm_input_info();
 
-VkPipelineViewportStateCreateInfo pl_create_vp_info(const pipeline_cfg_t &cfg);
+VkPipelineViewportStateCreateInfo pipeline_create_viewport_info(const pipeline_config &cfg);
 
-VkPipelineRasterizationStateCreateInfo pl_create_rast_info();
+VkPipelineRasterizationStateCreateInfo pipeline_create_rast_info();
 
-VkPipelineMultisampleStateCreateInfo pl_create_msaa_info();
+VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info();
 
-VkPipelineColorBlendStateCreateInfo pl_create_col_blend_info(const pipeline_cfg_t &cfg);
+VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipeline_config &cfg);
 
-VkGraphicsPipelineCreateInfo pl_create_info(const pipeline_info_t &pl_info, const layout_t &layout, const render_pass_t &rp);
+VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const layout &lyt, const render_pass &rp);
 
-void pl_create(pipeline_t *pl, const device_t &dev, const layout_t &layout, const render_pass_t &rp, const swapchain_state_t &st, const std::array<shader_t, 2> &shdrs);
+void pipeline_create(pipeline *pl, const device &dev, const layout &lyt, const render_pass &rp, const swapchain_state &st, const std::array<shader, 2> &shdrs);
 
-void pl_destroy(const pipeline_t &pipeline, const device_t &dev);
+void pipeline_destroy(const pipeline &pl, const device &dev);
 
 #endif

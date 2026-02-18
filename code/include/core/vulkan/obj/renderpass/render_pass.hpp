@@ -3,28 +3,27 @@
 
 #include <vulkan/vulkan.h>
 
-struct swapchain_state_t;
-struct device_t;
+struct swapchain_state;
+struct device;
 
-struct render_pass_t 
-{
+struct render_pass {
 	VkRenderPass handle = VK_NULL_HANDLE;
 };
 
-VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapchain_state_t &st, uint32_t img_idx, const VkClearValue col);
+VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass &rp, const swapchain_state &st, const VkClearValue &col, uint32_t img_idx);
 
-VkAttachmentDescription rp_create_att_desc(const swapchain_state_t &st);
+VkAttachmentDescription render_pass_create_att_desc(const swapchain_state &st);
 
-VkAttachmentReference rp_create_att_ref();
+VkAttachmentReference render_pass_create_att_ref();
 
-VkSubpassDescription rp_create_subp_desc(VkAttachmentReference *ref);
+VkSubpassDescription render_pass_create_subp_desc(const VkAttachmentReference &ref);
 
-VkSubpassDependency rp_create_subp_dep();
+VkSubpassDependency render_pass_create_subp_dep();
 
-VkRenderPassCreateInfo rp_create_info(VkAttachmentDescription *att, VkSubpassDescription *subp, VkSubpassDependency *dep);
+VkRenderPassCreateInfo render_pass_create_info(const VkAttachmentDescription &att, const VkSubpassDescription &subp, const VkSubpassDependency &dep);
 
-void rp_create(render_pass_t *rp, const device_t &dev, const swapchain_state_t &st);
+void render_pass_create(render_pass *rp, const device &dev, const swapchain_state &st);
     
-void rp_destroy(const render_pass_t &rp, const device_t &dev);
+void render_pass_destroy(const render_pass &rp, const device &dev);
 
 #endif

@@ -1,9 +1,9 @@
-#include "core/vulkan/objects/renderpass/RenderPass.hpp"
-#include "core/vulkan/objects/swapchain/Swapchain.hpp"
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-#include "util/debug/Logger.hpp"
+#include "core/vulkan/obj/renderpass/render_pass.hpp"
+#include "core/vulkan/obj/swapchain/swapchain.hpp"
+#include "core/vulkan/obj/device/device.hpp"
+#include "util/debug/log.hpp"
 
-VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapchain_state_t &st, uint32_t img_idx, const VkClearValue clear_col) 
+VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass &rp, const swapchain_state &st, const VkClearValue &clear_col, uint32_t img_idx) 
 {
 	VkRenderPassBeginInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -16,7 +16,7 @@ VkRenderPassBeginInfo rp_create_begin_info(const render_pass_t &rp, const swapch
 	return info;
 }
 
-VkAttachmentDescription rp_create_att_desc(const swapchain_state_t &st) 
+VkAttachmentDescription render_pass_create_att_desc(const swapchain_state &st) 
 {
 	log_info("Creating an Attachment Description...");
 
@@ -35,7 +35,7 @@ VkAttachmentDescription rp_create_att_desc(const swapchain_state_t &st)
 	return desc;
 }
 
-VkAttachmentReference rp_create_att_ref() 
+VkAttachmentReference render_pass_create_att_ref() 
 {
 	log_info("Creating the Attachment Reference...");
 
@@ -48,21 +48,21 @@ VkAttachmentReference rp_create_att_ref()
 	return ref;
 }
 
-VkSubpassDescription rp_create_subp_desc(VkAttachmentReference *ref) 
+VkSubpassDescription render_pass_create_subp_desc(const VkAttachmentReference &ref) 
 {
 	log_info("Creating a Subpass Description...");
 
 	VkSubpassDescription desc = {};
 	desc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 	desc.colorAttachmentCount = 1;
-	desc.pColorAttachments = ref;
+	desc.pColorAttachments = &ref;
 
 	log_info("The Subpasss Description was Created.");
 
 	return desc;
 }
 
-VkSubpassDependency rp_create_subp_dep() 
+VkSubpassDependency render_pass_create_subp_dep() 
 {
 	VkSubpassDependency dep = {};
 	dep.srcSubpass = VK_SUBPASS_EXTERNAL;
@@ -74,48 +74,46 @@ VkSubpassDependency rp_create_subp_dep()
 	return dep;
 }
 
-VkRenderPassCreateInfo rp_create_info(VkAttachmentDescription *att, VkSubpassDescription *subp, VkSubpassDependency *dep) 
+VkRenderPassCreateInfo render_pass_create_info(const VkAttachmentDescription &att, const VkSubpassDescription &subp, const VkSubpassDependency &dep) 
 {
 	log_info("Creating the Render Pass Info...");
 
 	VkRenderPassCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 	info.attachmentCount = 1;
-	info.pAttachments = att;
+	info.pAttachments = &att;
 	info.subpassCount = 1;
-	info.pSubpasses = subp;
+	info.pSubpasses = &subp;
 	info.dependencyCount = 1;
-	info.pDependencies = dep;
+	info.pDependencies = &dep;
 
 	log_info("The Render Pass Info was Created.");
 
 	return info;
 }
 
-void rp_create(render_pass_t *rp, const device_t &dev, const swapchain_state_t &st) 
+void render_pass_create(render_pass *rp, const device &dev, const swapchain_state &st) 
 {
 	log_info("Creating a Render Pass...");
 
-	VkAttachmentDescription att_desc = rp_create_att_desc(st);
-	VkAttachmentReference att_ref = rp_create_att_ref();
-	VkSubpassDescription subp = rp_create_subp_desc(&att_ref);
-	VkSubpassDependency dep = rp_create_subp_dep();
-	VkRenderPassCreateInfo info = rp_create_info(&att_desc, &subp, &dep);
+	VkAttachmentDescription desc = render_pass_create_att_desc(st);
+	VkAttachmentReference ref = render_pass_create_att_ref();
+	VkSubpassDescription subp = render_pass_create_subp_desc(ref);
+	VkSubpassDependency dep = render_pass_create_subp_dep();
+	VkRenderPassCreateInfo info = render_pass_create_info(desc, subp, dep);
 
-	if (vkCreateRenderPass(dev.handle, &info, nullptr, &rp->handle) != VK_SUCCESS) {
+	if (vkCreateRenderPass(dev.handle, &info, nullptr, &rp->handle) != VK_SUCCESS)
 		log_critical("Failed to Create the Render Pass.");
-	}
 
 	log_info("The Render Pass was Created.");
 }
 
-void rp_destroy(const render_pass_t &rp, const device_t &dev) 
+void render_pass_destroy(const render_pass &rp, const device &dev) 
 {
 	log_info("Destroying the Render Pass...");
 
-	if (rp.handle == VK_NULL_HANDLE) {
+	if (rp.handle == VK_NULL_HANDLE)
 		log_error("Cannot Destroy the Render Pass::Render Pass is not Created.");
-	}
 
 	vkDestroyRenderPass(dev.handle, rp.handle, nullptr);
 

@@ -6,30 +6,18 @@
 #include <vector>
 #include <array>
 
-struct swapchain_t;
-struct command_buffer_t;
-struct semaphore_t;
+struct swapchain;
+struct command_buffer;
+struct semaphore;
 
-struct queue_t
-{
-	VkQueue		gfx = VK_NULL_HANDLE;
-	VkQueue		pres = VK_NULL_HANDLE;
+struct queue {
+	VkQueue	gfx  = VK_NULL_HANDLE;
+	VkQueue	pres = VK_NULL_HANDLE;
 };
 
-VkSubmitInfo q_create_submit_info
-(
-	const uint32_t						&frame, 
-	const std::array<VkSemaphore, 1>			&waits,
-	const std::array<VkSemaphore, 1>			&signals,
-	const std::array<VkPipelineStageFlags, 1>		&stages, 
-	const std::vector<command_buffer_t>			&cmd_bufs
-);
+VkSubmitInfo queue_create_submit_info(const uint32_t &frame, const std::array<VkSemaphore, 1> &waits, const std::array<VkSemaphore, 1> &signals, 
+				      const std::array<VkPipelineStageFlags, 1> &stages, const std::vector<command_buffer> &cmds);
 
-VkPresentInfoKHR q_create_pres_info
-(
-	const std::array<VkSemaphore, 1>			&signals,
-	const std::array<VkSwapchainKHR, 1>			&swapchains, 
-	const uint32_t						&img_idx
-);
+VkPresentInfoKHR queue_create_pres_info(const std::array<VkSemaphore, 1> &signals, const std::array<VkSwapchainKHR, 1> &swps, const uint32_t &img_idx);
 
 #endif

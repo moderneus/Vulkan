@@ -12,8 +12,7 @@ struct pipeline;
 struct command_pool;
 struct vertex_buffer;
 
-struct command_buffer
-{
+struct command_buffer {
 	VkCommandBuffer handle = VK_NULL_HANDLE;
 };
 

@@ -3,16 +3,15 @@
 
 #include <vulkan/vulkan.h>
 
-struct instance_t;
-struct window_t;
+struct instance;
+struct window;
 
-struct surface_t
-{
+struct surface {
 	VkSurfaceKHR handle = VK_NULL_HANDLE;
 };
 
-void surf_create(surface_t *surf, const instance_t &inst, const window_t &win);
+void surface_create(surface *surf, const instance &inst, const window &win);
 
-void surf_destroy(const surface_t &surf, const instance_t &inst);
+void surface_destroy(const surface &surf, const instance &inst);
 
 #endif

@@ -7,27 +7,25 @@
 #include <vector>
 #include <array>
 
-struct device_t;
+struct device;
 
-struct shader_t 
-{ 
+struct shader { 
 	VkShaderModule handle = VK_NULL_HANDLE;
 };
 
-struct shader_ref_t
-{
+struct shader_reference {
 	VkShaderModule handle = VK_NULL_HANDLE;
 	VkShaderStageFlagBits stage;
 };
 
-VkShaderModuleCreateInfo shdr_create_info(const std::vector<char>& src);
+VkShaderModuleCreateInfo shader_create_info(const std::vector<char>& src);
 
-void shdr_create(shader_t *shdr, const device_t &dev, const std::string &path);
+void shader_create(shader *shdr, const device &dev, const std::string &path);
 
-void shdr_destroy(const shader_t &shdr, const device_t &dev);
+void shader_destroy(const shader &shdr, const device &dev);
 
-void shdrs_create(std::array<shader_t, 2> *shdrs, const device_t &dev); 
+void shaders_create(std::array<shader, 2> *shdrs, const device &dev); 
 
-void shdrs_destroy(const std::array<shader_t, 2> &shdrs, const device_t &dev);
+void shaders_destroy(const std::array<shader, 2> &shdrs, const device &dev);
 
 #endif

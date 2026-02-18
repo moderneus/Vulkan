@@ -1,6 +1,6 @@
-#include "core/vulkan/objects/pipeline/PipelineLayout.hpp"
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-#include "util/debug/Logger.hpp"
+#include "core/vulkan/obj/pipeline/layout.hpp"
+#include "core/vulkan/obj/device/device.hpp"
+#include "util/debug/log.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -19,28 +19,26 @@ VkPipelineLayoutCreateInfo layout_create_info()
 	return info;
 }
 
-void layout_create(layout_t *layout, const device_t &dev) 
+void layout_create(layout *lyt, const device &dev) 
 {
 	log_info("Creating a Pipeline Layout...");
 
 	VkPipelineLayoutCreateInfo info = layout_create_info();
 
-	if (vkCreatePipelineLayout(dev.handle, &info, nullptr, &layout->handle) != VK_SUCCESS) {
+	if (vkCreatePipelineLayout(dev.handle, &info, nullptr, &lyt->handle) != VK_SUCCESS)
 		log_critical("Failed to Create the Pipeline Layout.");
-	}
 
 	log_info("The Pipeline Layout was Created.");
 }
 
-void layout_destroy(const layout_t &layout, const device_t &dev) 
+void layout_destroy(const layout &lyt, const device &dev) 
 {
 	log_info("Destroying the Pipeline Layout...");
 
-	if (layout.handle == VK_NULL_HANDLE) {
+	if (lyt.handle == VK_NULL_HANDLE)
 		log_error("Cannot Destroy the Pipeline Layout::Pipeline Layout is not Created.");
-	}
 
-	vkDestroyPipelineLayout(dev.handle, layout.handle, nullptr);
+	vkDestroyPipelineLayout(dev.handle, lyt.handle, nullptr);
 
 	log_info("The Pipeline Layout was Destroyed.");
 }

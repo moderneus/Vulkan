@@ -1,8 +1,8 @@
-#include "engine/Engine.hpp"
+#include "engine/engine.hpp"
 
 int main() 
 {
-	engine_t e;
+	engine e;
 	engine_init(&e);
 	engine_run(&e);
 	engine_destroy(&e);

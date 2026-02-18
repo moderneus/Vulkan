@@ -12,7 +12,7 @@ VkBufferCreateInfo vertex_buffer_create_info()
 
 	VkBufferCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-	info.size = sizeof(verts[0]) * verts.size();
+	info.size = sizeof(triangle_verts[0]) * triangle_verts.size();
 	info.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 	info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
@@ -51,8 +51,8 @@ void vertex_buffer_malloc(vertex_buffer_mem *mem, const vertex_buffer &buf, cons
 {
 	log_info("Allocation the Vertex Buffer Memory...");
 
-	VkMemoryRequirements reqs = vert_buf_get_mem_reqs(buf, dev);
-	VkMemoryAllocateInfo info = vert_buf_create_alloc_info(gpu, reqs);
+	VkMemoryRequirements reqs = vertex_buffer_get_mem_reqs(buf, dev);
+	VkMemoryAllocateInfo info = vertex_buffer_create_alloc_info(gpu, reqs);
 
 	if (vkAllocateMemory(dev.handle, &info, nullptr, &mem->handle) != VK_SUCCESS)
 		log_critical("Failed to Allocate Vertex Buffer Memory.");
@@ -66,7 +66,7 @@ void vertex_buffer_memcpy(const vertex_buffer_mem &mem, const device &dev, const
 
 	void* data;
 	vkMapMemory(dev.handle, mem.handle, 0, info.size, 0, &data);
-		memcpy(data, verts.data(), info.size);
+		memcpy(data, triangle_verts.data(), info.size);
 	vkUnmapMemory(dev.handle, mem.handle);
 
 	log_info("The Vertex Buffer Memory was Copyied.");

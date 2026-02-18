@@ -3,13 +3,13 @@
 
 #include <vulkan/vulkan.h>
 
-struct device_t;
-struct swapchain_state_t;
+struct device;
+struct swapchain_state;
 
-VkImageViewCreateInfo img_view_create_info(const VkImage &img, const VkFormat &fmt);
+VkImageViewCreateInfo image_view_create_info(const VkImage &img, const VkFormat &fmt);
 
-void img_views_create(swapchain_state_t *st, const device_t &dev);
+void image_views_create(swapchain_state *st, const device &dev);
 
-void img_views_destroy(const swapchain_state_t &st, const device_t &dev);
+void image_views_destroy(const swapchain_state &st, const device &dev);
 
 #endif

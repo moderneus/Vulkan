@@ -9,10 +9,9 @@
 struct physical_device;
 struct surface;
 
-struct queue_indices
-{
-	std::optional<uint32_t>		gfx;
-	std::optional<uint32_t>		pres;
+struct queue_indices {
+	std::optional<uint32_t>	gfx;
+	std::optional<uint32_t> pres;
 };
 
 bool queue_indices_is_complete(const queue_indices &q_idx);

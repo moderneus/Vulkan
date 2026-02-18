@@ -8,8 +8,8 @@
 inline constexpr const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
 
 inline const std::array<std::string, 2> shdr_paths = {
-	"shaders/vert/VertexShader.vert.spv",
-	"shaders/frag/FragmentShader.frag.spv"
+	"shaders/vert/triangle.vert.spv",
+	"shaders/frag/triangle.frag.spv"
 };
 
 #endif

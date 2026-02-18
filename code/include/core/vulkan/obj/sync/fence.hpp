@@ -5,17 +5,16 @@
 
 #include <vector>
 
-struct device_t;
+struct device;
 
-struct fence_t
-{
+struct fence {
 	VkFence handle = VK_NULL_HANDLE;
 };
 
 VkFenceCreateInfo fence_create_info();
 
-void fences_create(std::vector<fence_t> *fences, const device_t &dev);
+void fences_create(std::vector<fence> *fns, const device &dev);
 
-void fences_destroy(const std::vector<fence_t> &fences, const device_t &dev);
+void fences_destroy(const std::vector<fence> &fns, const device &dev);
 
 #endif

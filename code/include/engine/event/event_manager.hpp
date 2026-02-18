@@ -3,14 +3,13 @@
 
 #include "SDL3/SDL_events.h"
 
-struct window_t;
-struct renderer_state_t;
+struct window;
+struct renderer_state;
 
-struct event_manager_t
-{
-	SDL_Event e;
+struct event_manager {
+	SDL_Event event;
 };
 
-void ev_m_poll(event_manager_t *ev_m, renderer_state_t *st, window_t *win);
+void event_manager_poll(event_manager *ev_m, renderer_state *st, window *win);
 
 #endif

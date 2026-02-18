@@ -4,9 +4,8 @@ std::vector<std::string> cstr_vec_to_str_vec(const std::vector<const char*> &cst
 {
 	std::vector<std::string> strs;
 
-	for(const char *cstr : cstrs){
+	for(const char *cstr : cstrs)
 		strs.push_back(cstr);
-	}
 
 	return strs;
 }

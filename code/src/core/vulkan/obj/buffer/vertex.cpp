@@ -1,4 +1,4 @@
-#include "core/vulkan/objects/buffers/types/Vertex.hpp"
+#include "core/vulkan/obj/buffer/vertex.hpp"
 
 VkVertexInputBindingDescription vertex_get_bind_desc()
 {

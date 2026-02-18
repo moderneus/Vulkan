@@ -1,4 +1,4 @@
-#include "util/debug/ValidationLayers.hpp"
+#include "util/debug/val_layers.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -21,6 +21,7 @@ bool val_layers_check_supp()
 				break;
 			}
 		}
+
 		if (!found) {
 			return false;
 		}

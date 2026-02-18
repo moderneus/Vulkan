@@ -1,7 +1,7 @@
-#include "core/vulkan/objects/sync/Fence.hpp"
-#include "core/vulkan/objects/device/LogicalDevice.hpp"
-#include "util/debug/Logger.hpp"
-#include "util/Constants.hpp"
+#include "core/vulkan/obj/sync/fence.hpp"
+#include "core/vulkan/obj/device/device.hpp"
+#include "util/debug/log.hpp"
+#include "util/constants.hpp"
 
 VkFenceCreateInfo fence_create_info() 
 {
@@ -16,32 +16,31 @@ VkFenceCreateInfo fence_create_info()
 	return info;
 }
 
-void fences_create(std::vector<fence_t> *fences, const device_t &dev) 
+void fences_create(std::vector<fence> *fns, const device &dev) 
 {
 	log_info("Creating the Fences...");
 
 	VkFenceCreateInfo info = fence_create_info();
 
-	fences->resize(MAX_FRAMES_IN_FLIGHT);
+	fns->resize(MAX_FRAMES_IN_FLIGHT);
 
 	for(uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-		if (vkCreateFence(dev.handle, &info, nullptr, &fences->data()[i].handle) != VK_SUCCESS) {
+		if (vkCreateFence(dev.handle, &info, nullptr, &fns->data()[i].handle) != VK_SUCCESS)
 			log_critical("Failed to Create the Fences.");
-		}
 	}
 
 	log_info("The Fences were Created.");
 }
 
-void fences_destroy(const std::vector<fence_t> &fences, const device_t &dev) 
+void fences_destroy(const std::vector<fence> &fns, const device &dev) 
 {
 	log_info("Destroying the Fences...");
 
 	for(uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
-		if (fences[i].handle == VK_NULL_HANDLE) {
+		if (fns[i].handle == VK_NULL_HANDLE)
 			log_error("Cannot Destroy the Fence::Fence is not Created.");
-		}
-		vkDestroyFence(dev.handle, fences[i].handle, nullptr);
+
+		vkDestroyFence(dev.handle, fns[i].handle, nullptr);
 	}
 
 	log_info("The Fences were Destroyed.");

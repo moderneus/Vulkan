@@ -1,15 +1,15 @@
-#include "engine/gfx/Renderer.hpp"
-#include "engine/events/EventManager.hpp"
-#include "engine/window/Window.hpp"
-#include "core/vulkan/Core.hpp"
-#include "util/debug/Logger.hpp"
-#include "util/Constants.hpp"
+#include "engine/gfx/renderer.hpp"
+#include "engine/event/event_manager.hpp"
+#include "engine/window/window.hpp"
+#include "core/vulkan/core.hpp"
+#include "util/debug/log.hpp"
+#include "util/constants.hpp"
 
 #include <vulkan/vulkan.h>
 
 #include <array>
 
-void rndr_init(renderer_t *r, window_t *win) 
+void renderer_init(renderer *r, window *win) 
 {
 	log_info("Initializing a Renderer...");
 
@@ -18,7 +18,7 @@ void rndr_init(renderer_t *r, window_t *win)
 	log_info("The Renderer was Initialized.");
 }
 
-void rndr_destroy(renderer_t *r) 
+void renderer_destroy(renderer *r) 
 {
 	log_info("Destroying the Renderer...");
 
@@ -27,53 +27,52 @@ void rndr_destroy(renderer_t *r)
 	log_info("The Renderer was Destroyed.");
 }
 
-void rndr_loop(renderer_t *r, event_manager_t *ev_m, core_t *core) 
+void renderer_loop(renderer *r, event_manager *ev_m, core *c) 
 {
-	renderer_state_t st = {};
+	renderer_state st = {};
 	while(!r->pwin->is_closed) {
-		ev_m_poll(ev_m, &st, r->pwin);
-		rndr_draw(*r, &st, core);
+		event_manager_poll(ev_m, &st, r->pwin);
+		renderer_draw(*r, &st, c);
 	}
-	vkDeviceWaitIdle(core->dev.handle);
+	vkDeviceWaitIdle(c->dev.handle);
 }
 
-void rndr_draw(const renderer_t &r, renderer_state_t *st, core_t *core) 
+void renderer_draw(const renderer &r, renderer_state *st, core *c) 
 {
-	vkWaitForFences(core->dev.handle, 1, &core->frm_fences[st->frame].handle, VK_TRUE, UINT64_MAX);
+	vkWaitForFences(c->dev.handle, 1, &c->frm_fences[st->frame].handle, VK_TRUE, UINT64_MAX);
 
 	uint32_t img_idx;
-	VkResult res = vkAcquireNextImageKHR(core->dev.handle, core->swp.handle, UINT64_MAX, core->img_avail_sems[st->frame].handle, VK_NULL_HANDLE, &img_idx);
+	VkResult res = vkAcquireNextImageKHR(c->dev.handle, c->swp.handle, UINT64_MAX, c->img_avail_sems[st->frame].handle, VK_NULL_HANDLE, &img_idx);
 
 	if (res == VK_ERROR_OUT_OF_DATE_KHR) {
-		swp_recreate(&core->swp, &core->swp_st, core->dev, core->phys_dev, core->rp, core->qf, core->surf, *r.pwin);
+		swapchain_recreate(&c->swp, &c->swp_st, c->dev, c->gpu, c->rp, c->q_idx, c->surf, *r.pwin);
 		return;
 	} else if (res != VK_SUCCESS && res != VK_SUBOPTIMAL_KHR) {
 		log_critical("Failed to Acquire Swapchain Image.");
 	}
 
-	vkResetFences(core->dev.handle, 1, &core->frm_fences[st->frame].handle);
+	vkResetFences(c->dev.handle, 1, &c->frm_fences[st->frame].handle);
 
-	vkResetCommandBuffer(core->cmd_bufs[st->frame].handle, 0);
-	cmd_buf_record(core->cmd_bufs[st->frame], core->pl, core->rp, core->swp_st, core->buf, img_idx);
+	vkResetCommandBuffer(c->cmds[st->frame].handle, 0);
+	command_buffer_record(c->cmds[st->frame], c->pl, c->rp, c->swp_st, c->buf, img_idx);
 
-	std::array<VkSemaphore, 1> waits = {core->img_avail_sems[st->frame].handle};
+	std::array<VkSemaphore, 1> waits = {c->img_avail_sems[st->frame].handle};
 	std::array<VkPipelineStageFlags, 1> stages = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-	std::array<VkSemaphore, 1> signals = {core->rnd_done_sems[st->frame].handle};
+	std::array<VkSemaphore, 1> signals = {c->rnd_done_sems[st->frame].handle};
 
-	VkSubmitInfo submit_info = q_create_submit_info(st->frame, waits, signals, stages, core->cmd_bufs);
+	VkSubmitInfo submit_info = queue_create_submit_info(st->frame, waits, signals, stages, c->cmds);
 
-	if (vkQueueSubmit(core->q.gfx, 1, &submit_info, core->frm_fences[st->frame].handle) != VK_SUCCESS) {
+	if (vkQueueSubmit(c->q.gfx, 1, &submit_info, c->frm_fences[st->frame].handle) != VK_SUCCESS)
 		log_critical("Failed to Submit Draw Command Buffer.");
-	}
 
-	std::array<VkSwapchainKHR, 1> swps = {core->swp.handle};
-	VkPresentInfoKHR p_info = q_create_pres_info(signals, swps, img_idx);
+	std::array<VkSwapchainKHR, 1> swps = {c->swp.handle};
+	VkPresentInfoKHR pres_info = queue_create_pres_info(signals, swps, img_idx);
 
-	vkQueuePresentKHR(core->q.pres, &p_info);
+	vkQueuePresentKHR(c->q.pres, &pres_info);
 
 	if (res == VK_ERROR_OUT_OF_DATE_KHR || res == VK_SUBOPTIMAL_KHR || st->fb_resized) {
 		st->fb_resized = false;
-		swp_recreate(&core->swp, &core->swp_st, core->dev, core->phys_dev, core->rp, core->qf, core->surf, *r.pwin);
+		swapchain_recreate(&c->swp, &c->swp_st, c->dev, c->gpu, c->rp, c->q_idx, c->surf, *r.pwin);
 	} else if (res != VK_SUCCESS) {
 		log_critical("Failed to Present Swapchain Image.");
 	}
