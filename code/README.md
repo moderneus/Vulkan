@@ -72,7 +72,7 @@ code
 └── src
     ├── core
     │   ├── sdl
-    │   │   └── <a href="./src/core/sdl/sdl_ctx.cpp">sdl_ctx.cpp</a>
+    │   │   └── <a href="./src/core/SDL/sdl_ctx.cpp">sdl_ctx.cpp</a>
     │   └── vulkan
     │       ├── <a href="./src/core/vulkan/core.cpp">core.cpp</a>
     │       └── obj
