@@ -1,0 +1,114 @@
+#include "core/vulkan/obj/debug/messenger.hpp"
+#include "core/vulkan/obj/instance/instance.hpp"
+#include "util/debug/log.hpp"
+
+#include "fmt/core.h"
+#include "fmt/color.h"
+
+#include <vulkan/vulkan.h>
+
+VKAPI_ATTR VkBool32 VKAPI_CALL callback(VkDebugUtilsMessageSeverityFlagBitsEXT sev, VkDebugUtilsMessageTypeFlagsEXT type, 
+					const VkDebugUtilsMessengerCallbackDataEXT *cb_data, void *usr_data)
+{ 
+	fmt::color col;
+
+	switch(sev) {
+	default:
+		col = fmt::color::white;
+	break;
+
+	case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+		col = fmt::color::gray;
+	break;
+
+	case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+		col = fmt::color::gold;
+	break;
+
+	case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+		col = fmt::color::red;
+	break;
+
+	case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+		col = fmt::color::blue;
+	break;
+	}
+
+	fmt::print(fmt::fg(fmt::color::dark_red), "[VULKAN] ");
+	fmt::print(fmt::fg(col), "{}: ", cb_data->pMessageIdName);
+	fmt::print(fmt::fg(fmt::color::white), "{}\n", cb_data->pMessage);
+
+	return VK_FALSE;
+}
+
+VkDebugUtilsMessengerCreateInfoEXT messenger_create_info() 
+{
+	log_info("Creating a Debug Messenger Info...");
+
+	VkDebugUtilsMessengerCreateInfoEXT info = {};
+	info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+
+	info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
+			       VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+			       VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT |
+			       VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
+
+	info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+			   VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+
+	info.pfnUserCallback = callback;
+	info.pUserData = nullptr;
+
+	log_info("The Debug Messenger Info was created.");
+
+	return info;
+}
+
+VkResult messenger_create(messenger *msgr, const instance &inst, const VkDebugUtilsMessengerCreateInfoEXT &info, 
+			  const VkAllocationCallbacks *alloc) 
+{    
+	log_info("Creating a Debug Messenger...");
+
+	auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(inst.handle, "vkCreateDebugUtilsMessengerEXT");
+
+	if (func != nullptr) {
+		func(inst.handle, &info, alloc, &msgr->handle);
+	} else {
+		log_error("Failed to Create the Debug Messegner::Extension not Present!");
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
+	}
+
+	log_info("The Debug Messenger was Created.");
+
+	return VK_SUCCESS;
+}
+
+void messenger_setup(messenger *msgr, const instance &inst) 
+{
+	log_info("Setting up a Debug Messenger...");
+
+	VkDebugUtilsMessengerCreateInfoEXT info = messenger_create_info();
+
+	if (messenger_create(msgr, inst, info, nullptr) != VK_SUCCESS)
+		log_error("Failed to Create the Debug Messenger.");
+
+	log_info("The Debug Messenger was Setted up.");
+}
+
+VkResult messenger_destroy(const messenger &msgr, const instance &inst) 
+{
+	log_info("Destroying the Debug Messenger...");
+
+	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(inst.handle, "vkDestroyDebugUtilsMessengerEXT");
+
+	if (func != nullptr) {
+		func(inst.handle, msgr.handle, nullptr);
+	} else {
+		log_error("Failed to Destroy the Debug Messenger::Extension not Present!");
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
+	}
+
+	log_info("The Debug Messenger was Destroyed.");
+
+	return VK_SUCCESS;
+}

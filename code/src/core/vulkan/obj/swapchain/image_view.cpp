@@ -1,0 +1,49 @@
+#include "core/vulkan/obj/swapchain/image_view.hpp"
+#include "core/vulkan/obj/swapchain/swapchain.hpp"
+#include "core/vulkan/obj/device/device.hpp"
+#include "util/debug/log.hpp"
+
+VkImageViewCreateInfo image_view_create_info(const VkImage &img, const VkFormat &fmt) 
+{
+	VkImageViewCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	info.image = img;
+	info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	info.format = fmt;
+	info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+	info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+	info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+	info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+	info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	info.subresourceRange.baseMipLevel = 0;
+	info.subresourceRange.levelCount = 1;
+	info.subresourceRange.baseArrayLayer = 0;
+	info.subresourceRange.layerCount = 1;
+	return info;
+}
+
+void image_views_create(swapchain_state *st, const device &dev) 
+{
+	log_info("Creating an Image Views...");
+
+	st->views.resize(st->imgs.size());
+
+	for(uint32_t i = 0; i < st->imgs.size(); ++i) {
+		VkImageViewCreateInfo info = image_view_create_info(st->imgs[i], st->fmt);
+
+		if (vkCreateImageView(dev.handle, &info, nullptr, &st->views[i]) != VK_SUCCESS)
+			log_critical("Failed to Create the ImageView.");
+	}
+
+	log_info("The Image Views were Created.");
+}
+
+void image_views_destroy(const swapchain_state &st, const device &dev) 
+{
+	log_info("Destroying the Image Views...");
+
+	for(auto &view : st.views)
+		vkDestroyImageView(dev.handle, view, nullptr);
+
+	log_info("The Image Views were Destroyed.");
+}
