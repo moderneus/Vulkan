@@ -12,7 +12,7 @@ bool val_layers_check_supp()
 	std::vector<VkLayerProperties> layers(layer_cnt);
 	vkEnumerateInstanceLayerProperties(&layer_cnt, layers.data());
 
-	for(const char* layer_name : val_layers) {
+	for(const char *layer_name : val_layers) {
 		bool found = false;
 
 		for(const auto& layer_props : layers) {

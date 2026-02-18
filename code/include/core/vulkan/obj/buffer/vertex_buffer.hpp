@@ -6,13 +6,11 @@
 struct physical_device;
 struct device;
 
-struct vertex_buffer
-{
+struct vertex_buffer {
 	VkBuffer handle = VK_NULL_HANDLE;
 };
 
-struct vertex_buffer_mem
-{
+struct vertex_buffer_mem {
 	VkDeviceMemory handle = VK_NULL_HANDLE;
 };
 

@@ -76,7 +76,7 @@ void physical_device_pick(physical_device *gpu, const instance &inst, const surf
 		}
 	}
 
-	if (best.rbegin()->first > 0)
+	if (!best.empty() && best.rbegin()->first > 0)
 		gpu->handle = best.rbegin()->second;
 	else
 		log_critical("Failed to Find any Suitable GPU.");

@@ -42,7 +42,8 @@ bool swapchain_is_adequate(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surf
 
 	bool srgb_ok = false;
 	for(const auto &fmt : d.fmts) {
-		if ((fmt.format == VK_FORMAT_B8G8R8A8_SRGB || fmt.format == VK_FORMAT_UNDEFINED) && fmt.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+		if ((fmt.format == VK_FORMAT_B8G8R8A8_SRGB || fmt.format == VK_FORMAT_UNDEFINED) && 
+		     fmt.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
 			srgb_ok = true;
 	}
 
@@ -152,7 +153,8 @@ VkSwapchainCreateInfoKHR swapchain_create_info(const queue_indices &q_idx, const
 	return info;
 }
 
-void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, const VkSurfaceFormatKHR &fmt, const VkExtent2D &extent)
+void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, const VkSurfaceFormatKHR &fmt, 
+			   const VkExtent2D &extent)
 {
 	st->fmt = fmt.format;
 	st->extent = extent;
@@ -164,7 +166,8 @@ void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const devi
 	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, st->imgs.data());
 }
 
-void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, const render_pass &rp, const queue_indices &q_idx, const surface &surf, const window &win)
+void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, const render_pass &rp, 
+			const queue_indices &q_idx, const surface &surf, const window &win)
 {
 	vkDeviceWaitIdle(dev.handle);
 
@@ -177,7 +180,8 @@ void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, 
 	framebuffers_create(st, dev, rp);
 }
 
-void swapchain_create(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, const queue_indices &q_idx, const surface &surf, const window &win)
+void swapchain_create(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, 
+		      const queue_indices &q_idx, const surface &surf, const window &win)
 {
 	log_info("Creating a Swapchain...");
 

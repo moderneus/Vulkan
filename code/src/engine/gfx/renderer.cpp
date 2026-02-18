@@ -42,7 +42,8 @@ void renderer_draw(const renderer &r, renderer_state *st, core *c)
 	vkWaitForFences(c->dev.handle, 1, &c->frm_fences[st->frame].handle, VK_TRUE, UINT64_MAX);
 
 	uint32_t img_idx;
-	VkResult res = vkAcquireNextImageKHR(c->dev.handle, c->swp.handle, UINT64_MAX, c->img_avail_sems[st->frame].handle, VK_NULL_HANDLE, &img_idx);
+	VkResult res = vkAcquireNextImageKHR(c->dev.handle, c->swp.handle, UINT64_MAX, c->img_avail_sems[st->frame].handle, 
+					     VK_NULL_HANDLE, &img_idx);
 
 	if (res == VK_ERROR_OUT_OF_DATE_KHR) {
 		swapchain_recreate(&c->swp, &c->swp_st, c->dev, c->gpu, c->rp, c->q_idx, c->surf, *r.pwin);

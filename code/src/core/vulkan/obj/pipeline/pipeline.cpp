@@ -34,9 +34,9 @@ VkPipelineColorBlendAttachmentState pipeline_create_col_blend_att()
 	VkPipelineColorBlendAttachmentState att = {};
 
 	att.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | 
-				    VK_COLOR_COMPONENT_G_BIT | 
-				    VK_COLOR_COMPONENT_B_BIT | 
-				    VK_COLOR_COMPONENT_A_BIT;
+			     VK_COLOR_COMPONENT_G_BIT | 
+			     VK_COLOR_COMPONENT_B_BIT | 
+			     VK_COLOR_COMPONENT_A_BIT;
 
 	att.blendEnable = VK_FALSE;
 	att.alphaBlendOp = VK_BLEND_OP_ADD;
@@ -230,7 +230,8 @@ VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, 
 	return info;
 }
 
-void pipeline_create(pipeline *pl, const device &dev, const layout &lyt, const render_pass &rp, const swapchain_state &st, const std::array<shader, 2> &shdrs)
+void pipeline_create(pipeline *pl, const device &dev, const layout &lyt, const render_pass &rp, 
+		     const swapchain_state &st, const std::array<shader, 2> &shdrs)
 {
 	log_info("Creating a Pipeline...");
 
