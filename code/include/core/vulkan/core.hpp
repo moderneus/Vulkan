@@ -24,8 +24,7 @@
 
 struct window;
 
-struct core
-{
+struct core {
 	instance				inst;
 	surface					surf;
 	messenger				msgr;
