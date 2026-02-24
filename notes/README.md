@@ -9,7 +9,7 @@ to avoid guessing any of those settings. Vulkan also allows the use of multi-thr
 graphics program. Personally I chose Vulkan because I'm interested in full control, performance and the modern API.
 
 # Vulkan Objects
-- **[Instance](Vulkan-Objects/Instance.md)**,
+- **[Instance](Vulkan-Objects/Instance.md)**
 - **[Surface](Vulkan-Objects/Surface.md)**
 - **[PhysicalDevice](Vulkan-Objects/PhysicalDevice.md)**
 - **[QueueFamily](Vulkan-Objects/QueueFamily.md)**
