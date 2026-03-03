@@ -26,8 +26,8 @@ graphics program. Personally I chose Vulkan because I'm interested in full contr
 │   │   ├── <a href="Vulkan-Objects/Semaphore.md">Semaphore</a>
 │   │   ├── <a href="Vulkan-Objects/ShaderModule.md">ShaderModule</a>
 │   │   ├── <a href="Vulkan-Objects/Swapchain.md">Swapchain</a>
-│   │   │   └── Image
-│   │   └── VertexBuffer
+│   │   │   └── <a href="Vulkan-Objects/Image.md">Image</a>
+│   │   └── <a href="Vulkan-Objects/VertexBuffer.md">VertexBuffer</a>
 │   └── <a href="Vulkan-Objects/QueueFamily.md">QueueFamily</a>
 └── <a href="Vulkan-Objects/Surface.md">Surface</a>
 </pre>
