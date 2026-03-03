@@ -11,24 +11,11 @@ graphics program. Personally I chose Vulkan because I'm interested in full contr
 
 # Vulkan Objects
 
-**<pre>
-<a href="Vulkan-Objects/Instance.md">Instance</a>
-├── <a href="Vulkan-Objects/PhysicalDevice.md">PhysicalDevice</a>
-│   ├── <a href="Vulkan-Objects/LogicalDevice.md">Device</a>
-│   │   ├── <a href="Vulkan-Objects/CommandPool.md">CommandPool</a>
-│   │   │   └── <a href="Vulkan-Objects/CommandBuffer.md">CommandBuffer</a>
-│   │   ├── <a href="Vulkan-Objects/Fence.md">Fence</a>
-│   │   ├── <a href="Vulkan-Objects/Framebuffer.md">Framebuffer</a>
-│   │   ├── <a href="Vulkan-Objects/ImageView.md">ImageView</a>
-│   │   ├── <a href="Vulkan-Objects/Pipeline.md">Pipeline</a>
-│   │   ├── <a href="Vulkan-Objects/PipelineLayout.md">PipelineLayout</a>
-│   │   ├── <a href="Vulkan-Objects/Queue.md">Queue</a>
-│   │   ├── <a href="Vulkan-Objects/Renderpass.md">RenderPass</a>
-│   │   ├── <a href="Vulkan-Objects/Semaphore.md">Semaphore</a>
-│   │   ├── <a href="Vulkan-Objects/ShaderModule.md">ShaderModule</a>
-│   │   ├── <a href="Vulkan-Objects/Swapchain.md">Swapchain</a>
-│   │   │   └── <a href="Vulkan-Objects/Image.md">Image</a>
-│   │   └── <a href="Vulkan-Objects/VertexBuffer.md">VertexBuffer</a>
-│   └── <a href="Vulkan-Objects/QueueFamily.md">QueueFamily</a>
-└── <a href="Vulkan-Objects/Surface.md">Surface</a>
-</pre>**
+```mermaid
+flowchart LR
+    Instance --> Surface
+    Surface -.- PhysicalDevice
+    Instance --> PhysicalDevice
+    PhysicalDevice -.-> A@{ shape: processes, label: "QueueFamily" }
+    PhysicalDevice & A@{ shape: processes, label: "QueueFamily" } --> Device
+```
