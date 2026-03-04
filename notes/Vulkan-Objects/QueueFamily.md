@@ -12,4 +12,3 @@ all depend on the selected QueueFamily. In turn, the [Device](Device.md) and com
 
 - Vulkan Specification: **[QueueFamily](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#devsandqueues-queues)**
 - Vulkan Documentation: **[QueueFamily](https://docs.vulkan.org/guide/latest/queues.html)**
-
