@@ -16,7 +16,7 @@ graphics program. Personally I chose Vulkan because I'm interested in full contr
 - **[PhysicalDevice](Vulkan-Objects/PhysicalDevice.md)**
 - **[QueueFamily](Vulkan-Objects/QueueFamily.md)**
 - **[Queue](Vulkan-Objects/Queue.md)**
-- **[LogicalDevice](Vulkan-Objects/LogicalDevice.md)**
+- **[Device](Vulkan-Objects/Device.md)**
 - **[Swapchain](Vulkan-Objects/Swapchain.md)**
 - **[ImageView](Vulkan-Objects/ImageView.md)**
 - **[RenderPass](Vulkan-Objects/Renderpass.md)**
