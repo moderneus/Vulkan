@@ -9,5 +9,6 @@ The Queue depends on the [Device](Device.md) since it selects what [QueueFamilie
 
 # Links
 
-- Vulkan Specification: [Queue](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#devsandqueues-queues)
-- Vulkan Documentation: [Queue](https://docs.vulkan.org/guide/latest/queues.html)
+- Vulkan Specification: **[Queue](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#devsandqueues-queues)**
+- Vulkan Documentation: **[Queue](https://docs.vulkan.org/guide/latest/queues.html)**
+
