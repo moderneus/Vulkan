@@ -16,5 +16,6 @@ layers that affect driver behavior are registered at the Instance level.
 
 # Links
 
-- Vulkan Specification: [Instance](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#initialization-instances)
-- Vulkan Documentation: [Instance](https://docs.vulkan.org/tutorial/latest/03_Drawing_a_triangle/00_Setup/01_Instance.html)
+- Vulkan Specification: **[Instance](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#initialization-instances)**
+- Vulkan Documentation: **[Instance](https://docs.vulkan.org/tutorial/latest/03_Drawing_a_triangle/00_Setup/01_Instance.html)**
+
