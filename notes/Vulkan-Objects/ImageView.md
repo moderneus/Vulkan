@@ -5,6 +5,8 @@ And also convert if possible to specified format and components. During ImageVie
 
 # Dependencies
 
+The ImageView determines how shaders in the Pipeline will see and work with the image.
+
 # Links
 
 - Vulkan Specification: **[ImageView](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#resources-image-views)**
