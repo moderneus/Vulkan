@@ -14,4 +14,4 @@ All Vulkan resources and operations ultimately rely on the selected PhysicalDevi
 # Links
 
 - Vulkan Specification: **[PhysicalDevice](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#devsandqueues-physical-device-enumeration)**
-- Vulkan Documentation: **[PhysicalDevice](https://docs.vulkan.org/refpages/latest/refpages/source/VkPhysicalDevice.html)**
+- Vulkan Documentation: **[PhysicalDevice](https://docs.vulkan.org/spec/latest/chapters/devsandqueues.html)**
