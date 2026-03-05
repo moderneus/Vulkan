@@ -6,3 +6,6 @@ And also convert if possible to specified format and components. During ImageVie
 # Dependencies
 
 # Links
+
+- Vulkan Specification: **[ImageView](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#resources-image-views)**
+- Vulkan Documentation: **[ImageView](https://docs.vulkan.org/tutorial/latest/03_Drawing_a_triangle/01_Presentation/02_Image_views.html)**
