@@ -19,7 +19,7 @@ graphics program. Personally I chose Vulkan because I'm interested in full contr
 - **[Device](Vulkan-Objects/Device.md)**
 - **[Swapchain](Vulkan-Objects/Swapchain.md)**
 - **[ImageView](Vulkan-Objects/ImageView.md)**
-- **[RenderPass](Vulkan-Objects/Renderpass.md)**
+- **[RenderPass](Vulkan-Objects/RenderPass.md)**
 - **[Framebuffer](Vulkan-Objects/Framebuffer.md)**
 - **[PipelineLayout](Vulkan-Objects/PipelineLayout.md)**
 - **[ShaderModule](Vulkan-Objects/ShaderModule.md)**
