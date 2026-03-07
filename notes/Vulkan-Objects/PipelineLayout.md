@@ -6,10 +6,11 @@ requires the PipelineLayout.
 
 # Dependencies
 
-*The [DescriptorSets](DescriptorSet.md) and push constants can later be read by dispatch or draw calls, but only if the bound 
-[Pipeline](Pipeline.md) being used for the command has a layout that is compatible with the layout that was used to bind the 
-resources. Compatible means that the PipelineLayout must be the same object, or a different layout in which the push constant 
-ranges and [DescriptorSet](DescriptorSet.md) layouts were be identically defined.* 
+The [Pipeline](Pipeline.md) requires even the empty PipelineLayout to be created since the shaders might use the 
+[DescriptorSets](DescriptorSet.md) and push constants. *The [DescriptorSets](DescriptorSet.md) and push constants can later be 
+read by dispatch or draw calls, but only if the bound [Pipeline](Pipeline.md) being used for the command has a layout that is 
+compatible with the layout that was used to bind the resources. Compatible means that the PipelineLayout must be the same object, 
+or a different layout in which the push constant ranges and [DescriptorSet](DescriptorSet.md) layouts were be identically defined.* 
 
 This excerpt was taken from this site because I don't know how to describe dependencies: 
 [Vulkan Rust Documentation](https://docs.rs/vulkano/latest/vulkano/pipeline/layout/index.html)
@@ -18,3 +19,4 @@ This excerpt was taken from this site because I don't know how to describe depen
 
 - Vulkan Specification: **[PipelineLayout](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#descriptors-pipelinelayout)**
 - Vulkan Documentation: **[PipelineLayout](https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineLayout.html)**
+
