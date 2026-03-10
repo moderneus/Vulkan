@@ -8,5 +8,5 @@ The ShaderModule depends on the [Device](Device.md) since it is allocated from i
 
 # Links
 
-- Vulkan Specification: **[ShaderModule]()**
-- Vulkan Documentation: **[ShaderModule]()**
+- Vulkan Specification: **[ShaderModule](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#shader-modules)**
+- Vulkan Documentation: **[ShaderModule](https://docs.vulkan.org/refpages/latest/refpages/source/VkShaderModule.html)**
