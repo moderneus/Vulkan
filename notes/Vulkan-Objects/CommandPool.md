@@ -5,7 +5,7 @@ allocated many [CommandBuffers](CommandBuffer.md).
 
 # Dependencies
 
-The CommandPool depends on the [Device](Device.md) since it is allocated from it. 
+The CommandPool depends on the [Device](Device.md) since it is allocated from it. The [CommandBuffer](CommandBuffer.md) directly depends on the CommandPool because it allocated from it.
 
 # Links
 
