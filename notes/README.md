@@ -26,6 +26,6 @@ graphics program. Personally I chose Vulkan because I'm interested in full contr
 - **[Pipeline](Vulkan-Objects/Pipeline.md)**
 - **[CommandPool](Vulkan-Objects/CommandPool.md)**
 - **[CommandBuffer](Vulkan-Objects/CommandBuffer.md)**
-- **[VertexBuffer](Vulkan-Objects/VertexBuffer.md)**
+- **[Buffer](Vulkan-Objects/Buffer.md)**
 - **[Semaphore](Vulkan-Objects/Semaphore.md)**
 - **[Fence](Vulkan-Objects/Fence.md)**
