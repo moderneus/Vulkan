@@ -1,13 +1,13 @@
 # What is a Fence?
 
-The Fence is a synchronization mechanism between CPU and GPU operations. It allows the CPU wait before 
-the GPU ends and than continue. The Fence as a Semaphore come in two states: idle and signal. For example:
-the CPU cannot save a screenshot until the [Image](Image.md) is rendered.   
+The Fence is a synchronization mechanism between host (CPU) and device (GPU) operations. It allows the host wait for 
+the device to finish and then continue. The Fence like a Semaphore come in two states: idle and signal. For example:
+the host cannot save a screenshot until the [Image](Image.md) is rendered.   
 
 # Dependencies
 
-The Fence directly depends on the [Device](Device.md) which from it is allocated. The Fence creates
-dependencies itself between CPU and GPU operations.
+The Fence directly depends on the [Device](Device.md) from which it is allocated. The Fence creates
+dependencies itself between host and device operations.
 
 # Links
 
