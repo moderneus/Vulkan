@@ -1,7 +1,7 @@
 # What is an Image?
 
-The Image is just a set of pixels of special format in the GPU memory. An image is where we render. A set of pixels 
-will be colored with specific colors, which will be a frame.
+The Image is just a set of pixels of special format, size, layers count and mip level in the GPU memory. An image is where we render. A set of pixels 
+will be colored with specific colors, which will be a frame. 
 
 # Dependencies
 
