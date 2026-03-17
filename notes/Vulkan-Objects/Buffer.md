@@ -1,6 +1,6 @@
 # What is a Buffer?
 
-The Buffer is a Vulkan object that represents a linear arrays of data for special puproses. The Buffer binds to the [Pipeline](Pipeline.md)
+The Buffer is a Vulkan object that represents the linear arrays of data for special puproses. The Buffer binds to the [Pipeline](Pipeline.md)
 via [DescriptorSet](DescriptorSet.md) and provides the data stored in this Buffer.
 
 # Dependencies
