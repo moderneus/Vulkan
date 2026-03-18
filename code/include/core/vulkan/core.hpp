@@ -36,8 +36,7 @@ struct core {
 	swapchain_state				swp_st;
 	layout					lyt;
 	std::array<shader, 2>			shdrs;
-	vertex_buffer				buf;
-	vertex_buffer_mem			mem;
+	vertex_buffer				buf = {{}, triangle_verts};
 	pipeline				pl;
 	render_pass				rp;
 	command_pool				cmd_pool;

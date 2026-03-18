@@ -23,6 +23,8 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 
 VkCommandBufferAllocateInfo command_buffer_create_alloc_info(const command_pool &pool, const std::vector<command_buffer> &cmds);
 
+void command_buffer_create(command_buffer *cmd, const device &dev, const command_pool &pool);
+
 void command_buffers_create(std::vector<command_buffer> *cmds, const device &dev, const command_pool &pool);
 
 #endif
