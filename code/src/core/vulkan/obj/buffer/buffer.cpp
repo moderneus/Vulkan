@@ -106,6 +106,18 @@ void buffer_memcpy(const buffer &buf, const device &dev, const std::vector<verte
 	log_info("The Vertex Buffer Memory was Copyied.");
 }
 
+void buffer_memcpy(const buffer &buf, const device &dev, const std::vector<uint32_t> &idxs, const VkDeviceSize size)
+{
+	log_info("Copying the Index Buffer Memory...");
+
+	void* data;
+	vkMapMemory(dev.handle, buf.mem, 0, size, 0, &data);
+		memcpy(data, idxs.data(), size);
+	vkUnmapMemory(dev.handle, buf.mem);
+
+	log_info("The Index Buffer Memory was Copyied.");
+}
+
 void buffer_create(buffer *buf, const device &dev, const physical_device &gpu, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags props)
 {
 	log_info("Creating a Vertex Buffer...");

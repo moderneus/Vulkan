@@ -11,6 +11,7 @@ struct render_pass;
 struct pipeline;
 struct command_pool;
 struct vertex_buffer;
+struct index_buffer;
 
 struct command_buffer {
 	VkCommandBuffer handle = VK_NULL_HANDLE;
@@ -19,7 +20,7 @@ struct command_buffer {
 VkCommandBufferBeginInfo command_buffer_create_begin_info();
 
 void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const render_pass &rp, 
-			   const swapchain_state &st, const vertex_buffer &buf, const uint32_t img_idx);
+			   const swapchain_state &st, const vertex_buffer &buf, const index_buffer &idx_buf, const uint32_t img_idx);
 
 VkCommandBufferAllocateInfo command_buffer_create_alloc_info(const command_pool &pool, const std::vector<command_buffer> &cmds);
 

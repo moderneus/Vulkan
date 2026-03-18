@@ -13,10 +13,15 @@ struct vertex {
 	glm::vec3 col;
 };
 
-const std::vector<vertex> triangle_verts = {
-	{{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
-	{{0.5f,  0.5f}, {0.0f, 1.0f, 0.0f}},
-	{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+const std::vector<vertex> rectangle_verts = {
+	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+	{{0.5f, -0.5f},  {0.0f, 1.0f, 0.0f}},
+	{{0.5f, 0.5f},   {0.0f, 0.0f, 1.0f}},
+	{{-0.5f, 0.5f},  {1.0f, 1.0f, 1.0f}}
+};
+
+const std::vector<uint32_t> rectangle_indices = {
+	0, 1, 2, 2, 3, 0
 };
 
 VkVertexInputBindingDescription vertex_get_bind_desc();

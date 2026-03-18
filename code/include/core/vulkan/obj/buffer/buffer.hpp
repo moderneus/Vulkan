@@ -27,6 +27,8 @@ void buffer_malloc(buffer *buf, const device &dev, const physical_device &gpu, c
 
 void buffer_memcpy(const buffer &buf, const device &dev, const std::vector<vertex> &verts, const VkDeviceSize size);
 
+void buffer_memcpy(const buffer &buf, const device &dev, const std::vector<uint32_t> &idxs, const VkDeviceSize size);
+
 void buffer_copy(const buffer &src_buf, const buffer &dst_buf, const device &dev, const queue &q, const command_pool &pool, const VkDeviceSize size);
 
 void buffer_create(buffer *buf, const device &dev, const physical_device &gpu, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags props);

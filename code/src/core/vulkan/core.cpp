@@ -23,6 +23,7 @@ void core_init(core *c, const window &win)
 	command_pool_create(&c->cmd_pool, c->dev, c->q_idx);
 	command_buffers_create(&c->cmds, c->dev, c->cmd_pool);
 	vertex_buffer_create(&c->buf, c->dev, c->gpu, c->q, c->cmd_pool);
+	index_buffer_create(&c->idx_buf, c->dev, c->gpu, c->q, c->cmd_pool);
 	semaphores_create(&c->img_avail_sems, c->dev);
 	semaphores_create(&c->rnd_done_sems, c->dev);
 	fences_create(&c->frm_fences, c->dev);
@@ -37,6 +38,7 @@ void core_destroy(core *c)
 	fences_destroy(c->frm_fences, c->dev);
 	semaphores_destroy(c->rnd_done_sems, c->dev);
 	semaphores_destroy(c->img_avail_sems, c->dev);
+	index_buffer_destroy(c->idx_buf, c->dev);
 	vertex_buffer_destroy(c->buf, c->dev);
 	command_pool_destroy(c->cmd_pool, c->dev);
 	framebuffers_destroy(c->swp_st, c->dev);

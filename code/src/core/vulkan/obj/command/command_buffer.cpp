@@ -5,6 +5,7 @@
 #include "core/vulkan/obj/device/device.hpp"
 #include "core/vulkan/obj/buffer/vertex.hpp"
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
+#include "core/vulkan/obj/buffer/index_buffer.hpp"
 #include "util/debug/log.hpp"
 #include "util/constants.hpp"
 
@@ -20,7 +21,7 @@ VkCommandBufferBeginInfo command_buffer_create_begin_info()
 }
 
 void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const render_pass &rp, 
-			   const swapchain_state &st, const vertex_buffer &buf, const uint32_t img_idx)
+			   const swapchain_state &st, const vertex_buffer &buf, const index_buffer &idx_buf, const uint32_t img_idx)
 {
 	VkCommandBufferBeginInfo cmd_begin = command_buffer_create_begin_info();
 
@@ -40,9 +41,11 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 
 		std::array<VkBuffer, 1> bufs = {buf.vbuf.handle};
 		std::array<VkDeviceSize, 1> offsets = {0};
-		vkCmdBindVertexBuffers(cmd.handle, 0, 1, bufs.data(), offsets.data());
 
-		vkCmdDraw(cmd.handle, static_cast<uint32_t>(triangle_verts.size()), 1, 0, 0);
+		vkCmdBindVertexBuffers(cmd.handle, 0, 1, bufs.data(), offsets.data());
+		vkCmdBindIndexBuffer(cmd.handle, idx_buf.ibuf.handle, 0, VK_INDEX_TYPE_UINT32);
+
+		vkCmdDrawIndexed(cmd.handle, static_cast<uint32_t>(rectangle_indices.size()), 1, 0, 0, 0);
 
 	vkCmdEndRenderPass(cmd.handle);
 
