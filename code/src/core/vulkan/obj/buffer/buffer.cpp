@@ -94,26 +94,24 @@ void buffer_copy(const buffer &src_buf, const buffer &dst_buf, const device &dev
 	vkFreeCommandBuffers(dev.handle, pool.handle, 1, &cmd.handle);
 }
 
-void buffer_memcpy(const buffer &buf, const device &dev, const std::vector<vertex> &verts, const VkDeviceSize size)
+void buffer_memcpy(buffer *buf, const device &dev, const std::vector<vertex> &verts, const VkDeviceSize size)
 {
 	log_info("Copying the Vertex Buffer Memory...");
 
-	void* data;
-	vkMapMemory(dev.handle, buf.mem, 0, size, 0, &data);
-		memcpy(data, verts.data(), size);
-	vkUnmapMemory(dev.handle, buf.mem);
+	vkMapMemory(dev.handle, buf->mem, 0, size, 0, &buf->data);
+		memcpy(buf->data, verts.data(), size);
+	vkUnmapMemory(dev.handle, buf->mem);
 
 	log_info("The Vertex Buffer Memory was Copyied.");
 }
 
-void buffer_memcpy(const buffer &buf, const device &dev, const std::vector<uint32_t> &idxs, const VkDeviceSize size)
+void buffer_memcpy(buffer *buf, const device &dev, const std::vector<uint32_t> &idxs, const VkDeviceSize size)
 {
 	log_info("Copying the Index Buffer Memory...");
 
-	void* data;
-	vkMapMemory(dev.handle, buf.mem, 0, size, 0, &data);
-		memcpy(data, idxs.data(), size);
-	vkUnmapMemory(dev.handle, buf.mem);
+	vkMapMemory(dev.handle, buf->mem, 0, size, 0, &buf->data);
+		memcpy(buf->data, idxs.data(), size);
+	vkUnmapMemory(dev.handle, buf->mem);
 
 	log_info("The Index Buffer Memory was Copyied.");
 }

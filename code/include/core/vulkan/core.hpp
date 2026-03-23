@@ -11,6 +11,8 @@
 #include "core/vulkan/obj/pipeline/layout.hpp"
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
 #include "core/vulkan/obj/buffer/index_buffer.hpp"
+#include "core/vulkan/obj/buffer/uniform_buffer.hpp"
+#include "core/vulkan/obj/descriptor/set_layout.hpp"
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
 #include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
@@ -37,8 +39,10 @@ struct core {
 	swapchain_state				swp_st;
 	layout					lyt;
 	std::array<shader, 2>			shdrs;
-	vertex_buffer				buf = {{}, rectangle_verts};
+	vertex_buffer				vert_buf = {{}, rectangle_verts};
 	index_buffer				idx_buf = {{}, rectangle_indices};
+	std::vector<uniform_buffer>		uniform_bufs;
+	descriptor_set_layout			set_lyt = {{}, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER};
 	pipeline				pl;
 	render_pass				rp;
 	command_pool				cmd_pool;

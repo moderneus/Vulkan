@@ -74,7 +74,7 @@ void device_create(device *dev, queue *q, const queue_indices &q_idx, const phys
 	VkDeviceCreateInfo info = device_create_info(q_infos, features);
 
 	if (vkCreateDevice(gpu.handle, &info, nullptr, &dev->handle) != VK_SUCCESS)
-		log_critical("Failed to Create the Logical Device!");
+		log_critical("Failed to Create the Logical Device.");
 
 	vkGetDeviceQueue(dev->handle, q_idx.gfx.value(), 0, &q->gfx);
 	vkGetDeviceQueue(dev->handle, q_idx.pres.value(), 0, &q->pres);

@@ -13,8 +13,9 @@ struct device;
 struct queue;
 
 struct buffer {
-	VkBuffer handle = VK_NULL_HANDLE;
-	VkDeviceMemory mem = VK_NULL_HANDLE;
+	VkBuffer		handle = VK_NULL_HANDLE;
+	VkDeviceMemory		mem = VK_NULL_HANDLE;
+	void			*data;
 };
 
 VkBufferCreateInfo buffer_create_info(const VkDeviceSize size, const VkBufferUsageFlags usage);
@@ -25,9 +26,9 @@ VkMemoryAllocateInfo buffer_create_alloc_info(const physical_device &gpu, const 
 
 void buffer_malloc(buffer *buf, const device &dev, const physical_device &gpu, const VkMemoryPropertyFlags props);
 
-void buffer_memcpy(const buffer &buf, const device &dev, const std::vector<vertex> &verts, const VkDeviceSize size);
+void buffer_memcpy(buffer *buf, const device &dev, const std::vector<vertex> &verts, const VkDeviceSize size);
 
-void buffer_memcpy(const buffer &buf, const device &dev, const std::vector<uint32_t> &idxs, const VkDeviceSize size);
+void buffer_memcpy(buffer *buf, const device &dev, const std::vector<uint32_t> &idxs, const VkDeviceSize size);
 
 void buffer_copy(const buffer &src_buf, const buffer &dst_buf, const device &dev, const queue &q, const command_pool &pool, const VkDeviceSize size);
 

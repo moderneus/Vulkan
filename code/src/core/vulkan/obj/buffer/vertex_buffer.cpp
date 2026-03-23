@@ -7,7 +7,7 @@ void vertex_buffer_create(vertex_buffer *buf, const device &dev, const physical_
 	buffer staging_buf = {};
 	buffer_create(&staging_buf, dev, gpu, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-	buffer_memcpy(staging_buf, dev, buf->data, size);
+	buffer_memcpy(&staging_buf, dev, buf->data, size);
 
 	buffer_create(&buf->vbuf, dev, gpu, size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 

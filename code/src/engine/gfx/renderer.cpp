@@ -52,10 +52,12 @@ void renderer_draw(const renderer &r, renderer_state *st, core *c)
 		log_critical("Failed to Acquire Swapchain Image.");
 	}
 
+	uniform_buffer_update(&c->uniform_bufs, c->swp_st, st->frame);
+	
 	vkResetFences(c->dev.handle, 1, &c->frm_fences[st->frame].handle);
 
 	vkResetCommandBuffer(c->cmds[st->frame].handle, 0);
-	command_buffer_record(c->cmds[st->frame], c->pl, c->rp, c->swp_st, c->buf, c->idx_buf, img_idx);
+	command_buffer_record(c->cmds[st->frame], c->pl, c->rp, c->swp_st, c->vert_buf, c->idx_buf, img_idx);
 
 	std::array<VkSemaphore, 1> waits = {c->img_avail_sems[st->frame].handle};
 	std::array<VkPipelineStageFlags, 1> stages = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
