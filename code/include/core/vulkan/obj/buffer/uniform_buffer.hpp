@@ -8,10 +8,10 @@
 struct swapchain_state;
 
 struct uniform_buffer {
-	buffer ubuf;
 	glm::mat4 model;
 	glm::mat4 view;
 	glm::mat4 proj;
+	buffer ubuf;
 };
 
 void uniform_buffer_create(std::vector<uniform_buffer> *bufs, const device &dev, const physical_device &gpu);

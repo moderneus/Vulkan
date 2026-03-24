@@ -1,5 +1,5 @@
-#ifndef MOD_SET_LAYOUT_HPP
-#define MOD_SET_LAYOUT_HPP
+#ifndef MOD_DESCRIPTOR_SET_LAYOUT_HPP
+#define MOD_DESCRIPTOR_SET_LAYOUT_HPP
 
 struct device;
 

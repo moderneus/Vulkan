@@ -9,7 +9,7 @@
 #include <array>
 
 struct swapchain_state;
-struct layout;
+struct pipeline_layout;
 struct render_pass;
 struct device;
 
@@ -67,9 +67,9 @@ VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info();
 
 VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipeline_config &cfg);
 
-VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const layout &lyt, const render_pass &rp);
+VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const pipeline_layout &lyt, const render_pass &rp);
 
-void pipeline_create(pipeline *pl, const device &dev, const layout &lyt, const render_pass &rp, 
+void pipeline_create(pipeline *pl, const device &dev, const pipeline_layout &lyt, const render_pass &rp, 
 		     const swapchain_state &st, const std::array<shader, 2> &shdrs);
 
 void pipeline_destroy(const pipeline &pl, const device &dev);

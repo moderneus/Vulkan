@@ -1,5 +1,5 @@
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
-#include "core/vulkan/obj/pipeline/layout.hpp"
+#include "core/vulkan/obj/pipeline/pipeline_layout.hpp"
 #include "core/vulkan/obj/pipeline/shader.hpp"
 #include "core/vulkan/obj/swapchain/swapchain.hpp"
 #include "core/vulkan/obj/device/device.hpp"
@@ -159,7 +159,7 @@ VkPipelineRasterizationStateCreateInfo pipeline_create_rast_info()
 	info.polygonMode = VK_POLYGON_MODE_FILL;
 	info.lineWidth = 1.0f;
 	info.cullMode = VK_CULL_MODE_BACK_BIT;
-	info.frontFace = VK_FRONT_FACE_CLOCKWISE;
+	info.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 	info.depthBiasEnable = VK_FALSE;
 	info.depthBiasConstantFactor = 0.0f;
 	info.depthBiasClamp = 0.0f;
@@ -205,7 +205,7 @@ VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipelin
 	return info;
 }
 
-VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const layout &lyt, const render_pass &rp)
+VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const pipeline_layout &lyt, const render_pass &rp)
 {
 	log_info("Creating the Pipeline Info...");
 
@@ -230,7 +230,7 @@ VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, 
 	return info;
 }
 
-void pipeline_create(pipeline *pl, const device &dev, const layout &lyt, const render_pass &rp, 
+void pipeline_create(pipeline *pl, const device &dev, const pipeline_layout &lyt, const render_pass &rp, 
 		     const swapchain_state &st, const std::array<shader, 2> &shdrs)
 {
 	log_info("Creating a Pipeline...");

@@ -44,6 +44,7 @@ VkMemoryAllocateInfo buffer_create_alloc_info(const physical_device &gpu, const 
 	info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	info.allocationSize = reqs.size;
 	info.memoryTypeIndex = physical_device_find_mem_type(gpu, reqs.memoryTypeBits, props);
+
 	log_info("The Vertex Buffer Allocation Info was Created.");
 
 	return info;

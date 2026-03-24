@@ -18,7 +18,7 @@ void core_init(core *c, const window &win)
 	render_pass_create(&c->rp, c->dev, c->swp_st);
 	shaders_create(&c->shdrs, c->dev);
 	descriptor_set_layout_create(&c->set_lyt, c->dev);
-	layout_create(&c->lyt, c->dev, c->set_lyt);
+	pipeline_layout_create(&c->lyt, c->dev, c->set_lyt);
 	pipeline_create(&c->pl, c->dev, c->lyt, c->rp, c->swp_st, c->shdrs);
 	framebuffers_create(&c->swp_st, c->dev, c->rp);
 	command_pool_create(&c->cmd_pool, c->dev, c->q_idx);
@@ -26,6 +26,8 @@ void core_init(core *c, const window &win)
 	vertex_buffer_create(&c->vert_buf, c->dev, c->gpu, c->q, c->cmd_pool);
 	index_buffer_create(&c->idx_buf, c->dev, c->gpu, c->q, c->cmd_pool);
 	uniform_buffer_create(&c->uniform_bufs, c->dev, c->gpu);
+	descriptor_pool_create(&c->set_pool, c->dev);
+	descriptor_sets_create(&c->sets, c->dev, c->set_pool, c->set_lyt, c->uniform_bufs);
 	semaphores_create(&c->img_avail_sems, c->dev);
 	semaphores_create(&c->rnd_done_sems, c->dev);
 	fences_create(&c->frm_fences, c->dev);
@@ -40,6 +42,7 @@ void core_destroy(core *c)
 	fences_destroy(c->frm_fences, c->dev);
 	semaphores_destroy(c->rnd_done_sems, c->dev);
 	semaphores_destroy(c->img_avail_sems, c->dev);
+	descriptor_pool_destroy(c->set_pool, c->dev);
 	uniform_buffer_destroy(c->uniform_bufs, c->dev);
 	index_buffer_destroy(c->idx_buf, c->dev);
 	vertex_buffer_destroy(c->vert_buf, c->dev);
@@ -49,7 +52,7 @@ void core_destroy(core *c)
 	descriptor_set_layout_destroy(c->set_lyt, c->dev);
 	shaders_destroy(c->shdrs, c->dev);
 	render_pass_destroy(c->rp, c->dev);
-	layout_destroy(c->lyt, c->dev);
+	pipeline_layout_destroy(c->lyt, c->dev);
 	image_views_destroy(c->swp_st, c->dev);
 	swapchain_destroy(c->swp, c->dev);
 	device_destroy(c->dev);

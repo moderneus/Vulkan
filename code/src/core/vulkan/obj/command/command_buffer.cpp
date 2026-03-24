@@ -1,11 +1,13 @@
 #include "core/vulkan/obj/command/command_buffer.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
+#include "core/vulkan/obj/pipeline/pipeline_layout.hpp"
 #include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
 #include "core/vulkan/obj/device/device.hpp"
 #include "core/vulkan/obj/buffer/vertex.hpp"
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
 #include "core/vulkan/obj/buffer/index_buffer.hpp"
+#include "core/vulkan/obj/descriptor/descriptor_set.hpp"
 #include "util/debug/log.hpp"
 #include "util/constants.hpp"
 
@@ -20,8 +22,8 @@ VkCommandBufferBeginInfo command_buffer_create_begin_info()
 	return info;
 }
 
-void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const render_pass &rp, 
-			   const swapchain_state &st, const vertex_buffer &buf, const index_buffer &idx_buf, const uint32_t img_idx)
+void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const pipeline_layout &lyt, const render_pass &rp, 
+			   const swapchain_state &st, const vertex_buffer &buf, const index_buffer &idx_buf, const descriptor_set &set, const uint32_t img_idx)
 {
 	VkCommandBufferBeginInfo cmd_begin = command_buffer_create_begin_info();
 
@@ -44,6 +46,8 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 
 		vkCmdBindVertexBuffers(cmd.handle, 0, 1, bufs.data(), offsets.data());
 		vkCmdBindIndexBuffer(cmd.handle, idx_buf.ibuf.handle, 0, VK_INDEX_TYPE_UINT32);
+
+		vkCmdBindDescriptorSets(cmd.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, lyt.handle, 0, 1, &set.handle, 0, nullptr);
 
 		vkCmdDrawIndexed(cmd.handle, static_cast<uint32_t>(rectangle_indices.size()), 1, 0, 0, 0);
 
