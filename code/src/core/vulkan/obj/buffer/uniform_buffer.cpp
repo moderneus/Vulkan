@@ -2,6 +2,7 @@
 #include "core/vulkan/obj/swapchain/swapchain.hpp"
 #include "core/vulkan/obj/device/device.hpp"
 #include "util/constants.hpp"
+#include "util/debug/log.hpp"
 
 #define GLM_FORCE_RADIANS
 
@@ -12,6 +13,8 @@
 
 void uniform_buffer_create(std::vector<uniform_buffer> *bufs, const device &dev, const physical_device &gpu)
 {
+	log_info("Creating the Uniform Buffers...");
+
 	VkDeviceSize size = sizeof(uniform_buffer) - sizeof(buffer);
 
 	bufs->resize(MAX_FRAMES_IN_FLIGHT);
@@ -21,12 +24,18 @@ void uniform_buffer_create(std::vector<uniform_buffer> *bufs, const device &dev,
 
 		vkMapMemory(dev.handle, bufs->data()[i].ubuf.mem, 0, size, 0, &bufs->data()[i].ubuf.data);
 	}
+
+	log_info("The Uniform Buffers were Created.");
 }
 
 void uniform_buffer_destroy(const std::vector<uniform_buffer> &bufs, const device &dev)
 {
+	log_info("Destroying the Uniform Buffers...");
+
 	for(uint32_t i = 0; i < bufs.size(); ++i)
 		buffer_destroy(bufs[i].ubuf, dev);
+
+	log_info("The Uniform Buffers were Destroyed.");
 }
 
 void uniform_buffer_update(std::vector<uniform_buffer> *bufs, const swapchain_state &st, uint32_t frame)

@@ -52,7 +52,7 @@ VkMemoryAllocateInfo buffer_create_alloc_info(const physical_device &gpu, const 
 
 void buffer_malloc(buffer *buf, const device &dev, const physical_device &gpu, const VkMemoryPropertyFlags props)
 {
-	log_info("Allocation the Vertex Buffer Memory...");
+	log_info("Allocating the Vertex Buffer Memory...");
 
 	VkMemoryRequirements reqs = buffer_get_mem_reqs(*buf, dev);
 	VkMemoryAllocateInfo info = buffer_create_alloc_info(gpu, reqs, props);
@@ -65,6 +65,8 @@ void buffer_malloc(buffer *buf, const device &dev, const physical_device &gpu, c
 
 void buffer_copy(const buffer &src_buf, const buffer &dst_buf, const device &dev, const queue &q, const command_pool &pool, const VkDeviceSize size)
 {
+	log_info("Copying the Buffer...");
+
 	VkCommandBufferAllocateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -93,6 +95,8 @@ void buffer_copy(const buffer &src_buf, const buffer &dst_buf, const device &dev
 	vkQueueWaitIdle(q.gfx);
 
 	vkFreeCommandBuffers(dev.handle, pool.handle, 1, &cmd.handle);
+
+	log_info("The Buffer was Copied.");
 }
 
 void buffer_memcpy(buffer *buf, const device &dev, const std::vector<vertex> &verts, const VkDeviceSize size)

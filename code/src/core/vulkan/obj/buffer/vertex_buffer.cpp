@@ -1,7 +1,10 @@
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
+#include "util/debug/log.hpp"
 
 void vertex_buffer_create(vertex_buffer *buf, const device &dev, const physical_device &gpu, const queue &q, const command_pool &pool)
 {
+	log_info("Creating a Vertex Buffer...");
+
 	VkDeviceSize size = sizeof(buf->data[0]) * buf->data.size();
 
 	buffer staging_buf = {};
@@ -14,9 +17,18 @@ void vertex_buffer_create(vertex_buffer *buf, const device &dev, const physical_
 	buffer_copy(staging_buf, buf->vbuf, dev, q, pool, size);
 
 	buffer_destroy(staging_buf, dev);
+
+	log_info("The Vertex Buffer was Created.");
 }
 
 void vertex_buffer_destroy(const vertex_buffer &buf, const device &dev)
 {
+	log_info("Destroying the Vertex Buffer...");
+
+	if (buf.vbuf.handle == VK_NULL_HANDLE)
+		log_error("Cannnot Destroy the Vertex Buffer::Vertex Buffer is not Created.");
+
 	buffer_destroy(buf.vbuf, dev);
+
+	log_info("The Vertex Buffer was Destroyed.");
 }
