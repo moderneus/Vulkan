@@ -5,7 +5,10 @@
 #include "core/vulkan/obj/device/physical_device.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
 #include "core/vulkan/obj/command/command_buffer.hpp"
+#include "core/vulkan/obj/image/image.hpp"
 #include "util/debug/log.hpp"
+
+#include "stbi_image.h"
 
 #include <cstring>
 
@@ -104,7 +107,7 @@ void buffer_memcpy(buffer *buf, const device &dev, const std::vector<vertex> &ve
 	log_info("Copying the Vertex Buffer Memory...");
 
 	vkMapMemory(dev.handle, buf->mem, 0, size, 0, &buf->data);
-		memcpy(buf->data, verts.data(), size);
+		memcpy(buf->data, verts.data(), static_cast<size_t>(size));
 	vkUnmapMemory(dev.handle, buf->mem);
 
 	log_info("The Vertex Buffer Memory was Copyied.");
@@ -115,10 +118,21 @@ void buffer_memcpy(buffer *buf, const device &dev, const std::vector<uint32_t> &
 	log_info("Copying the Index Buffer Memory...");
 
 	vkMapMemory(dev.handle, buf->mem, 0, size, 0, &buf->data);
-		memcpy(buf->data, idxs.data(), size);
+		memcpy(buf->data, idxs.data(), static_cast<size_t>(size));
 	vkUnmapMemory(dev.handle, buf->mem);
 
 	log_info("The Index Buffer Memory was Copyied.");
+}
+
+void buffer_memcpy(buffer *buf, const device &dev, const image &img, const VkDeviceSize)
+{
+	log_info("Copying the Image...");
+
+	vkMapMemory(dev.handle, buf->mem, 0, size, 0, &buf->data);
+		memcpy(buf->data, img.data, static_cast<size_t>(size));
+	vkUnmapMemory(dev.handle, buf->mem);
+
+	log_info("The Image was Copyied.");
 }
 
 void buffer_create(buffer *buf, const device &dev, const physical_device &gpu, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags props)

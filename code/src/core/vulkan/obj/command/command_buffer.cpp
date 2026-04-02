@@ -87,3 +87,30 @@ void command_buffers_create(std::vector<command_buffer> *cmds, const device &dev
 
 	log_info("The Command Buffer was Created.");
 }
+
+command_buffer command_buffer_begin_single_time_cmds(const device &dev, const command_pool &pool)
+{
+	VkCommandBufferAllocateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	info.commandPool = pool.handle;
+	info.commandBufferCount = 1;
+	
+	command_buffer cmd;
+	vkAllocateCommandBuffers(dev.handle, &info, &cmd.handle);
+
+	VkCommandBufferBeginInfo begin_info = {};
+	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+	vkBeginCommandBuffer(cmd.handle, &begin_info);
+
+	return cmd;
+}
+
+void command_buffer_end_single_time_cmds(const command_buffer &cmd, const device &dev, const command_pool &pool, const queue &q)
+{
+	vkEndCommandBuffer(cmd.handle);
+
+	VkSubmitInfo 
+}
