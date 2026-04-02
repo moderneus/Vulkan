@@ -9,6 +9,6 @@ struct memory_barrier {
 	VkImageMemoryBarrier info = {};
 };
 
-void memory_barrier_create(memory_barrier *bar, const image &img, const VkImageLayout &old_lyt, const VkImageLayout &new_lyt, VkPipelineStateFlags *src_stage, VkPipelineStateFlags *dst_stage);
+void memory_barrier_create(memory_barrier *bar, const image &img, const VkImageLayout &old_lyt, const VkImageLayout &new_lyt, VkPipelineStageFlags *src_stage, VkPipelineStageFlags *dst_stage);
 
 #endif

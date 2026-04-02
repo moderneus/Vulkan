@@ -1,13 +1,14 @@
 #include "core/vulkan/obj/command/command_buffer.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
 #include "core/vulkan/obj/pipeline/pipeline_layout.hpp"
-#include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
 #include "core/vulkan/obj/device/device.hpp"
+#include "core/vulkan/obj/device/queue.hpp"
 #include "core/vulkan/obj/buffer/vertex.hpp"
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
 #include "core/vulkan/obj/buffer/index_buffer.hpp"
 #include "core/vulkan/obj/descriptor/descriptor_set.hpp"
+#include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "util/debug/log.hpp"
 #include "util/constants.hpp"
 
@@ -112,5 +113,13 @@ void command_buffer_end_single_time_cmds(const command_buffer &cmd, const device
 {
 	vkEndCommandBuffer(cmd.handle);
 
-	VkSubmitInfo 
+	VkSubmitInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	info.commandBufferCount = 1;
+	info.pCommandBuffers = &cmd.handle;
+
+	vkQueueSubmit(q.gfx, 1, &info, VK_NULL_HANDLE);
+	vkQueueWaitIdle(q.gfx);
+
+	vkFreeCommandBuffers(dev.handle, pool.handle, 1, &cmd.handle);
 }

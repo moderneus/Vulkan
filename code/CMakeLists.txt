@@ -22,7 +22,7 @@ file(GLOB_RECURSE SRC "src/*.cpp")
 
 add_executable(${TARGET} ${SRC})
 
-target_compile_options(${TARGET} PRIVATE -g -std=c++20 -O1 -Wall -Wextra -Wpedantic -frtti -fexceptions)
+target_compile_options(${TARGET} PRIVATE -std=c++20 -O1 -Wall -Wextra -Wpedantic -frtti -fexceptions)
 target_include_directories(${TARGET} PRIVATE include libs/SDL/include libs/fmt/include libs/glm libs/stb)
 target_link_libraries(${TARGET} PRIVATE SDL3::SDL3 fmt::fmt Vulkan::Vulkan)
 

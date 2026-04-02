@@ -1,14 +1,16 @@
 #include "core/vulkan/obj/image/texture.hpp"
 #include "core/vulkan/obj/image/image.hpp"
+#include "core/vulkan/obj/buffer/buffer.hpp"
 #include "util/debug/log.hpp"
+
+#define STB_IMAGE_IMPLEMENTATION
 
 #include "stb_image.h"
 
-#include <string>
 
-void texture_create(texture *tex, const device &dev, const physical_device &gpu, const std::string &path)
+void texture_create(texture *tex, const device &dev, const physical_device &gpu, const queue &q, const command_pool &pool, const uint32_t w, const uint32_t h, const std::string &path)
 {
-	stbi_uc *pixels = stbi_load(path.c_str(), &tex->img.width, &tex->img.height, &tex->img.channels, STBI_rgb_alpha);
+	stbi_uc *pixels = stbi_load(path.c_str(), reinterpret_cast<int*>(&tex->img.width), reinterpret_cast<int*>(&tex->img.height), reinterpret_cast<int*>(&tex->img.channels), STBI_rgb_alpha);
 
 	if (!pixels)
 		log_error("Failed to Load Texture by path: ", path);
@@ -25,8 +27,18 @@ void texture_create(texture *tex, const device &dev, const physical_device &gpu,
 
 	tex->img.fmt = VK_FORMAT_R8G8B8A8_SRGB;
 	tex->img.tiling = VK_IMAGE_TILING_OPTIMAL;
-	tex->img.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED;
+	tex->img.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	tex->img.width = w;
+	tex->img.height = h;
 	image_create(&tex->img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+	image_transition_layout(tex->img, dev, q, pool, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+		buffer_copy_to_image(staging_buf, tex->img, dev, pool, q);
+
+	image_transition_layout(tex->img, dev, q, pool, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+	buffer_destroy(staging_buf, dev);
 }
 
 void texture_destroy(const texture &tex, const device &dev)

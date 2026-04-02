@@ -7,7 +7,7 @@
 
 VkMemoryAllocateInfo image_create_alloc_info(const physical_device &gpu, const VkMemoryRequirements &reqs, const VkMemoryPropertyFlags &props)
 {
-	VkMemoryAllocate info = {};
+	VkMemoryAllocateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	info.allocationSize = reqs.size;
 	info.memoryTypeIndex = physical_device_find_mem_type(gpu, reqs.memoryTypeBits, props);
@@ -37,18 +37,18 @@ void image_create(image *img, const device &dev, const physical_device &gpu, con
 {
 	VkImageCreateInfo info = image_create_info(*img);
 
-	if (vkCreateImage(dev.handle, &info, nullptr, &img->handle) != VK_SUCESS)
+	if (vkCreateImage(dev.handle, &info, nullptr, &img->handle) != VK_SUCCESS)
 		log_error("Failed to Create the Image.");
 
 	VkMemoryRequirements reqs;
-	vkGetImageMemoryRequirements(dev.handle, img.handle, &reqs);
+	vkGetImageMemoryRequirements(dev.handle, img->handle, &reqs);
 
 	VkMemoryAllocateInfo alloc_info = image_create_alloc_info(gpu, reqs, props);
 
 	if (vkAllocateMemory(dev.handle, &alloc_info, nullptr, &img->mem) != VK_SUCCESS)
 		log_error("Failed to Allocate the Image Memory");
 
-	vkBindImageMemory(dev.handle, img.handle, img.mem, 0);
+	vkBindImageMemory(dev.handle, img->handle, img->mem, 0);
 }
 
 void image_destroy(const image &img, const device &dev)
@@ -59,13 +59,13 @@ void image_destroy(const image &img, const device &dev)
 
 void image_transition_layout(const image &img, const device &dev, const queue &q, const command_pool &pool, const VkImageLayout &old_lyt, const VkImageLayout &new_lyt)
 {
-	VkPipelineStateFlags src_stage;
-	VkPipelineStateFlags dst_stage;
+	VkPipelineStageFlags src_stage;
+	VkPipelineStageFlags dst_stage;
 
 	memory_barrier bar = {};
 	memory_barrier_create(&bar, img, old_lyt, new_lyt, &src_stage, &dst_stage);
 
-	command_buffer cmd = command_buffer_begin_single_time_cmds(dev);
-		VkCmdPipelineBarrier(cmd.handle, src_stage, dst_stage, 0, nullptr, 0, nullptr, 1, &bar.info);
+	command_buffer cmd = command_buffer_begin_single_time_cmds(dev, pool);
+		vkCmdPipelineBarrier(cmd.handle, src_stage, dst_stage, 0, 0, nullptr, 0, nullptr, 1, &bar.info);
 	command_buffer_end_single_time_cmds(cmd, dev, pool, q);
 }

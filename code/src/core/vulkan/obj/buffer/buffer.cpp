@@ -8,7 +8,7 @@
 #include "core/vulkan/obj/image/image.hpp"
 #include "util/debug/log.hpp"
 
-#include "stbi_image.h"
+#include "stb_image.h"
 
 #include <cstring>
 
@@ -70,36 +70,36 @@ void buffer_copy(const buffer &src_buf, const buffer &dst_buf, const device &dev
 {
 	log_info("Copying the Buffer...");
 
-	VkCommandBufferAllocateInfo info = {};
-	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	info.commandPool = pool.handle;
-	info.commandBufferCount = 1;
+	command_buffer cmd = command_buffer_begin_single_time_cmds(dev, pool);
 
-	command_buffer cmd;
-	vkAllocateCommandBuffers(dev.handle, &info, &cmd.handle);
-
-	VkCommandBufferBeginInfo begin_info = {};
-	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-	vkBeginCommandBuffer(cmd.handle, &begin_info);
 		VkBufferCopy copy_region = {};
 		copy_region.size = size;
+
 		vkCmdCopyBuffer(cmd.handle, src_buf.handle, dst_buf.handle, 1, &copy_region);
-	vkEndCommandBuffer(cmd.handle);
 
-	VkSubmitInfo submit_info = {};
-	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	submit_info.commandBufferCount = 1;
-	submit_info.pCommandBuffers = &cmd.handle;
-
-	vkQueueSubmit(q.gfx, 1, &submit_info, VK_NULL_HANDLE);
-	vkQueueWaitIdle(q.gfx);
-
-	vkFreeCommandBuffers(dev.handle, pool.handle, 1, &cmd.handle);
+	command_buffer_end_single_time_cmds(cmd, dev, pool, q);
 
 	log_info("The Buffer was Copied.");
+}
+
+void buffer_copy_to_image(const buffer &buf, const image &img, const device &dev, const command_pool &pool, const queue &q)
+{
+	command_buffer cmd = command_buffer_begin_single_time_cmds(dev, pool);
+
+	VkBufferImageCopy region = {};
+	region.bufferOffset = 0;
+	region.bufferRowLength = 0;
+	region.bufferImageHeight = 0;
+	region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	region.imageSubresource.mipLevel = 0;
+	region.imageSubresource.baseArrayLayer = 0;
+	region.imageSubresource.layerCount = 1;
+	region.imageOffset = {0, 0, 0};
+	region.imageExtent = {img.width, img.height, 1};
+
+	vkCmdCopyBufferToImage(cmd.handle, buf.handle, img.handle, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+	
+	command_buffer_end_single_time_cmds(cmd, dev, pool, q);
 }
 
 void buffer_memcpy(buffer *buf, const device &dev, const std::vector<vertex> &verts, const VkDeviceSize size)
@@ -124,7 +124,7 @@ void buffer_memcpy(buffer *buf, const device &dev, const std::vector<uint32_t> &
 	log_info("The Index Buffer Memory was Copyied.");
 }
 
-void buffer_memcpy(buffer *buf, const device &dev, const image &img, const VkDeviceSize)
+void buffer_memcpy(buffer *buf, const device &dev, const image &img, const VkDeviceSize size)
 {
 	log_info("Copying the Image...");
 

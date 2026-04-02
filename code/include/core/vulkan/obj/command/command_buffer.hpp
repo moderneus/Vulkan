@@ -6,6 +6,7 @@
 #include <vector>
 
 struct device;
+struct queue;
 struct swapchain_state;
 struct pipeline_layout;
 struct descriptor_set;
@@ -30,7 +31,7 @@ void command_buffer_create(command_buffer *cmd, const device &dev, const command
 
 void command_buffers_create(std::vector<command_buffer> *cmds, const device &dev, const command_pool &pool);
 
-command_buffer command_buffer_begin_single_time_cmds(const device &dev);
+command_buffer command_buffer_begin_single_time_cmds(const device &dev, const command_pool &pool);
 
 void command_buffer_end_single_time_cmds(const command_buffer &cmd, const device &dev, const command_pool &pool, const queue &q);
 
