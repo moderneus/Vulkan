@@ -1,6 +1,5 @@
 #include "core/vulkan/obj/swapchain/swapchain.hpp"
 #include "core/vulkan/obj/swapchain/framebuffer.hpp"
-#include "core/vulkan/obj/swapchain/image_view.hpp"
 #include "core/vulkan/obj/device/queue_indices.hpp"
 #include "core/vulkan/obj/device/device.hpp"
 #include "core/vulkan/obj/device/physical_device.hpp"
@@ -156,14 +155,22 @@ VkSwapchainCreateInfoKHR swapchain_create_info(const queue_indices &q_idx, const
 void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, const VkSurfaceFormatKHR &fmt, 
 			   const VkExtent2D &extent)
 {
-	st->fmt = fmt.format;
-	st->extent = extent;
-
 	uint32_t img_cnt = 0;
 	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, nullptr);
 
+	std::vector<VkImage> tmp_imgs(img_cnt);
+	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, tmp_imgs.data());
+
 	st->imgs.resize(img_cnt);
-	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, st->imgs.data());
+
+	for(uint32_t i = 0; i < img_cnt; ++i)
+		st->imgs[i].handle = tmp_imgs[i];
+
+	for(uint32_t i = 0; i < img_cnt; ++i)
+		st->imgs[i].fmt = fmt.format;
+
+	for(uint32_t i = 0; i < img_cnt; ++i)
+		st->imgs[i].extent = extent;
 }
 
 void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, const render_pass &rp, 

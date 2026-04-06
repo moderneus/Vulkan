@@ -48,7 +48,7 @@ void uniform_buffer_update(std::vector<uniform_buffer> *bufs, const swapchain_st
 	uniform_buffer ubo = {};
 	ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	ubo.proj = glm::perspective(glm::radians(45.0f), st.extent.width / static_cast<float>(st.extent.height), 0.1f, 10.0f);
+	ubo.proj = glm::perspective(glm::radians(45.0f), st.imgs[0].extent.width / static_cast<float>(st.imgs[0].extent.height), 0.1f, 10.0f);
 	ubo.proj[1][1] *= -1;
 
 	memcpy(bufs->data()[frame].ubuf.data, &ubo, sizeof(ubo));

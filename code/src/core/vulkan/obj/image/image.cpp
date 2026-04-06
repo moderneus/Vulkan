@@ -19,8 +19,8 @@ VkImageCreateInfo image_create_info(const image &img)
 	VkImageCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	info.imageType = VK_IMAGE_TYPE_2D;
-	info.extent.width = img.width;
-	info.extent.height = img.height;
+	info.extent.width = img.extent.width;
+	info.extent.height = img.extent.height;
 	info.extent.depth = 1;
 	info.mipLevels = 1;
 	info.arrayLayers = 1;

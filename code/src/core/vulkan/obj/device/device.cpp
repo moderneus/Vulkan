@@ -8,10 +8,10 @@
 
 #include <cstdint>
 
-VkPhysicalDeviceFeatures device_get_enabled_features(const physical_device &gpu) 
+VkPhysicalDeviceFeatures device_get_enabled_features() 
 {
 	VkPhysicalDeviceFeatures features = {};
-	features.geometryShader = physical_device_get_features(gpu).geometryShader;
+	features.samplerAnisotropy = VK_TRUE;
 	return features;
 }
 
@@ -70,7 +70,7 @@ void device_create(device *dev, queue *q, const queue_indices &q_idx, const phys
 
 	const float q_prior = 1.0f;
 	std::vector<VkDeviceQueueCreateInfo> q_infos = device_create_queue_infos(q_idx, q_prior);
-	VkPhysicalDeviceFeatures features = device_get_enabled_features(gpu);
+	VkPhysicalDeviceFeatures features = device_get_enabled_features();
 	VkDeviceCreateInfo info = device_create_info(q_infos, features);
 
 	if (vkCreateDevice(gpu.handle, &info, nullptr, &dev->handle) != VK_SUCCESS)

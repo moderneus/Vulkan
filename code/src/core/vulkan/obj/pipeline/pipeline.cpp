@@ -12,8 +12,8 @@ VkViewport pipeline_create_viewport(const swapchain_state &st)
 	VkViewport vp = {};
 	vp.x = 0.0f;
 	vp.y = 0.0f;
-	vp.width = static_cast<float>(st.extent.width);
-	vp.height = static_cast<float>(st.extent.height);
+	vp.width = static_cast<float>(st.imgs[0].extent.width);
+	vp.height = static_cast<float>(st.imgs[0].extent.height);
 	vp.minDepth = 0.0f;
 	vp.maxDepth = 1.0f;
 	return vp;
@@ -23,7 +23,7 @@ VkRect2D pipeline_create_scissor(const swapchain_state &st)
 {
 	VkRect2D scissor = {};
 	scissor.offset = {0, 0};
-	scissor.extent = st.extent;
+	scissor.extent = st.imgs[0].extent;
 	return scissor;
 }
 

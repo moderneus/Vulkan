@@ -10,7 +10,7 @@ VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass &rp, const
 	info.renderPass = rp.handle;
 	info.framebuffer = st.fbs[img_idx];
 	info.renderArea.offset = {0, 0};
-	info.renderArea.extent = st.extent;
+	info.renderArea.extent = st.imgs[0].extent;
 	info.clearValueCount = 1;
 	info.pClearValues = &clear_col;
 	return info;
@@ -21,7 +21,7 @@ VkAttachmentDescription render_pass_create_att_desc(const swapchain_state &st)
 	log_info("Creating an Attachment Description...");
 
 	VkAttachmentDescription desc = {};
-	desc.format = st.fmt;
+	desc.format = st.imgs[0].fmt;
 	desc.samples = VK_SAMPLE_COUNT_1_BIT;
 	desc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	desc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;

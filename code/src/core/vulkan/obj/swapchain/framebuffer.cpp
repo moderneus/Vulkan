@@ -4,15 +4,15 @@
 #include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "util/debug/log.hpp"
 
-VkFramebufferCreateInfo framebuffer_create_info(const swapchain_state &st, const render_pass &rp, const VkImageView &atts) 
+VkFramebufferCreateInfo framebuffer_create_info(const swapchain_state &st, const render_pass &rp, const image_view &atts)
 {
 	VkFramebufferCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 	info.renderPass = rp.handle;
 	info.attachmentCount = 1;
-	info.pAttachments = &atts;
-	info.width = st.extent.width;
-	info.height = st.extent.height;
+	info.pAttachments = &atts.handle;
+	info.width = st.imgs[0].extent.width;
+	info.height = st.imgs[0].extent.height;
 	info.layers = 1;
 	return info;
 }

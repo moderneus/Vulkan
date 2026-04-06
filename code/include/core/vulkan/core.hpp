@@ -16,6 +16,8 @@
 #include "core/vulkan/obj/descriptor/descriptor_pool.hpp"
 #include "core/vulkan/obj/descriptor/descriptor_set.hpp"
 #include "core/vulkan/obj/image/texture.hpp"
+#include "core/vulkan/obj/image/image_view.hpp"
+#include "core/vulkan/obj/image/sampler.hpp"
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
 #include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
@@ -45,6 +47,8 @@ struct core {
 	vertex_buffer				vert_buf = {{}, rectangle_verts};
 	index_buffer				idx_buf = {{}, rectangle_indices};
 	texture					tex;
+	image_view				tex_view;
+	sampler					samp;
 	std::vector<uniform_buffer>		uniform_bufs;
 	descriptor_set_layout			set_lyt = {{}, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER};
 	descriptor_pool				set_pool;

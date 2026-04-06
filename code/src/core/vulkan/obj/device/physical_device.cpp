@@ -90,8 +90,8 @@ VkPhysicalDeviceFeatures physical_device_get_features(const physical_device &gpu
 	VkPhysicalDeviceFeatures features = {};
 	vkGetPhysicalDeviceFeatures(gpu.handle, &features);
 
-	if (features.geometryShader != VK_TRUE)
-		log_critical("The found GPU doesn't have a Geometry Shader Feature.");
+	if (features.samplerAnisotropy != VK_TRUE)
+		log_critical("The found GPU doesn't have a Anistropy Filtrening Support.");
 
 	return features;
 }

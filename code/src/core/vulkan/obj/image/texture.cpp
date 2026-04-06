@@ -7,15 +7,14 @@
 
 #include "stb_image.h"
 
-
-void texture_create(texture *tex, const device &dev, const physical_device &gpu, const queue &q, const command_pool &pool, const uint32_t w, const uint32_t h, const std::string &path)
+void texture_create(texture *tex, const device &dev, const physical_device &gpu, const queue &q, const command_pool &pool, const std::string &path)
 {
-	stbi_uc *pixels = stbi_load(path.c_str(), reinterpret_cast<int*>(&tex->img.width), reinterpret_cast<int*>(&tex->img.height), reinterpret_cast<int*>(&tex->img.channels), STBI_rgb_alpha);
+	tex->img.data = stbi_load(path.c_str(), reinterpret_cast<int*>(&tex->img.extent.width), reinterpret_cast<int*>(&tex->img.extent.height), reinterpret_cast<int*>(&tex->img.channels), STBI_rgb_alpha);
 
-	if (!pixels)
+	if (!tex->img.data)
 		log_error("Failed to Load Texture by path: ", path);
 
-	VkDeviceSize size = tex->img.width * tex->img.height * sizeof(uint32_t);
+	VkDeviceSize size = tex->img.extent.width * tex->img.extent.height * 4;
 
 	buffer staging_buf;
 
@@ -23,13 +22,11 @@ void texture_create(texture *tex, const device &dev, const physical_device &gpu,
 
 	buffer_memcpy(&staging_buf, dev, tex->img, size);
 
-	stbi_image_free(pixels);
+	stbi_image_free(tex->img.data);
 
 	tex->img.fmt = VK_FORMAT_R8G8B8A8_SRGB;
 	tex->img.tiling = VK_IMAGE_TILING_OPTIMAL;
 	tex->img.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-	tex->img.width = w;
-	tex->img.height = h;
 	image_create(&tex->img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 	image_transition_layout(tex->img, dev, q, pool, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);

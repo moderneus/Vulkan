@@ -95,7 +95,7 @@ void buffer_copy_to_image(const buffer &buf, const image &img, const device &dev
 	region.imageSubresource.baseArrayLayer = 0;
 	region.imageSubresource.layerCount = 1;
 	region.imageOffset = {0, 0, 0};
-	region.imageExtent = {img.width, img.height, 1};
+	region.imageExtent = {img.extent.width, img.extent.height, 1};
 
 	vkCmdCopyBufferToImage(cmd.handle, buf.handle, img.handle, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 	

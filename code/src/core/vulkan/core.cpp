@@ -1,5 +1,4 @@
 #include "core/vulkan/core.hpp"
-#include "core/vulkan/obj/swapchain/image_view.hpp"
 #include "core/vulkan/obj/swapchain/framebuffer.hpp"
 #include "util/debug/log.hpp"
 
@@ -25,7 +24,9 @@ void core_init(core *c, const window &win)
 	command_buffers_create(&c->cmds, c->dev, c->cmd_pool);
 	vertex_buffer_create(&c->vert_buf, c->dev, c->gpu, c->q, c->cmd_pool);
 	index_buffer_create(&c->idx_buf, c->dev, c->gpu, c->q, c->cmd_pool);
-	texture_create(&c->tex, c->dev, c->gpu, c->q, c->cmd_pool, 512, 512, "assets/textures/texture.png");
+	texture_create(&c->tex, c->dev, c->gpu, c->q, c->cmd_pool, "assets/textures/texture.png");
+	image_view_create(&c->tex_view, c->dev, c->tex.img);
+	sampler_create(&c->samp, c->dev, c->gpu);
 	uniform_buffer_create(&c->uniform_bufs, c->dev, c->gpu);
 	descriptor_pool_create(&c->set_pool, c->dev);
 	descriptor_sets_create(&c->sets, c->dev, c->set_pool, c->set_lyt, c->uniform_bufs);
@@ -45,6 +46,8 @@ void core_destroy(core *c)
 	semaphores_destroy(c->img_avail_sems, c->dev);
 	descriptor_pool_destroy(c->set_pool, c->dev);
 	uniform_buffer_destroy(c->uniform_bufs, c->dev);
+	sampler_destroy(c->samp, c->dev);
+	image_view_destroy(c->tex_view, c->dev);
 	texture_destroy(c->tex, c->dev);
 	index_buffer_destroy(c->idx_buf, c->dev);
 	vertex_buffer_destroy(c->vert_buf, c->dev);

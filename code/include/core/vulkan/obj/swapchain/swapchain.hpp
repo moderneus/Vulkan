@@ -1,6 +1,9 @@
 #ifndef MOD_SWAPCHAIN_HPP
 #define MOD_SWAPCHAIN_HPP
 
+#include "core/vulkan/obj/image/image_view.hpp"
+#include "core/vulkan/obj/image/image.hpp"
+
 #include <vulkan/vulkan.h>
 
 #include <vector>
@@ -23,12 +26,9 @@ struct swapchain_support_details {
 };
 
 struct swapchain_state {
-	VkExtent2D					extent = {};
-	VkFormat					fmt = VK_FORMAT_UNDEFINED;
-	VkColorSpaceKHR					colspc = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 	std::vector<VkFramebuffer>			fbs;
-	std::vector<VkImageView>			views; 
-	std::vector<VkImage>				imgs;
+	std::vector<image_view>				views; 
+	std::vector<image>				imgs;
 };
 
 swapchain_support_details swapchain_query_supp_details(const physical_device &gpu, const surface &surf);

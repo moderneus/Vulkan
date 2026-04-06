@@ -10,11 +10,11 @@ struct physical_device;
 struct device;
 
 struct texture {
-	buffer tbuf;
 	image img;
+	buffer tbuf;
 };
 
-void texture_create(texture *tex, const device &dev, const physical_device &gpu, const queue &q, const command_pool &pool, const uint32_t w, const uint32_t h, const std::string &path);
+void texture_create(texture *tex, const device &dev, const physical_device &gpu, const queue &q, const command_pool &pool, const std::string &path);
 
 void texture_destroy(const texture &tex, const device &dev);
 

@@ -15,8 +15,7 @@ struct image {
 	VkImage				handle;
 	VkDeviceMemory			mem;
 	stbi_uc				*data;
-	uint32_t			width;
-	uint32_t			height;
+	VkExtent2D			extent;
 	uint32_t			channels;
 	VkImageUsageFlags		usage;
 	VkImageTiling			tiling;
