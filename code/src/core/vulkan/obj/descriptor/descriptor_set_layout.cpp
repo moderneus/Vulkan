@@ -2,29 +2,35 @@
 #include "core/vulkan/obj/device/device.hpp"
 #include "util/debug/log.hpp"
 
-VkDescriptorSetLayoutBinding descriptor_set_layout_create_binding(const VkDescriptorType type)
+std::array<VkDescriptorSetLayoutBinding, 2> descriptor_set_layout_create_bindings()
 {
 	log_info("Creating the Descriptor Set Layout Binding...");
 
-	VkDescriptorSetLayoutBinding bind = {};
-	bind.binding = 0;
-	bind.descriptorType = type;
-	bind.descriptorCount = 1;
-	bind.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	VkDescriptorSetLayoutBinding ubo_bind = {};
+	ubo_bind.binding = 0;
+	ubo_bind.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	ubo_bind.descriptorCount = 1;
+	ubo_bind.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+	VkDescriptorSetLayoutBinding samp_bind = {};
+	samp_bind.binding = 1;
+	samp_bind.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	samp_bind.descriptorCount = 1;
+	samp_bind.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
 	log_info("The Descriptor Set Layout Binding was Created.");
 
-	return bind;
+	return {ubo_bind, samp_bind};
 }
 
-VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info(const VkDescriptorSetLayoutBinding &bind)
+VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info(const std::array<VkDescriptorSetLayoutBinding, 2> &binds)
 {
 	log_info("Creating the Descriptor Set Layout Info...");
 
 	VkDescriptorSetLayoutCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	info.bindingCount = 1;
-	info.pBindings = &bind;
+	info.bindingCount = static_cast<uint32_t>(binds.size());
+	info.pBindings = binds.data();
 
 	log_info("The Descriptor Set Layout Info was Created.");
 
@@ -35,8 +41,8 @@ void descriptor_set_layout_create(descriptor_set_layout *set_lyt, const device &
 {
 	log_info("Creating a Desriptor Set Layout...");
 
-	VkDescriptorSetLayoutBinding bind = descriptor_set_layout_create_binding(set_lyt->type);
-	VkDescriptorSetLayoutCreateInfo info = descriptor_set_layout_create_info(bind);
+	std::array<VkDescriptorSetLayoutBinding, 2> binds = descriptor_set_layout_create_bindings();
+	VkDescriptorSetLayoutCreateInfo info = descriptor_set_layout_create_info(binds);
 
 	if (vkCreateDescriptorSetLayout(dev.handle, &info, nullptr, &set_lyt->handle) != VK_SUCCESS)
 		log_critical("Failed to Create the Descriptor Set Layout.");

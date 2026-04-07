@@ -3,14 +3,14 @@
 #include "util/constants.hpp"
 #include "util/debug/log.hpp"
 
-VkDescriptorPoolCreateInfo descriptor_pool_create_info(const VkDescriptorPoolSize &size)
+VkDescriptorPoolCreateInfo descriptor_pool_create_info(const std::array<VkDescriptorPoolSize, 2> &sizes)
 {
 	log_info("Creating the Descriptor Pool Info...");
 
 	VkDescriptorPoolCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	info.poolSizeCount = 1;
-	info.pPoolSizes = &size;
+	info.poolSizeCount = static_cast<uint32_t>(sizes.size());
+	info.pPoolSizes = sizes.data();
 	info.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
 
 	log_info("The Descriptor Pool Info was Created.");
@@ -18,25 +18,29 @@ VkDescriptorPoolCreateInfo descriptor_pool_create_info(const VkDescriptorPoolSiz
 	return info;
 }
 
-VkDescriptorPoolSize descriptor_pool_create_size()
+std::array<VkDescriptorPoolSize, 2> descriptor_pool_create_sizes()
 {
 	log_info("Creating the Descriptor Pool Size Info...");
 
-	VkDescriptorPoolSize size = {};
-	size.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	size.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+	std::array<VkDescriptorPoolSize, 2> sizes = {};
+
+	sizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	sizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+
+	sizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	sizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
 
 	log_info("The Descriptor Pool Size Info was Created.");
 	
-	return size;
+	return sizes;
 }
 
 void descriptor_pool_create(descriptor_pool *pool, const device &dev)
 {
 	log_info("Creating a Descriptor Pool...");
 
-	VkDescriptorPoolSize size = descriptor_pool_create_size();
-	VkDescriptorPoolCreateInfo info = descriptor_pool_create_info(size);
+	std::array<VkDescriptorPoolSize, 2> sizes = descriptor_pool_create_sizes();
+	VkDescriptorPoolCreateInfo info = descriptor_pool_create_info(sizes);
 
 	if (vkCreateDescriptorPool(dev.handle, &info, nullptr, &pool->handle) != VK_SUCCESS)
 		log_critical("Failed to Create the Descriptor Pool.");

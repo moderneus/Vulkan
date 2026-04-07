@@ -50,7 +50,7 @@ struct core {
 	image_view				tex_view;
 	sampler					samp;
 	std::vector<uniform_buffer>		uniform_bufs;
-	descriptor_set_layout			set_lyt = {{}, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER};
+	descriptor_set_layout			set_lyt;
 	descriptor_pool				set_pool;
 	std::vector<descriptor_set>		sets;
 	pipeline				pl;

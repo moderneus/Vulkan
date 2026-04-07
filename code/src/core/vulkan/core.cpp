@@ -29,7 +29,7 @@ void core_init(core *c, const window &win)
 	sampler_create(&c->samp, c->dev, c->gpu);
 	uniform_buffer_create(&c->uniform_bufs, c->dev, c->gpu);
 	descriptor_pool_create(&c->set_pool, c->dev);
-	descriptor_sets_create(&c->sets, c->dev, c->set_pool, c->set_lyt, c->uniform_bufs);
+	descriptor_sets_create(&c->sets, c->dev, c->set_pool, c->set_lyt, c->uniform_bufs, c->tex_view, c->samp);
 	semaphores_create(&c->img_avail_sems, c->dev);
 	semaphores_create(&c->rnd_done_sems, c->dev);
 	fences_create(&c->frm_fences, c->dev);

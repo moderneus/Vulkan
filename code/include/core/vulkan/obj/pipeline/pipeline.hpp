@@ -36,7 +36,7 @@ struct pipeline_config {
 	VkPipelineColorBlendAttachmentState			att	    = {};
 	std::vector<VkDynamicState>				dyn_state   = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
 	VkVertexInputBindingDescription				bind_desc   = {};
-	std::array<VkVertexInputAttributeDescription, 2>	attrib_desc = {};
+	std::array<VkVertexInputAttributeDescription, 3>	attrib_desc = {};
 };
 
 VkViewport pipeline_create_viewport(const swapchain_state &st);

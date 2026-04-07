@@ -5,13 +5,15 @@ struct device;
 
 #include <vulkan/vulkan.h>
 
+#include <array>
+
 struct descriptor_pool {
 	VkDescriptorPool handle = VK_NULL_HANDLE;
 };
 
-VkDescriptorPoolCreateInfo descriptor_pool_create_info(const VkDescriptorPoolSize &size);
+VkDescriptorPoolCreateInfo descriptor_pool_create_info(const std::array<VkDescriptorPoolSize, 2> &sizes);
 
-VkDescriptorPoolSize descriptor_pool_create_size();
+std::array<VkDescriptorPoolSize, 2> descriptor_pool_create_sizes();
 
 void descriptor_pool_create(descriptor_pool *pool, const device &dev);
 

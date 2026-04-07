@@ -5,14 +5,15 @@ struct device;
 
 #include <vulkan/vulkan.h>
 
+#include <array>
+
 struct descriptor_set_layout {
 	VkDescriptorSetLayout		handle = VK_NULL_HANDLE;
-	VkDescriptorType		type;
 };
 
-VkDescriptorSetLayoutBinding descriptor_set_layout_create_binding(const VkDescriptorType type);
+std::array<VkDescriptorSetLayoutBinding, 2> descriptor_set_layout_create_binding();
 
-VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info(const VkDescriptorSetLayoutBinding &bind);
+VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info(const std::array<VkDescriptorSetLayoutBinding, 2> &binds);
 
 void descriptor_set_layout_create(descriptor_set_layout *set_lyt, const device &dev);
 

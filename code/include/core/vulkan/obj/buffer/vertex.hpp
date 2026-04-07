@@ -11,13 +11,14 @@
 struct vertex {
 	glm::vec2 pos;
 	glm::vec3 col;
+	glm::vec2 tex;
 };
 
 const std::vector<vertex> rectangle_verts = {
-	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-	{{0.5f, -0.5f},  {0.0f, 1.0f, 0.0f}},
-	{{0.5f, 0.5f},   {0.0f, 0.0f, 1.0f}},
-	{{-0.5f, 0.5f},  {1.0f, 1.0f, 1.0f}}
+	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+	{{0.5f, -0.5f},  {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+	{{0.5f, 0.5f},   {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+	{{-0.5f, 0.5f},  {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
 };
 
 const std::vector<uint32_t> rectangle_indices = {
@@ -26,6 +27,6 @@ const std::vector<uint32_t> rectangle_indices = {
 
 VkVertexInputBindingDescription vertex_get_bind_desc();
 
-std::array<VkVertexInputAttributeDescription, 2> vertex_get_attrib_desc();
+std::array<VkVertexInputAttributeDescription, 3> vertex_get_attrib_desc();
 
 #endif
