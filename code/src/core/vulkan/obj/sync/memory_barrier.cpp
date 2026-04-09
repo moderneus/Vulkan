@@ -4,6 +4,8 @@
 
 void memory_barrier_create(memory_barrier *bar, const image &img, const VkImageLayout &old_lyt, const VkImageLayout &new_lyt, VkPipelineStageFlags *src_stage, VkPipelineStageFlags *dst_stage)
 {
+	log_info("Creating a Memory Barrier...");
+
 	bar->info = {};
 	bar->info.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	bar->info.oldLayout = old_lyt;
@@ -32,4 +34,6 @@ void memory_barrier_create(memory_barrier *bar, const image &img, const VkImageL
 	} else {
 		log_critical("Failed to Create Memory Barrier::Unsupported Layout Transition.");
 	}
+
+	log_info("The Memory Barrier was Created.");
 }

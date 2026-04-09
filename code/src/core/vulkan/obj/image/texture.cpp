@@ -9,6 +9,8 @@
 
 void texture_create(texture *tex, const device &dev, const physical_device &gpu, const queue &q, const command_pool &pool, const std::string &path)
 {
+	log_info("Creating a Texture... Path: ", path);
+
 	tex->img.data = stbi_load(path.c_str(), reinterpret_cast<int*>(&tex->img.extent.width), reinterpret_cast<int*>(&tex->img.extent.height), reinterpret_cast<int*>(&tex->img.channels), STBI_rgb_alpha);
 
 	if (!tex->img.data)
@@ -36,9 +38,15 @@ void texture_create(texture *tex, const device &dev, const physical_device &gpu,
 	image_transition_layout(tex->img, dev, q, pool, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 	buffer_destroy(staging_buf, dev);
+
+	log_info("The Texture was Created.");
 }
 
 void texture_destroy(const texture &tex, const device &dev)
 {
+	log_info("Destroying the Texture...");
+
 	image_destroy(tex.img, dev);
+
+	log_info("The Texture was Destroyed");
 }

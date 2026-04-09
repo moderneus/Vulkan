@@ -5,7 +5,7 @@
 
 std::vector<char> file_read(const std::string &path) 
 {
-	log_info("Reading a File... Path = ", path);
+	log_info("Reading a File... Path: ", path);
 
 	std::ifstream f(path, std::ios::ate | std::ios::binary);
 
@@ -19,7 +19,7 @@ std::vector<char> file_read(const std::string &path)
 	f.read(buf.data(), len);
 	f.close();
 
-	log_info("The File was Read by Path = ", path);
+	log_info("The File was Read by Path: ", path);
 
 	return buf;
 }

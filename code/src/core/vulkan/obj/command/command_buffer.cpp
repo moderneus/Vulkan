@@ -42,8 +42,7 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 		VkRect2D sc = pipeline_create_scissor(st);
 		vkCmdSetScissor(cmd.handle, 0, 1, &sc);
 
-		std::array<VkBuffer, 1> bufs = {buf.vbuf.handle};
-		std::array<VkDeviceSize, 1> offsets = {0};
+		std::array<VkBuffer, 1> bufs = {buf.vbuf.handle}; std::array<VkDeviceSize, 1> offsets = {0};
 
 		vkCmdBindVertexBuffers(cmd.handle, 0, 1, bufs.data(), offsets.data());
 		vkCmdBindIndexBuffer(cmd.handle, idx_buf.ibuf.handle, 0, VK_INDEX_TYPE_UINT32);

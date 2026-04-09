@@ -12,8 +12,8 @@ struct command_pool;
 struct command_buffer;
 
 struct image {
-	VkImage				handle;
-	VkDeviceMemory			mem;
+	VkImage				handle = VK_NULL_HANDLE;
+	VkDeviceMemory			mem = VK_NULL_HANDLE;
 	stbi_uc				*data;
 	VkExtent2D			extent;
 	uint32_t			channels;
@@ -25,6 +25,8 @@ struct image {
 VkMemoryAllocateInfo image_create_alloc_info(const physical_device &gpu, const VkMemoryRequirements &reqs, const VkMemoryPropertyFlags &props);
 
 VkImageCreateInfo image_create_info(const image &img);
+
+void image_malloc(image *img, const device &dev, const physical_device &gpu, const VkMemoryPropertyFlags &props);
 
 void image_create(image *img, const device &dev, const physical_device &gpu, const VkMemoryPropertyFlags &props);
 
