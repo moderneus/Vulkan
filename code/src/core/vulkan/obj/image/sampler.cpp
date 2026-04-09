@@ -5,6 +5,8 @@
 
 VkSamplerCreateInfo sampler_create_info(const VkPhysicalDeviceProperties &props)
 {
+	log_info("Creating the Sampler Info...");
+
 	VkSamplerCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
 	info.magFilter = VK_FILTER_LINEAR;
@@ -22,11 +24,16 @@ VkSamplerCreateInfo sampler_create_info(const VkPhysicalDeviceProperties &props)
 	info.mipLodBias = 0.0f;
 	info.minLod = 0.0f;
 	info.maxLod = 0.0f;
+
+	log_info("The Sampler Info Was Created.");
+
 	return info;
 }
 
 void sampler_create(sampler *samp, const device &dev, const physical_device &gpu)
 {
+	log_info("Creating a Sampler...");
+
 	VkPhysicalDeviceProperties props = {};
 	vkGetPhysicalDeviceProperties(gpu.handle, &props);
 
@@ -34,12 +41,18 @@ void sampler_create(sampler *samp, const device &dev, const physical_device &gpu
 
 	if (vkCreateSampler(dev.handle, &info, nullptr, &samp->handle) != VK_SUCCESS)
 		log_critical("Failed to Create the Sampler.");
+
+	log_info("The Sampler was Created.");
 }
 
 void sampler_destroy(const sampler &samp, const device &dev)
 {
+	log_info("Destroying the Sampler...");
+
 	if (samp.handle == VK_NULL_HANDLE)
 		log_error("Cannot Destroy the Sampler::Sampler is not Created.");
 
 	vkDestroySampler(dev.handle, samp.handle, nullptr);
+
+	log_info("The Sampler was Destroyed.");
 }
