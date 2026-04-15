@@ -18,14 +18,14 @@ VkFramebufferCreateInfo framebuffer_create_info(const swapchain_state &st, const
 	return info;
 }
 
-void framebuffers_create(swapchain_state *st, const device &dev, const depth_image &dp_img, const render_pass &rp) 
+void framebuffers_create(swapchain_state *st, const device &dev, const render_pass &rp) 
 {
 	log_info("Creating a Framebuffers...");
 
 	st->fbs.resize(st->views.size());
 
 	for(uint32_t i = 0; i < st->views.size(); ++i) {
-		std::array<VkImageView, 2> atts = {st->views[i].handle, dp_img.view.handle};
+		std::array<VkImageView, 2> atts = {st->views[i].handle, st->dp_img.view.handle};
 		VkFramebufferCreateInfo info = framebuffer_create_info(*st, rp, atts);
 
 		if (vkCreateFramebuffer(dev.handle, &info, nullptr, &st->fbs[i]) != VK_SUCCESS)

@@ -15,8 +15,8 @@ struct depth_image {
 
 VkFormat depth_image_find_fmt(const physical_device &gpu);
 
-void depth_image_create(depth_image *dp_img, const device &dev, const physical_device &gpu, const swapchain_state &st);
+void depth_image_create(swapchain_state *st, const device &dev, const physical_device &gpu);
 
-void depth_image_destroy(const depth_image &img, const device &dev);
+void depth_image_destroy(const swapchain_state &st, const device &dev);
 
 #endif

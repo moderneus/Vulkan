@@ -46,7 +46,7 @@ void renderer_draw(const renderer &r, renderer_state *st, core *c)
 					     VK_NULL_HANDLE, &img_idx);
 
 	if (res == VK_ERROR_OUT_OF_DATE_KHR) {
-		swapchain_recreate(&c->swp, &c->swp_st, c->dev, c->gpu, c->dp_img, c->rp, c->q_idx, c->surf, *r.pwin);
+		swapchain_recreate(&c->swp, &c->swp_st, st, c->dev, c->gpu, c->rp, c->q_idx, c->surf, *r.pwin);
 		return;
 	} else if (res != VK_SUCCESS && res != VK_SUBOPTIMAL_KHR) {
 		log_critical("Failed to Acquire Swapchain Image.");
@@ -75,7 +75,7 @@ void renderer_draw(const renderer &r, renderer_state *st, core *c)
 
 	if (res == VK_ERROR_OUT_OF_DATE_KHR || res == VK_SUBOPTIMAL_KHR || st->fb_resized) {
 		st->fb_resized = false;
-		swapchain_recreate(&c->swp, &c->swp_st, c->dev, c->gpu, c->dp_img, c->rp, c->q_idx, c->surf, *r.pwin);
+		swapchain_recreate(&c->swp, &c->swp_st, st, c->dev, c->gpu, c->rp, c->q_idx, c->surf, *r.pwin);
 	} else if (res != VK_SUCCESS) {
 		log_critical("Failed to Present Swapchain Image.");
 	}

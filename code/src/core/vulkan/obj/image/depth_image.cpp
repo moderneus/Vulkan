@@ -13,23 +13,23 @@ VkFormat depth_image_find_fmt(const physical_device &gpu)
 	);
 }
 
-void depth_image_create(depth_image *dp_img, const device &dev, const physical_device &gpu, const swapchain_state &st)
+void depth_image_create(swapchain_state *st, const device &dev, const physical_device &gpu)
 {
 	VkFormat fmt = depth_image_find_fmt(gpu);
 
-	dp_img->img.extent.width = st.imgs[0].extent.width;
-	dp_img->img.extent.height = st.imgs[0].extent.height;
-	dp_img->img.fmt = fmt;
-	dp_img->img.tiling = VK_IMAGE_TILING_OPTIMAL;
-	dp_img->img.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-	dp_img->img.aspect_flags = VK_IMAGE_ASPECT_DEPTH_BIT;
+	st->dp_img.img.extent.width = st->imgs[0].extent.width;
+	st->dp_img.img.extent.height = st->imgs[0].extent.height;
+	st->dp_img.img.fmt = fmt;
+	st->dp_img.img.tiling = VK_IMAGE_TILING_OPTIMAL;
+	st->dp_img.img.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+	st->dp_img.img.aspect_flags = VK_IMAGE_ASPECT_DEPTH_BIT;
 
-	image_create(&dp_img->img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-	image_view_create(&dp_img->view, dev, dp_img->img);
+	image_create(&st->dp_img.img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	image_view_create(&st->dp_img.view, dev, st->dp_img.img);
 }
 
-void depth_image_destroy(const depth_image &dp_img, const device &dev)
+void depth_image_destroy(const swapchain_state &st, const device &dev)
 {
-	image_destroy(dp_img.img, dev);
-	image_view_destroy(dp_img.view, dev);
+	image_destroy(st.dp_img.img, dev);
+	image_view_destroy(st.dp_img.view, dev);
 }

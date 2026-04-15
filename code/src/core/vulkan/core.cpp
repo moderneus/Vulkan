@@ -19,8 +19,8 @@ void core_init(core *c, const window &win)
 	descriptor_set_layout_create(&c->set_lyt, c->dev);
 	pipeline_layout_create(&c->lyt, c->dev, c->set_lyt);
 	pipeline_create(&c->pl, c->dev, c->lyt, c->rp, c->swp_st, c->shdrs);
-	depth_image_create(&c->dp_img, c->dev, c->gpu, c->swp_st);
-	framebuffers_create(&c->swp_st, c->dev, c->dp_img, c->rp);
+	depth_image_create(&c->swp_st, c->dev, c->gpu);
+	framebuffers_create(&c->swp_st, c->dev, c->rp);
 	command_pool_create(&c->cmd_pool, c->dev, c->q_idx);
 	command_buffers_create(&c->cmds, c->dev, c->cmd_pool);
 	vertex_buffer_create(&c->vert_buf, c->dev, c->gpu, c->q, c->cmd_pool);
@@ -52,13 +52,13 @@ void core_destroy(core *c)
 	vertex_buffer_destroy(c->vert_buf, c->dev);
 	command_pool_destroy(c->cmd_pool, c->dev);
 	framebuffers_destroy(c->swp_st, c->dev);
-	depth_image_destroy(c->dp_img, c->dev);
 	pipeline_destroy(c->pl, c->dev);
 	descriptor_set_layout_destroy(c->set_lyt, c->dev);
 	shaders_destroy(c->shdrs, c->dev);
 	render_pass_destroy(c->rp, c->dev);
 	pipeline_layout_destroy(c->lyt, c->dev);
 	image_views_destroy(c->swp_st, c->dev);
+	depth_image_destroy(c->swp_st, c->dev);
 	swapchain_destroy(c->swp, c->dev);
 	device_destroy(c->dev);
 	surface_destroy(c->surf, c->inst);

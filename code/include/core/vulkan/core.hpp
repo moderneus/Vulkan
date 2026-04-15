@@ -49,7 +49,6 @@ struct core {
 	index_buffer				idx_buf = {{}, rectangles_indices};
 	texture					tex;
 	sampler					samp;
-	depth_image				dp_img;
 	std::vector<uniform_buffer>		uniform_bufs;
 	descriptor_set_layout			set_lyt;
 	descriptor_pool				set_pool;

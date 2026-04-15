@@ -122,4 +122,6 @@ VkFormat physical_device_find_supp_fmt(const physical_device &gpu, const std::ve
 	}
 
 	log_critical("Failed to Find Supported Format.");
+
+	return VK_FORMAT_UNDEFINED;
 }

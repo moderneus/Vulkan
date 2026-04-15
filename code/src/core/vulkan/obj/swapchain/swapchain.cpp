@@ -3,9 +3,12 @@
 #include "core/vulkan/obj/device/queue_indices.hpp"
 #include "core/vulkan/obj/device/device.hpp"
 #include "core/vulkan/obj/device/physical_device.hpp"
+#include "core/vulkan/obj/image/depth_image.hpp"
 #include "core/vulkan/obj/instance/surface.hpp"
 #include "engine/window/window.hpp"
 #include "util/debug/log.hpp"
+
+#include "SDL3/SDL_events.h"
 
 #include <array>
 #include <limits>
@@ -171,18 +174,30 @@ void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const devi
 	}
 }
 
-void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, 
-			const depth_image &dp_img, const render_pass &rp, const queue_indices &q_idx, const surface &surf, const window &win)
+void swapchain_recreate(swapchain *swp, swapchain_state *swp_st, renderer_state *rnd_st, const device &dev, const physical_device &gpu, 
+			const render_pass &rp, const queue_indices &q_idx, const surface &surf, const window &win)
 {
+	int w = 0, h = 0;
+	SDL_Event e;
+	while(w == 0 || h == 0) {
+		SDL_GetWindowSizeInPixels(win.handle, &w, &h);
+		SDL_WaitEvent(&e);
+
+		if (e.type == SDL_EVENT_WINDOW_RESIZED)
+			rnd_st->fb_resized = true;
+	}
+
 	vkDeviceWaitIdle(dev.handle);
 
-	framebuffers_destroy(*st, dev);
-	image_views_destroy(*st, dev);
+	framebuffers_destroy(*swp_st, dev);
+	depth_image_destroy(*swp_st, dev);
+	image_views_destroy(*swp_st, dev);
 	swapchain_destroy(*swp, dev);
 	
-	swapchain_create(swp, st, dev, gpu, q_idx, surf, win);
-	image_views_create(st, dev);
-	framebuffers_create(st, dev, dp_img, rp);
+	swapchain_create(swp, swp_st, dev, gpu, q_idx, surf, win);
+	image_views_create(swp_st, dev);
+	depth_image_create(swp_st, dev, gpu);
+	framebuffers_create(swp_st, dev, rp);
 }
 
 void swapchain_create(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu,
