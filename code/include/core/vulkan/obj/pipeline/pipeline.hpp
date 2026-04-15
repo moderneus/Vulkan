@@ -65,6 +65,8 @@ VkPipelineRasterizationStateCreateInfo pipeline_create_rast_info();
 
 VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info();
 
+VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info();
+
 VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipeline_config &cfg);
 
 VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const pipeline_layout &lyt, const render_pass &rp);

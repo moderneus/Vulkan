@@ -29,4 +29,6 @@ VkPhysicalDeviceFeatures physical_device_get_features(const physical_device &gpu
 
 uint32_t physical_device_find_mem_type(const physical_device &gpu, uint32_t type_filter, VkMemoryPropertyFlags props);
 
+VkFormat physical_device_find_supp_fmt(const physical_device &gpu, const std::vector<VkFormat> &fmts, VkImageTiling tiling, VkFormatFeatureFlags features);
+
 #endif

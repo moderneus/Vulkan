@@ -184,11 +184,16 @@ VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info()
 	return info;
 }
 
-#if 0
-VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info() {
-    
+VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info()
+{
+	VkPipelineDepthStencilStateCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	info.depthTestEnable = VK_TRUE;
+	info.depthWriteEnable = VK_TRUE;
+	info.depthCompareOp = VK_COMPARE_OP_LESS;
+	info.depthBoundsTestEnable = VK_FALSE;
+	return info;
 }
-#endif
 
 VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipeline_config &cfg) 
 {
@@ -218,7 +223,7 @@ VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, 
 	info.pViewportState = &pl_info.vp;
 	info.pRasterizationState = &pl_info.rast;
 	info.pMultisampleState = &pl_info.msaa;
-	info.pDepthStencilState = nullptr;
+	info.pDepthStencilState = &pl_info.ds;
 	info.pColorBlendState = &pl_info.col_blend;
 	info.pDynamicState = &pl_info.dyn_state;
 	info.layout = lyt.handle;
@@ -250,6 +255,7 @@ void pipeline_create(pipeline *pl, const device &dev, const pipeline_layout &lyt
 	pl_info.vp = pipeline_create_viewport_info(cfg);
 	pl_info.rast = pipeline_create_rast_info();
 	pl_info.msaa = pipeline_create_msaa_info();
+	pl_info.ds = pipeline_create_depth_stencil_info();
 	pl_info.col_blend = pipeline_create_col_blend_info(cfg);
 	pl_info.dyn_state = pipeline_create_dyn_state_info(cfg);
 

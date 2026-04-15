@@ -1,6 +1,7 @@
 #ifndef MOD_SWAPCHAIN_HPP
 #define MOD_SWAPCHAIN_HPP
 
+#include "core/vulkan/obj/swapchain/framebuffer.hpp"
 #include "core/vulkan/obj/image/image_view.hpp"
 #include "core/vulkan/obj/image/image.hpp"
 
@@ -11,6 +12,7 @@
 struct window;
 struct queue_indices;
 struct physical_device;
+struct depth_image;
 struct render_pass;
 struct device;
 struct surface;
@@ -48,8 +50,8 @@ bool swapchain_is_adequate(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surf
 void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, const VkSurfaceFormatKHR &fmt, 
 			   const VkExtent2D &extent);
 
-void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, const render_pass &rp, 
-			const queue_indices &q_idx, const surface &surf, const window &win);
+void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, const depth_image &dp_img, 
+			const render_pass &rp, const queue_indices &q_idx, const surface &surf, const window &win);
 
 void swapchain_create(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, 
 		      const queue_indices &q_idx, const surface &surf, const window &win);

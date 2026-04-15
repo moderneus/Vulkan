@@ -152,8 +152,8 @@ VkSwapchainCreateInfoKHR swapchain_create_info(const queue_indices &q_idx, const
 	return info;
 }
 
-void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, const VkSurfaceFormatKHR &fmt, 
-			   const VkExtent2D &extent)
+void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, 
+			   const VkSurfaceFormatKHR &fmt, const VkExtent2D &extent)
 {
 	uint32_t img_cnt = 0;
 	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, nullptr);
@@ -163,18 +163,16 @@ void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const devi
 
 	st->imgs.resize(img_cnt);
 
-	for(uint32_t i = 0; i < img_cnt; ++i)
+	for(uint32_t i = 0; i < img_cnt; ++i) {
 		st->imgs[i].handle = tmp_imgs[i];
-
-	for(uint32_t i = 0; i < img_cnt; ++i)
 		st->imgs[i].fmt = fmt.format;
-
-	for(uint32_t i = 0; i < img_cnt; ++i)
 		st->imgs[i].extent = extent;
+		st->imgs[i].aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT;
+	}
 }
 
-void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, const render_pass &rp, 
-			const queue_indices &q_idx, const surface &surf, const window &win)
+void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, 
+			const depth_image &dp_img, const render_pass &rp, const queue_indices &q_idx, const surface &surf, const window &win)
 {
 	vkDeviceWaitIdle(dev.handle);
 
@@ -184,10 +182,10 @@ void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, 
 	
 	swapchain_create(swp, st, dev, gpu, q_idx, surf, win);
 	image_views_create(st, dev);
-	framebuffers_create(st, dev, rp);
+	framebuffers_create(st, dev, dp_img, rp);
 }
 
-void swapchain_create(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, 
+void swapchain_create(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu,
 		      const queue_indices &q_idx, const surface &surf, const window &win)
 {
 	log_info("Creating a Swapchain...");

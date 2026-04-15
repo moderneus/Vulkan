@@ -15,6 +15,7 @@
 #include "core/vulkan/obj/descriptor/descriptor_set_layout.hpp"
 #include "core/vulkan/obj/descriptor/descriptor_pool.hpp"
 #include "core/vulkan/obj/descriptor/descriptor_set.hpp"
+#include "core/vulkan/obj/image/depth_image.hpp"
 #include "core/vulkan/obj/image/texture.hpp"
 #include "core/vulkan/obj/image/image_view.hpp"
 #include "core/vulkan/obj/image/sampler.hpp"
@@ -44,11 +45,11 @@ struct core {
 	swapchain_state				swp_st;
 	pipeline_layout				lyt;
 	std::array<shader, 2>			shdrs;
-	vertex_buffer				vert_buf = {{}, rectangle_verts};
-	index_buffer				idx_buf = {{}, rectangle_indices};
+	vertex_buffer				vert_buf = {{}, rectangles_verts};
+	index_buffer				idx_buf = {{}, rectangles_indices};
 	texture					tex;
-	image_view				tex_view;
 	sampler					samp;
+	depth_image				dp_img;
 	std::vector<uniform_buffer>		uniform_bufs;
 	descriptor_set_layout			set_lyt;
 	descriptor_pool				set_pool;

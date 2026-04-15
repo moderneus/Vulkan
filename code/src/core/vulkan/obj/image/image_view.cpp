@@ -20,6 +20,7 @@ VkImageViewCreateInfo image_view_create_info(const image &img)
 	info.subresourceRange.levelCount = 1;
 	info.subresourceRange.baseArrayLayer = 0;
 	info.subresourceRange.layerCount = 1;
+	info.subresourceRange.aspectMask = img.aspect_flags;
 	return info;
 }
 

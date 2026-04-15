@@ -31,8 +31,10 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 	if (vkBeginCommandBuffer(cmd.handle, &cmd_begin) != VK_SUCCESS)
 		log_critical("Failed to Begin Recording Command Buffer.");
 
-	VkClearValue clear_col = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-	VkRenderPassBeginInfo rp_begin = render_pass_create_begin_info(rp, st, clear_col, img_idx);
+	std::array<VkClearValue, 2> vals;
+	vals[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+	vals[1].depthStencil = {1.0f, 0};
+	VkRenderPassBeginInfo rp_begin = render_pass_create_begin_info(rp, st, vals, img_idx);
 
 	vkCmdBeginRenderPass(cmd.handle, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -49,7 +51,7 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 
 		vkCmdBindDescriptorSets(cmd.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, lyt.handle, 0, 1, &set.handle, 0, nullptr);
 
-		vkCmdDrawIndexed(cmd.handle, static_cast<uint32_t>(rectangle_indices.size()), 1, 0, 0, 0);
+		vkCmdDrawIndexed(cmd.handle, static_cast<uint32_t>(rectangles_indices.size()), 1, 0, 0, 0);
 
 	vkCmdEndRenderPass(cmd.handle);
 

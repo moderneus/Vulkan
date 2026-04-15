@@ -105,5 +105,21 @@ uint32_t physical_device_find_mem_type(const physical_device &gpu, uint32_t type
 		if ((type_filter & (1 << i)) && (mem_props.memoryTypes[i].propertyFlags & props) == props)
 			return i;
 	}
+	
 	return -1;
+}
+
+VkFormat physical_device_find_supp_fmt(const physical_device &gpu, const std::vector<VkFormat> &fmts, VkImageTiling tiling, VkFormatFeatureFlags features)
+{
+	for(VkFormat fmt : fmts) {
+		VkFormatProperties props;
+		vkGetPhysicalDeviceFormatProperties(gpu.handle, fmt, &props);
+
+		if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
+			return fmt;
+		else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+			return fmt;
+	}
+
+	log_critical("Failed to Find Supported Format.");
 }

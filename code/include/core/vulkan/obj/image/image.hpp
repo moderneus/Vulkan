@@ -20,6 +20,7 @@ struct image {
 	VkImageUsageFlags		usage;
 	VkImageTiling			tiling;
 	VkFormat			fmt;
+	VkImageAspectFlags		aspect_flags;
 };
 
 VkMemoryAllocateInfo image_create_alloc_info(const physical_device &gpu, const VkMemoryRequirements &reqs, const VkMemoryPropertyFlags &props);

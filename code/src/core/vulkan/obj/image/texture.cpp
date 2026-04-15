@@ -29,6 +29,8 @@ void texture_create(texture *tex, const device &dev, const physical_device &gpu,
 	tex->img.fmt = VK_FORMAT_R8G8B8A8_SRGB;
 	tex->img.tiling = VK_IMAGE_TILING_OPTIMAL;
 	tex->img.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	tex->img.aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT;
+
 	image_create(&tex->img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 	image_transition_layout(tex->img, dev, q, pool, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
@@ -39,6 +41,8 @@ void texture_create(texture *tex, const device &dev, const physical_device &gpu,
 
 	buffer_destroy(staging_buf, dev);
 
+	image_view_create(&tex->view, dev, tex->img);
+
 	log_info("The Texture was Created.");
 }
 
@@ -47,6 +51,7 @@ void texture_destroy(const texture &tex, const device &dev)
 	log_info("Destroying the Texture...");
 
 	image_destroy(tex.img, dev);
+	image_view_destroy(tex.view, dev);
 
 	log_info("The Texture was Destroyed");
 }
