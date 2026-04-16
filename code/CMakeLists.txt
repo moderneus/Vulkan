@@ -23,7 +23,7 @@ file(GLOB_RECURSE SRC "src/*.cpp")
 add_executable(${TARGET} ${SRC})
 
 target_compile_options(${TARGET} PRIVATE -std=c++20 -g -O1 -Wall -Wextra -Wpedantic -frtti -fexceptions)
-target_include_directories(${TARGET} PRIVATE include libs/SDL/include libs/fmt/include libs/glm libs/stb)
+target_include_directories(${TARGET} PRIVATE include libs/SDL/include libs/fmt/include libs/glm libs/stb libs/tinyobjloader)
 target_link_libraries(${TARGET} PRIVATE SDL3::SDL3 fmt::fmt Vulkan::Vulkan)
 
 set(DYNAMIC_LIBS SDL3::SDL3 fmt::fmt glm::glm)

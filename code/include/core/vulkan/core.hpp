@@ -19,6 +19,7 @@
 #include "core/vulkan/obj/image/texture.hpp"
 #include "core/vulkan/obj/image/image_view.hpp"
 #include "core/vulkan/obj/image/sampler.hpp"
+#include "core/vulkan/obj/model/model.hpp"
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
 #include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
@@ -45,10 +46,9 @@ struct core {
 	swapchain_state				swp_st;
 	pipeline_layout				lyt;
 	std::array<shader, 2>			shdrs;
-	vertex_buffer				vert_buf = {{}, rectangles_verts};
-	index_buffer				idx_buf = {{}, rectangles_indices};
 	texture					tex;
 	sampler					samp;
+	model					mod;
 	std::vector<uniform_buffer>		uniform_bufs;
 	descriptor_set_layout			set_lyt;
 	descriptor_pool				set_pool;

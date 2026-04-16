@@ -23,9 +23,10 @@ void core_init(core *c, const window &win)
 	framebuffers_create(&c->swp_st, c->dev, c->rp);
 	command_pool_create(&c->cmd_pool, c->dev, c->q_idx);
 	command_buffers_create(&c->cmds, c->dev, c->cmd_pool);
-	vertex_buffer_create(&c->vert_buf, c->dev, c->gpu, c->q, c->cmd_pool);
-	index_buffer_create(&c->idx_buf, c->dev, c->gpu, c->q, c->cmd_pool);
-	texture_create(&c->tex, c->dev, c->gpu, c->q, c->cmd_pool, "assets/textures/texture.png");
+	model_load(&c->mod, "assets/models/viking_room.obj");
+	vertex_buffer_create(&c->mod.vbuf, c->dev, c->gpu, c->q, c->cmd_pool);
+	index_buffer_create(&c->mod.ibuf, c->dev, c->gpu, c->q, c->cmd_pool);
+	texture_create(&c->tex, c->dev, c->gpu, c->q, c->cmd_pool, "assets/textures/viking_room.png");
 	sampler_create(&c->samp, c->dev, c->gpu);
 	uniform_buffer_create(&c->uniform_bufs, c->dev, c->gpu);
 	descriptor_pool_create(&c->set_pool, c->dev);
@@ -48,8 +49,8 @@ void core_destroy(core *c)
 	uniform_buffer_destroy(c->uniform_bufs, c->dev);
 	sampler_destroy(c->samp, c->dev);
 	texture_destroy(c->tex, c->dev);
-	index_buffer_destroy(c->idx_buf, c->dev);
-	vertex_buffer_destroy(c->vert_buf, c->dev);
+	index_buffer_destroy(c->mod.ibuf, c->dev);
+	vertex_buffer_destroy(c->mod.vbuf, c->dev);
 	command_pool_destroy(c->cmd_pool, c->dev);
 	framebuffers_destroy(c->swp_st, c->dev);
 	pipeline_destroy(c->pl, c->dev);

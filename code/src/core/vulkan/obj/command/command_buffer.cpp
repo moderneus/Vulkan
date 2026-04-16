@@ -51,7 +51,7 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 
 		vkCmdBindDescriptorSets(cmd.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, lyt.handle, 0, 1, &set.handle, 0, nullptr);
 
-		vkCmdDrawIndexed(cmd.handle, static_cast<uint32_t>(rectangles_indices.size()), 1, 0, 0, 0);
+		vkCmdDrawIndexed(cmd.handle, static_cast<uint32_t>(idx_buf.data.size()), 1, 0, 0, 0);
 
 	vkCmdEndRenderPass(cmd.handle);
 
