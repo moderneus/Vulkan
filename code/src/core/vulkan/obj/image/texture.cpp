@@ -26,20 +26,21 @@ void texture_create(texture *tex, const device &dev, const physical_device &gpu,
 
 	stbi_image_free(tex->img.data);
 
+	tex->img.mip_lvls = static_cast<uint32_t>(std::floor(std::log2(std::max(tex->img.extent.width, tex->img.extent.height)))) + 1;
 	tex->img.fmt = VK_FORMAT_R8G8B8A8_SRGB;
 	tex->img.tiling = VK_IMAGE_TILING_OPTIMAL;
-	tex->img.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	tex->img.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	tex->img.aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT;
 
 	image_create(&tex->img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 	image_transition_layout(tex->img, dev, q, pool, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-		buffer_copy_to_image(staging_buf, tex->img, dev, pool, q);
-
-	image_transition_layout(tex->img, dev, q, pool, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+	
+	buffer_copy_to_image(staging_buf, tex->img, dev, pool, q);
 
 	buffer_destroy(staging_buf, dev);
+
+	image_generate_mipmaps(tex->img, dev, gpu, q, pool);
 
 	image_view_create(&tex->view, dev, tex->img);
 

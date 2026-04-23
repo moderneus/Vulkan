@@ -15,7 +15,7 @@ void memory_barrier_create(memory_barrier *bar, const image &img, const VkImageL
 	bar->info.image = img.handle;
 	bar->info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	bar->info.subresourceRange.baseMipLevel = 0;
-	bar->info.subresourceRange.levelCount = 1;
+	bar->info.subresourceRange.levelCount = img.mip_lvls;
 	bar->info.subresourceRange.baseArrayLayer = 0;
 	bar->info.subresourceRange.layerCount = 1;
 

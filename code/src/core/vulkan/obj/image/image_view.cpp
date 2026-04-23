@@ -17,7 +17,7 @@ VkImageViewCreateInfo image_view_create_info(const image &img)
 	info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
 	info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	info.subresourceRange.baseMipLevel = 0;
-	info.subresourceRange.levelCount = 1;
+	info.subresourceRange.levelCount = img.mip_lvls;
 	info.subresourceRange.baseArrayLayer = 0;
 	info.subresourceRange.layerCount = 1;
 	info.subresourceRange.aspectMask = img.aspect_flags;

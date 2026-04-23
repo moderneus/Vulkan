@@ -23,7 +23,7 @@ VkSamplerCreateInfo sampler_create_info(const VkPhysicalDeviceProperties &props)
 	info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 	info.mipLodBias = 0.0f;
 	info.minLod = 0.0f;
-	info.maxLod = 0.0f;
+	info.maxLod = VK_LOD_CLAMP_NONE;
 
 	log_info("The Sampler Info Was Created.");
 

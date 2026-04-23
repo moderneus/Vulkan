@@ -171,6 +171,7 @@ void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const devi
 		st->imgs[i].fmt = fmt.format;
 		st->imgs[i].extent = extent;
 		st->imgs[i].aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT;
+		st->imgs[i].mip_lvls = 1;
 	}
 }
 

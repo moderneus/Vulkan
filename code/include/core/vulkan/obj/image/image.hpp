@@ -17,6 +17,7 @@ struct image {
 	stbi_uc				*data;
 	VkExtent2D			extent;
 	uint32_t			channels;
+	uint32_t			mip_lvls;
 	VkImageUsageFlags		usage;
 	VkImageTiling			tiling;
 	VkFormat			fmt;
@@ -34,5 +35,7 @@ void image_create(image *img, const device &dev, const physical_device &gpu, con
 void image_destroy(const image &img, const device &dev);
 
 void image_transition_layout(const image &img, const device &dev, const queue &q, const command_pool &pool, const VkImageLayout &old_lyt, const VkImageLayout &new_lyt);
+
+void image_generate_mipmaps(const image &img, const device &dev, const physical_device &gpu, const queue &q, const command_pool &pool);
 
 #endif
