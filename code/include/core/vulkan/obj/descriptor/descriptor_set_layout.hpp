@@ -8,12 +8,12 @@ struct device;
 #include <array>
 
 struct descriptor_set_layout {
-	VkDescriptorSetLayout		handle = VK_NULL_HANDLE;
+	VkDescriptorSetLayout handle = VK_NULL_HANDLE;
 };
 
-std::array<VkDescriptorSetLayoutBinding, 2> descriptor_set_layout_create_binding();
+std::array<VkDescriptorSetLayoutBinding, 3> descriptor_set_layout_create_binding();
 
-VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info(const std::array<VkDescriptorSetLayoutBinding, 2> &binds);
+VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info(const std::array<VkDescriptorSetLayoutBinding, 3> &binds);
 
 void descriptor_set_layout_create(descriptor_set_layout *set_lyt, const device &dev);
 

@@ -9,6 +9,7 @@ struct device;
 struct queue;
 struct swapchain_state;
 struct pipeline_layout;
+struct shader_storage_buffer;
 struct descriptor_set;
 struct render_pass;
 struct pipeline;
@@ -22,8 +23,10 @@ struct command_buffer {
 
 VkCommandBufferBeginInfo command_buffer_create_begin_info();
 
-void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const pipeline_layout &lyt, const render_pass &rp, 
-			   const swapchain_state &st, const vertex_buffer &buf, const index_buffer &idx_buf, const descriptor_set &set, const uint32_t img_idx);
+void command_buffer_record_compute(const command_buffer &cmd, const pipeline &pl, const pipeline_layout &lyt, const descriptor_set &set);
+
+void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const render_pass &rp, 
+			   const swapchain_state &st, const shader_storage_buffer &buf, const uint32_t img_idx);
 
 VkCommandBufferAllocateInfo command_buffer_create_alloc_info(const command_pool &pool, const std::vector<command_buffer> &cmds);
 

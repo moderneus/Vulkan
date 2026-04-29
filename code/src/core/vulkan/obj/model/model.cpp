@@ -28,7 +28,6 @@ void model_load(model *mod, const std::string &path)
 			vert.pos = {
 				attrib.vertices[3 * idx.vertex_index + 0],
 				attrib.vertices[3 * idx.vertex_index + 1],
-				attrib.vertices[3 * idx.vertex_index + 2]
 			};
 
 			vert.tex = {

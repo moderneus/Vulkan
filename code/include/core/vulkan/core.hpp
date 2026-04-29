@@ -12,6 +12,7 @@
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
 #include "core/vulkan/obj/buffer/index_buffer.hpp"
 #include "core/vulkan/obj/buffer/uniform_buffer.hpp"
+#include "core/vulkan/obj/buffer/shader_storage_buffer.hpp"
 #include "core/vulkan/obj/descriptor/descriptor_set_layout.hpp"
 #include "core/vulkan/obj/descriptor/descriptor_pool.hpp"
 #include "core/vulkan/obj/descriptor/descriptor_set.hpp"
@@ -21,6 +22,7 @@
 #include "core/vulkan/obj/image/sampler.hpp"
 #include "core/vulkan/obj/model/model.hpp"
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
+#include "core/vulkan/obj/pipeline/compute_pipeline.hpp"
 #include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
 #include "core/vulkan/obj/command/command_buffer.hpp"
@@ -35,31 +37,34 @@
 struct window;
 
 struct core {
-	instance				inst;
-	surface					surf;
-	messenger				msgr;
-	queue_indices				q_idx;
-	queue					q;
-	physical_device				gpu;
-	device					dev;
-	swapchain				swp;
-	swapchain_state				swp_st;
-	pipeline_layout				lyt;
-	std::array<shader, 2>			shdrs;
-	texture					tex;
-	sampler					samp;
-	model					mod;
-	std::vector<uniform_buffer>		uniform_bufs;
-	descriptor_set_layout			set_lyt;
-	descriptor_pool				set_pool;
-	std::vector<descriptor_set>		sets;
-	pipeline				pl;
-	render_pass				rp;
-	command_pool				cmd_pool;
-	std::vector<command_buffer>		cmds;
-	std::vector<semaphore>			img_avail_sems;
-	std::vector<semaphore>			rnd_done_sems;
-	std::vector<fence>			frm_fences;
+	instance					inst;
+	surface						surf;
+	messenger					msgr;
+	queue_indices					q_idx;
+	queue						q;
+	physical_device					gpu;
+	device						dev;
+	swapchain					swp;
+	swapchain_state					swp_st;
+	pipeline_layout					lyt;
+	pipeline_layout					comp_lyt;
+	std::array<shader, 3>				shdrs;
+	std::vector<uniform_buffer>			uniform_bufs;
+	std::vector<shader_storage_buffer>		ssbos;	
+	descriptor_set_layout				set_lyt;
+	descriptor_pool					set_pool;
+	std::vector<descriptor_set>			sets;
+	pipeline					pl;
+	pipeline					comp_pl;
+	render_pass					rp;
+	command_pool					cmd_pool;
+	std::vector<command_buffer>			cmds;
+	std::vector<command_buffer>			comp_cmds;
+	std::vector<semaphore>				img_avail_sems;
+	std::vector<semaphore>				rnd_done_sems;
+	std::vector<semaphore>				comp_done_sems;
+	std::vector<fence>				comp_frm_fences;
+	std::vector<fence>				frm_fences;
 };
 
 void core_init(core *c, const window &win);

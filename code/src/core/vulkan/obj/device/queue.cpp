@@ -3,18 +3,29 @@
 
 #include <vulkan/vulkan.h>
 
-VkSubmitInfo queue_create_submit_info(const uint32_t &frame, const std::array<VkSemaphore, 1> &waits, const std::array<VkSemaphore, 1> &signals, 
-				  const std::array<VkPipelineStageFlags, 1> &stages, const std::vector<command_buffer> &cmds)
+VkSubmitInfo queue_create_submit_info(const uint32_t &frame, const std::array<VkSemaphore, 2> &waits, const std::array<VkSemaphore, 1> &signals, 
+				  const std::array<VkPipelineStageFlags, 2> &stages, const std::vector<command_buffer> &cmds)
 {
 	VkSubmitInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	info.waitSemaphoreCount = static_cast<uint32_t>(waits.size());
+	info.waitSemaphoreCount = 2;
 	info.pWaitSemaphores = waits.data();
 	info.pWaitDstStageMask = stages.data();
 	info.commandBufferCount = 1;
 	info.pCommandBuffers = &cmds[frame].handle;
-	info.signalSemaphoreCount = static_cast<uint32_t>(signals.size());
+	info.signalSemaphoreCount = 1;
 	info.pSignalSemaphores = signals.data();
+	return info;
+}
+
+VkSubmitInfo queue_create_compute_submit_info(const uint32_t &frame, const std::vector<command_buffer> &cmds, const std::array<VkSemaphore, 1> &comp_done_sems)
+{
+	VkSubmitInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	info.commandBufferCount = 1;
+	info.pCommandBuffers = &cmds[frame].handle;
+	info.signalSemaphoreCount = 1;
+	info.pSignalSemaphores = comp_done_sems.data();
 	return info;
 }
 

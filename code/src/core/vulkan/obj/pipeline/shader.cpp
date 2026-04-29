@@ -45,7 +45,7 @@ void shader_destroy(const shader &shdr, const device &dev)
 	log_info("The Shader Module was Destroyed.");
 }
 
-void shaders_create(std::array<shader, 2> *shdrs, const device &dev) 
+void shaders_create(std::array<shader, 3> *shdrs, const device &dev) 
 {
 	log_info("Creating the Shader Modules...");
 
@@ -55,7 +55,7 @@ void shaders_create(std::array<shader, 2> *shdrs, const device &dev)
 	log_info("The Shader Modules were Created.");
 }
 
-void shaders_destroy(const std::array<shader, 2> &shdrs, const device &dev)
+void shaders_destroy(const std::array<shader, 3> &shdrs, const device &dev)
 {
 	log_info("Destroying the Shader Modules...");
 

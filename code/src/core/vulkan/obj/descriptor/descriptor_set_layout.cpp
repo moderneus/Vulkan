@@ -2,28 +2,36 @@
 #include "core/vulkan/obj/device/device.hpp"
 #include "util/debug/log.hpp"
 
-std::array<VkDescriptorSetLayoutBinding, 2> descriptor_set_layout_create_bindings()
+std::array<VkDescriptorSetLayoutBinding, 3> descriptor_set_layout_create_bindings()
 {
 	log_info("Creating the Descriptor Set Layout Binding...");
 
-	VkDescriptorSetLayoutBinding ubo_bind = {};
-	ubo_bind.binding = 0;
-	ubo_bind.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	ubo_bind.descriptorCount = 1;
-	ubo_bind.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	std::array<VkDescriptorSetLayoutBinding, 3> binds = {};
+	binds[0].binding = 0;
+	binds[0].descriptorCount = 1;
+	binds[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	binds[0].pImmutableSamplers = nullptr;
+	binds[0].stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
 
-	VkDescriptorSetLayoutBinding samp_bind = {};
-	samp_bind.binding = 1;
-	samp_bind.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	samp_bind.descriptorCount = 1;
-	samp_bind.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+	binds[1].binding = 1;
+	binds[1].descriptorCount = 1;
+	binds[1].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+	binds[1].pImmutableSamplers = nullptr;
+	binds[1].stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+
+	binds[2].binding = 2;
+	binds[2].descriptorCount = 1;
+	binds[2].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+	binds[2].pImmutableSamplers = nullptr;
+	binds[2].stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+
 
 	log_info("The Descriptor Set Layout Binding was Created.");
 
-	return {ubo_bind, samp_bind};
+	return binds;
 }
 
-VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info(const std::array<VkDescriptorSetLayoutBinding, 2> &binds)
+VkDescriptorSetLayoutCreateInfo descriptor_set_layout_create_info(const std::array<VkDescriptorSetLayoutBinding, 3> &binds)
 {
 	log_info("Creating the Descriptor Set Layout Info...");
 
@@ -41,7 +49,7 @@ void descriptor_set_layout_create(descriptor_set_layout *set_lyt, const device &
 {
 	log_info("Creating a Desriptor Set Layout...");
 
-	std::array<VkDescriptorSetLayoutBinding, 2> binds = descriptor_set_layout_create_bindings();
+	std::array<VkDescriptorSetLayoutBinding, 3> binds = descriptor_set_layout_create_bindings();
 	VkDescriptorSetLayoutCreateInfo info = descriptor_set_layout_create_info(binds);
 
 	if (vkCreateDescriptorSetLayout(dev.handle, &info, nullptr, &set_lyt->handle) != VK_SUCCESS)

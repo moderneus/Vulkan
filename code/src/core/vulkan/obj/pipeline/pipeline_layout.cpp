@@ -5,25 +5,25 @@
 
 #include <vulkan/vulkan.h>
 
-VkPipelineLayoutCreateInfo pipeline_layout_create_info(const descriptor_set_layout &set_lyt)
+VkPipelineLayoutCreateInfo pipeline_layout_create_info()
 {
 	log_info("Creating the Pipeline Layout Info...");
 	
 	VkPipelineLayoutCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	info.setLayoutCount = 1;
-	info.pSetLayouts = &set_lyt.handle;
+	info.setLayoutCount = 0;
+	info.pSetLayouts = nullptr;
+
 	log_info("The Pipeline Layout Info was Created.");
 
 	return info;
 }
 
-
-void pipeline_layout_create(pipeline_layout *lyt, const device &dev, const descriptor_set_layout &set_lyt)
+void pipeline_layout_create(pipeline_layout *lyt, const device &dev)
 {
 	log_info("Creating a Pipeline Layout...");
 
-	VkPipelineLayoutCreateInfo info = pipeline_layout_create_info(set_lyt);
+	VkPipelineLayoutCreateInfo info = pipeline_layout_create_info();
 
 	if (vkCreatePipelineLayout(dev.handle, &info, nullptr, &lyt->handle) != VK_SUCCESS)
 		log_critical("Failed to Create the Pipeline Layout.");

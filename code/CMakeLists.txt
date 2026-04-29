@@ -47,6 +47,7 @@ set(SHADERS_BIN_DIR ${CMAKE_BINARY_DIR}/shaders)
 file(GLOB_RECURSE SHADER_SOURCES
     ${SHADERS_SRC_DIR}/*.vert
     ${SHADERS_SRC_DIR}/*.frag
+    ${SHADERS_SRC_DIR}/*.comp
 )
 
 set(SHADER_BINARIES "")
