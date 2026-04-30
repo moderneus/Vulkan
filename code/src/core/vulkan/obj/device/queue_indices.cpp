@@ -24,7 +24,7 @@ void queue_indices_find(queue_indices *q_idx, const physical_device &gpu, const 
 	vkGetPhysicalDeviceQueueFamilyProperties(gpu.handle, &qf_cnt, qfs.data());
 
 	for(uint32_t i = 0; i < qf_cnt; ++i) {
-		if ((qfs[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && (qfs[i].queueFlags & VK_QUEUE_COMPUTE_BIT))
+		if (qfs[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 			q_idx->gfx= i;
 
 		VkBool32 pres_supp = false;

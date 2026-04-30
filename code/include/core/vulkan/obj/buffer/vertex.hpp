@@ -12,9 +12,8 @@
 #include <vector>
 
 struct vertex {
-	glm::vec2 pos;
+	glm::vec3 pos;
 	glm::vec3 col;
-	glm::vec2 vel;
 	glm::vec2 tex;
 
 	bool operator==(const vertex& other) const {
@@ -27,7 +26,7 @@ struct vertex {
 namespace std {
 	template<> struct hash<vertex> {
 		size_t operator()(vertex const& vert) const {
-			return ((hash<glm::vec2>()(vert.pos) ^
+			return ((hash<glm::vec3>()(vert.pos) ^
 			(hash<glm::vec3>()(vert.col) << 1)) >> 1) ^
 			(hash<glm::vec2>()(vert.tex) << 1);
         }
@@ -36,6 +35,6 @@ namespace std {
 
 VkVertexInputBindingDescription vertex_get_bind_desc();
 
-std::array<VkVertexInputAttributeDescription, 2> vertex_get_attrib_desc();
+std::array<VkVertexInputAttributeDescription, 3> vertex_get_attrib_desc();
 
 #endif

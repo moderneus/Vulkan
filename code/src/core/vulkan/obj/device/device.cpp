@@ -77,7 +77,6 @@ void device_create(device *dev, queue *q, const queue_indices &q_idx, const phys
 		log_critical("Failed to Create the Logical Device.");
 
 	vkGetDeviceQueue(dev->handle, q_idx.gfx.value(), 0, &q->gfx);
-	vkGetDeviceQueue(dev->handle, q_idx.gfx.value(), 0, &q->comp);
 	vkGetDeviceQueue(dev->handle, q_idx.pres.value(), 0, &q->pres);
 
 	log_info("The Logical Device was created.");

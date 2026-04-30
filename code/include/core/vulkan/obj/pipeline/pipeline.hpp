@@ -36,7 +36,7 @@ struct pipeline_config {
 	VkPipelineColorBlendAttachmentState			att	    = {};
 	std::vector<VkDynamicState>				dyn_state   = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
 	VkVertexInputBindingDescription				bind_desc   = {};
-	std::array<VkVertexInputAttributeDescription, 2>	attrib_desc = {};
+	std::array<VkVertexInputAttributeDescription, 3>	attrib_desc = {};
 };
 
 VkViewport pipeline_create_viewport(const swapchain_state &st);
@@ -47,7 +47,7 @@ VkPipelineColorBlendAttachmentState pipeline_create_col_blend_att();
 
 VkPipelineDepthStencilStateCreateInfo pipeline_create_ds_info();
 
-std::vector<shader_reference> pipeline_create_shdr_refs(const std::array<shader, 3> &shdrs);
+std::vector<shader_reference> pipeline_create_shdr_refs(const std::array<shader, 2> &shdrs);
 
 VkPipelineShaderStageCreateInfo pipeline_create_shdr_stage_info(const shader_reference &ref);
 
@@ -72,9 +72,7 @@ VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipelin
 VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const pipeline_layout &lyt, const render_pass &rp);
 
 void pipeline_create(pipeline *pl, const device &dev, const pipeline_layout &lyt, const render_pass &rp, 
-		     const swapchain_state &st, const std::array<shader, 3> &shdrs);
-
-void pipeline_create_compute(pipeline *pl, const device &dev, const pipeline_layout &lyt, const shader &shdr);
+		     const swapchain_state &st, const std::array<shader, 2> &shdrs);
 
 void pipeline_destroy(const pipeline &pl, const device &dev);
 

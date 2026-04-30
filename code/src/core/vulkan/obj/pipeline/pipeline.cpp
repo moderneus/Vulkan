@@ -46,7 +46,7 @@ VkPipelineColorBlendAttachmentState pipeline_create_col_blend_att()
 	return att;
 }
 
-std::vector<shader_reference> pipeline_create_shdr_refs(const std::array<shader, 3> &shdrs)
+std::vector<shader_reference> pipeline_create_shdr_refs(const std::array<shader, 2> &shdrs)
 {
 	log_info("Creating the Shader Modules References...");
 
@@ -124,7 +124,7 @@ VkPipelineInputAssemblyStateCreateInfo pipeline_create_asm_input_info()
 
 	VkPipelineInputAssemblyStateCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-	info.topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
+	info.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	info.primitiveRestartEnable = VK_FALSE;
 
 	log_info("The Input Assembly Info was Created.");
@@ -236,7 +236,7 @@ VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, 
 }
 
 void pipeline_create(pipeline *pl, const device &dev, const pipeline_layout &lyt, const render_pass &rp, 
-		     const swapchain_state &st, const std::array<shader, 3> &shdrs)
+		     const swapchain_state &st, const std::array<shader, 2> &shdrs)
 {
 	log_info("Creating a Pipeline...");
 
@@ -246,7 +246,7 @@ void pipeline_create(pipeline *pl, const device &dev, const pipeline_layout &lyt
 	cfg.scissor = pipeline_create_scissor(st);
 	cfg.att = pipeline_create_col_blend_att();
 	cfg.bind_desc = vertex_get_bind_desc();
-	cfg.attrib_desc = vertex_get_attrib_desc();
+	cfg.attrib_desc= vertex_get_attrib_desc();
 
 	pipeline_info pl_info = {};
 	pl_info.shdr_stages = pipeline_create_shdr_stage_infos(cfg);

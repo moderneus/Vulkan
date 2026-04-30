@@ -24,8 +24,8 @@ void shader_create(shader *shdr, const device &dev, const std::string &path);
 
 void shader_destroy(const shader &shdr, const device &dev);
 
-void shaders_create(std::array<shader, 3> *shdrs, const device &dev); 
+void shaders_create(std::array<shader, 2> *shdrs, const device &dev); 
 
-void shaders_destroy(const std::array<shader, 3> &shdrs, const device &dev);
+void shaders_destroy(const std::array<shader, 2> &shdrs, const device &dev);
 
 #endif

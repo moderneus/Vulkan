@@ -7,7 +7,6 @@
 #include "core/vulkan/obj/buffer/vertex.hpp"
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
 #include "core/vulkan/obj/buffer/index_buffer.hpp"
-#include "core/vulkan/obj/buffer/shader_storage_buffer.hpp"
 #include "core/vulkan/obj/descriptor/descriptor_set.hpp"
 #include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "util/debug/log.hpp"
@@ -24,26 +23,8 @@ VkCommandBufferBeginInfo command_buffer_create_begin_info()
 	return info;
 }
 
-void command_buffer_record_compute(const command_buffer &cmd, const pipeline &pl, const pipeline_layout &comp_lyt, const descriptor_set &set)
-{
-	VkCommandBufferBeginInfo info = {};
-	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-	if (vkBeginCommandBuffer(cmd.handle, &info) != VK_SUCCESS)
-		log_critical("Failed to Begin Recording Compute Command Buffer.");
-
-	vkCmdBindPipeline(cmd.handle, VK_PIPELINE_BIND_POINT_COMPUTE, pl.handle);
-
-	vkCmdBindDescriptorSets(cmd.handle, VK_PIPELINE_BIND_POINT_COMPUTE, comp_lyt.handle, 0, 1, &set.handle, 0, nullptr);
-
-	vkCmdDispatch(cmd.handle, PARTICLE_COUNT / 256, 1, 1);
-
-	if (vkEndCommandBuffer(cmd.handle) != VK_SUCCESS)
-		log_critical("Failed to End Recording Compute Command Buffer.");
-}
-
-void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const render_pass &rp, 
-			   const swapchain_state &st, const shader_storage_buffer &buf, const uint32_t img_idx)
+void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const pipeline_layout &lyt, const render_pass &rp, 
+			   const swapchain_state &st, const vertex_buffer &buf, const index_buffer &idx_buf, const descriptor_set &set, const uint32_t img_idx)
 {
 	VkCommandBufferBeginInfo cmd_begin = command_buffer_create_begin_info();
 
@@ -63,12 +44,14 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 		VkRect2D sc = pipeline_create_scissor(st);
 		vkCmdSetScissor(cmd.handle, 0, 1, &sc);
 
-		std::array<VkBuffer, 1> bufs = {buf.sbuf.handle}; 
-		std::array<VkDeviceSize, 1> offsets = {0};
+		std::array<VkBuffer, 1> bufs = {buf.vbuf.handle}; std::array<VkDeviceSize, 1> offsets = {0};
 
 		vkCmdBindVertexBuffers(cmd.handle, 0, 1, bufs.data(), offsets.data());
+		vkCmdBindIndexBuffer(cmd.handle, idx_buf.ibuf.handle, 0, VK_INDEX_TYPE_UINT32);
 
-		vkCmdDraw(cmd.handle, PARTICLE_COUNT, 1, 0, 0);
+		vkCmdBindDescriptorSets(cmd.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, lyt.handle, 0, 1, &set.handle, 0, nullptr);
+
+		vkCmdDrawIndexed(cmd.handle, static_cast<uint32_t>(idx_buf.data.size()), 1, 0, 0, 0);
 
 	vkCmdEndRenderPass(cmd.handle);
 

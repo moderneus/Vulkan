@@ -27,8 +27,8 @@ std::array<VkDescriptorPoolSize, 2> descriptor_pool_create_sizes()
 	sizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 	sizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
 
-	sizes[1].type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-	sizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT) * 2;
+	sizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	sizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
 
 	log_info("The Descriptor Pool Size Info was Created.");
 	

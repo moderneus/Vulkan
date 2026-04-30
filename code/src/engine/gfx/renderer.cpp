@@ -41,21 +41,6 @@ void renderer_draw(const renderer &r, renderer_state *st, core *c)
 {
 	vkWaitForFences(c->dev.handle, 1, &c->frm_fences[st->frame].handle, VK_TRUE, UINT64_MAX);
 
-	uniform_buffer_update(&c->uniform_bufs, c->swp_st, st->frame);
-
-	vkResetFences(c->dev.handle, 1, &c->comp_frm_fences[st->frame].handle);
-
-	vkResetCommandBuffer(c->comp_cmds[st->frame].handle, 0);
-	command_buffer_record_compute(c->comp_cmds[st->frame], c->comp_pl, c->comp_lyt, c->sets[st->frame]);
-
-	std::array<VkSemaphore, 1> comp_signals = {c->comp_done_sems[st->frame].handle};
-	VkSubmitInfo comp_submit_info = queue_create_compute_submit_info(st->frame, c->comp_cmds, comp_signals); 
-
-	if (vkQueueSubmit(c->q.comp, 1, &comp_submit_info, c->comp_frm_fences[st->frame].handle) != VK_SUCCESS)
-		log_critical("Failed to Submit Compute Commands.");
-
-	vkWaitForFences(c->dev.handle, 1, &c->frm_fences[st->frame].handle, VK_TRUE, UINT64_MAX);
-
 	uint32_t img_idx;
 	VkResult res = vkAcquireNextImageKHR(c->dev.handle, c->swp.handle, UINT64_MAX, c->img_avail_sems[st->frame].handle, 
 					     VK_NULL_HANDLE, &img_idx);
@@ -67,15 +52,15 @@ void renderer_draw(const renderer &r, renderer_state *st, core *c)
 		log_critical("Failed to Acquire Swapchain Image.");
 	}
 
+	uniform_buffer_update(&c->uniform_bufs, c->swp_st, st->frame);
 	
 	vkResetFences(c->dev.handle, 1, &c->frm_fences[st->frame].handle);
 
 	vkResetCommandBuffer(c->cmds[st->frame].handle, 0);
+	command_buffer_record(c->cmds[st->frame], c->pl, c->lyt, c->rp, c->swp_st, c->mod.vbuf, c->mod.ibuf, c->sets[st->frame], img_idx);
 
-	command_buffer_record(c->cmds[st->frame], c->pl, c->rp, c->swp_st, c->ssbos[st->frame], img_idx);
-
-	std::array<VkSemaphore, 2> waits = {c->comp_done_sems[st->frame].handle, c->img_avail_sems[st->frame].handle};
-	std::array<VkPipelineStageFlags, 2> stages = { VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+	std::array<VkSemaphore, 1> waits = {c->img_avail_sems[st->frame].handle};
+	std::array<VkPipelineStageFlags, 1> stages = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 	std::array<VkSemaphore, 1> signals = {c->rnd_done_sems[st->frame].handle};
 
 	VkSubmitInfo submit_info = queue_create_submit_info(st->frame, waits, signals, stages, c->cmds);
