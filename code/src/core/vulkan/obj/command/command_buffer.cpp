@@ -92,6 +92,8 @@ void command_buffers_create(std::vector<command_buffer> *cmds, const device &dev
 
 command_buffer command_buffer_begin_single_time_cmds(const device &dev, const command_pool &pool)
 {
+	log_info("Beginning the Command Buffer Single Time Commands.");
+
 	VkCommandBufferAllocateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -123,4 +125,6 @@ void command_buffer_end_single_time_cmds(const command_buffer &cmd, const device
 	vkQueueWaitIdle(q.gfx);
 
 	vkFreeCommandBuffers(dev.handle, pool.handle, 1, &cmd.handle);
+
+	log_info("Ending the Command Buffer Single Time Commands.");
 }

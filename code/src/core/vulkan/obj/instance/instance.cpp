@@ -12,14 +12,15 @@
 
 std::vector<const char*> instance_get_req_exts() 
 {
+	log_info("Getting the Required Extensions...");
+
 	uint32_t exts_cnt = 0;
 	const char* const* exts = SDL_Vulkan_GetInstanceExtensions(&exts_cnt);
 
 	std::vector<const char*> req_exts(exts, exts + exts_cnt);
 	req_exts.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 
-	log_info("Extensions = ", cstr_vec_to_str_vec(req_exts));
-	log_info("Extensions count = " + std::to_string(req_exts.size()));
+	log_info("The Required Extensions were Got: ", cstr_vec_to_str_vec(req_exts));
 
 	return req_exts;
 }

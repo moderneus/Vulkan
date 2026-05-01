@@ -16,6 +16,8 @@
 
 swapchain_support_details swapchain_query_supp_details(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surf) 
 {
+	log_info("Querying the Swapchain Support Details...");
+
 	swapchain_support_details d;
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surf, &d.caps);
 
@@ -35,11 +37,15 @@ swapchain_support_details swapchain_query_supp_details(const VkPhysicalDevice &g
 		vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surf, &pm_cnt, d.pms.data());
 	}
 
+	log_info("The Swapchain Support Details were Returned.");
+
 	return d;
 }
 
 bool swapchain_is_adequate(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surf) 
 {
+	log_info("Checking an Adequacy of Swapchain...");
+
 	swapchain_support_details d = swapchain_query_supp_details(gpu, surf);
 
 	bool srgb_ok = false;
@@ -54,6 +60,11 @@ bool swapchain_is_adequate(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surf
 		if (pm == VK_PRESENT_MODE_MAILBOX_KHR || pm == VK_PRESENT_MODE_FIFO_KHR)
 			pm_ok = true;
 	}
+
+	if (!(srgb_ok && pm_ok))
+		log_critical("The Swapchain is not Adequate.");
+
+	log_info("The Swapchain is Adequate.");
 
 	return srgb_ok && pm_ok;
 }
@@ -158,6 +169,8 @@ VkSwapchainCreateInfoKHR swapchain_create_info(const queue_indices &q_idx, const
 void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, 
 			   const VkSurfaceFormatKHR &fmt, const VkExtent2D &extent)
 {
+	log_info("Setting up the Swapchain State...");
+
 	uint32_t img_cnt = 0;
 	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, nullptr);
 
@@ -173,6 +186,8 @@ void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const devi
 		st->imgs[i].aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT;
 		st->imgs[i].mip_lvls = 1;
 	}
+
+	log_info("The Swapchain State was Setted up.");
 }
 
 void swapchain_recreate(swapchain *swp, swapchain_state *swp_st, renderer_state *rnd_st, const device &dev, const physical_device &gpu, 

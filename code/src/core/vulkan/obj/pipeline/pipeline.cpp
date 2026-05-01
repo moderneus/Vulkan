@@ -186,12 +186,17 @@ VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info(const swapchain_s
 
 VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info()
 {
+	log_info("Creating the Depth Stencil Info...");
+
 	VkPipelineDepthStencilStateCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 	info.depthTestEnable = VK_TRUE;
 	info.depthWriteEnable = VK_TRUE;
 	info.depthCompareOp = VK_COMPARE_OP_LESS;
 	info.depthBoundsTestEnable = VK_FALSE;
+
+	log_info("The Depth Stencil Info was Created.");
+
 	return info;
 }
 

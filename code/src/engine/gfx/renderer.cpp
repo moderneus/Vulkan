@@ -29,12 +29,16 @@ void renderer_destroy(renderer *r)
 
 void renderer_loop(renderer *r, event_manager *ev_m, core *c) 
 {
+	log_info("Starting the Render Loop...");
+
 	renderer_state st = {};
 	while(!r->pwin->is_closed) {
 		event_manager_poll(ev_m, &st, r->pwin);
 		renderer_draw(*r, &st, c);
 	}
 	vkDeviceWaitIdle(c->dev.handle);
+
+	log_info("The Render Loop was Ended.");
 }
 
 void renderer_draw(const renderer &r, renderer_state *st, core *c) 
@@ -49,7 +53,7 @@ void renderer_draw(const renderer &r, renderer_state *st, core *c)
 		swapchain_recreate(&c->swp, &c->swp_st, st, c->dev, c->gpu, c->rp, c->q_idx, c->surf, *r.pwin);
 		return;
 	} else if (res != VK_SUCCESS && res != VK_SUBOPTIMAL_KHR) {
-		log_critical("Failed to Acquire Swapchain Image.");
+		log_critical("Failed to Acquire the Swapchain Image.");
 	}
 
 	uniform_buffer_update(&c->uniform_bufs, c->swp_st, st->frame);
@@ -77,7 +81,7 @@ void renderer_draw(const renderer &r, renderer_state *st, core *c)
 		st->fb_resized = false;
 		swapchain_recreate(&c->swp, &c->swp_st, st, c->dev, c->gpu, c->rp, c->q_idx, c->surf, *r.pwin);
 	} else if (res != VK_SUCCESS) {
-		log_critical("Failed to Present Swapchain Image.");
+		log_critical("Failed to Present the Swapchain Image.");
 	}
 
 	st->frame = (st->frame + 1) % MAX_FRAMES_IN_FLIGHT;

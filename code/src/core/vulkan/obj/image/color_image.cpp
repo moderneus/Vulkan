@@ -1,9 +1,12 @@
 #include "core/vulkan/obj/image/color_image.hpp"
 #include "core/vulkan/obj/swapchain/swapchain.hpp"
 #include "core/vulkan/obj/device/physical_device.hpp"
+#include "util/debug/log.hpp"
 
 void color_image_create(swapchain_state *st, const device &dev, const physical_device &gpu)
 {
+	log_info("Creating a Color Image...");
+
 	st->col_img.img.extent.width = st->imgs[0].extent.width;
 	st->col_img.img.extent.height = st->imgs[0].extent.height;
 	st->col_img.img.tiling = st->imgs[0].tiling;
@@ -15,10 +18,16 @@ void color_image_create(swapchain_state *st, const device &dev, const physical_d
 
 	image_create(&st->col_img.img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 	image_view_create(&st->col_img.view, dev, st->col_img.img);
+
+	log_info("The Color Image was Created.");
 }
 
 void color_image_destroy(const swapchain_state &st, const device &dev)
 {
+	log_info("Destroying the Color Image..");
+
 	image_destroy(st.col_img.img, dev);
 	image_view_destroy(st.col_img.view, dev);
+
+	log_info("The Color Image was Destroyed."); 
 }

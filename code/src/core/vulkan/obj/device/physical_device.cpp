@@ -11,8 +11,17 @@
 #include <map>
 #include <set>
 
+std::string physical_device_get_name(const VkPhysicalDevice &gpu)
+{
+	VkPhysicalDeviceProperties props;
+	vkGetPhysicalDeviceProperties(gpu, &props);
+	return props.deviceName;
+}
+
 uint32_t physical_device_rate(const VkPhysicalDevice &gpu) 
 {
+	log_info("Rating the Physical Device with Name: ", physical_device_get_name(gpu));
+
 	VkPhysicalDeviceProperties props;
 	vkGetPhysicalDeviceProperties(gpu, &props);
 
@@ -23,18 +32,15 @@ uint32_t physical_device_rate(const VkPhysicalDevice &gpu)
 
 	scr += props.limits.maxImageDimension2D;
 
-	return scr;
-}
+	log_info("The Score of Physical Device is: ", std::to_string(scr));
 
-std::string physical_device_get_name(const physical_device &gpu)
-{
-	VkPhysicalDeviceProperties props;
-	vkGetPhysicalDeviceProperties(gpu.handle, &props);
-	return props.deviceName;
+	return scr;
 }
 
 bool physical_device_check_ext_supp(const VkPhysicalDevice &gpu)
 {
+	log_info("Checking the Physical Device Supported Extensions...");
+
 	uint32_t ext_cnt;
 	vkEnumerateDeviceExtensionProperties(gpu, nullptr, &ext_cnt, nullptr);
 
@@ -45,6 +51,11 @@ bool physical_device_check_ext_supp(const VkPhysicalDevice &gpu)
 
 	for(const auto &ext : exts)
 		req_exts.erase(ext.extensionName);
+
+	if(!req_exts.empty())
+		log_critical("The Physical Device doesn't Support the Required Extensions.");
+
+	log_info("The Physical Device Supports the Required Extensions.");
 
 	return req_exts.empty();
 }
@@ -82,22 +93,28 @@ void physical_device_pick(physical_device *gpu, const instance &inst, const surf
 		log_critical("Failed to Find any Suitable GPU.");
 	
 
-	log_info("Selected GPU = ", physical_device_get_name(*gpu));
+	log_info("The Suitable GPU was Found: ", physical_device_get_name(gpu->handle));
 }
 
 VkPhysicalDeviceFeatures physical_device_get_features(const physical_device &gpu) 
 {
+	log_info("Getting the Physical Device Features...");
+
 	VkPhysicalDeviceFeatures features = {};
 	vkGetPhysicalDeviceFeatures(gpu.handle, &features);
 
 	if (features.samplerAnisotropy != VK_TRUE)
 		log_critical("The found GPU doesn't have a Anistropy Filtrening Support.");
 
+	log_info("The Physical Device Features were Got");
+
 	return features;
 }
 
 uint32_t physical_device_find_mem_type(const physical_device &gpu, uint32_t type_filter, VkMemoryPropertyFlags props)
 {
+	log_info("Searching the Physical Device Memory Type...");
+
 	VkPhysicalDeviceMemoryProperties mem_props = {};
 	vkGetPhysicalDeviceMemoryProperties(gpu.handle, &mem_props);
 
@@ -105,20 +122,28 @@ uint32_t physical_device_find_mem_type(const physical_device &gpu, uint32_t type
 		if ((type_filter & (1 << i)) && (mem_props.memoryTypes[i].propertyFlags & props) == props)
 			return i;
 	}
+
+	log_info("The Physical Device Memory Type was Found.");
 	
 	return -1;
 }
 
 VkFormat physical_device_find_supp_fmt(const physical_device &gpu, const std::vector<VkFormat> &fmts, VkImageTiling tiling, VkFormatFeatureFlags features)
 {
+	log_info("Searching the Physical Device Supported Format...");
+
 	for(VkFormat fmt : fmts) {
 		VkFormatProperties props;
 		vkGetPhysicalDeviceFormatProperties(gpu.handle, fmt, &props);
 
-		if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
+		if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
+			log_info("The Physical Device Supported Format Was Found.");
 			return fmt;
-		else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+		}
+		else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
+			log_info("The Physical Device Supported Format was Found.");
 			return fmt;
+		}
 	}
 
 	log_critical("Failed to Find Supported Format.");
@@ -128,17 +153,39 @@ VkFormat physical_device_find_supp_fmt(const physical_device &gpu, const std::ve
 
 VkSampleCountFlagBits physical_device_get_max_usable_sample_cnt(const physical_device &gpu) 
 {
+	log_info("Getting the Physical Device Max Usable Samples...");
+
 	VkPhysicalDeviceProperties props;
 	vkGetPhysicalDeviceProperties(gpu.handle, &props);
 
 	VkSampleCountFlags cnts = props.limits.framebufferColorSampleCounts & props.limits.framebufferDepthSampleCounts;
 
-	if (cnts & VK_SAMPLE_COUNT_64_BIT) return VK_SAMPLE_COUNT_64_BIT;
-	if (cnts & VK_SAMPLE_COUNT_32_BIT) return VK_SAMPLE_COUNT_32_BIT;
-	if (cnts & VK_SAMPLE_COUNT_16_BIT) return VK_SAMPLE_COUNT_16_BIT;
-	if (cnts & VK_SAMPLE_COUNT_8_BIT) return VK_SAMPLE_COUNT_8_BIT;
-	if (cnts & VK_SAMPLE_COUNT_4_BIT) return VK_SAMPLE_COUNT_4_BIT;
-	if (cnts & VK_SAMPLE_COUNT_4_BIT) return VK_SAMPLE_COUNT_2_BIT;
+	if (cnts & VK_SAMPLE_COUNT_64_BIT) {
+		log_info("The Physical Device Max Usable Samples were Got.");
+		return VK_SAMPLE_COUNT_64_BIT;
+	}
+	if (cnts & VK_SAMPLE_COUNT_32_BIT) {
+		log_info("The Physical Device Max Usable Samples were Got.");
+		return VK_SAMPLE_COUNT_32_BIT;
+	}
+	if (cnts & VK_SAMPLE_COUNT_16_BIT) {
+		log_info("The Physical Device Max Usable Samples were Got.");
+		return VK_SAMPLE_COUNT_16_BIT;
+	}
+	if (cnts & VK_SAMPLE_COUNT_8_BIT) {
+		log_info("The Physical Device Max Usable Samples were Got.");
+		return VK_SAMPLE_COUNT_8_BIT;
+	}
+	if (cnts & VK_SAMPLE_COUNT_4_BIT) {
+		log_info("The Physical Device Max Usable Samples were Got.");
+		return VK_SAMPLE_COUNT_4_BIT;
+	}
+	if (cnts & VK_SAMPLE_COUNT_4_BIT) {
+		log_info("The Physical Device Max Usable Samples were Got.");
+		return VK_SAMPLE_COUNT_2_BIT;
+	}
+		
+	log_info("The Physical Device Max Usable Samples were Got.");
 
 	return VK_SAMPLE_COUNT_1_BIT;
 }

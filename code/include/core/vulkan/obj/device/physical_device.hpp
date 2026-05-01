@@ -15,9 +15,9 @@ struct physical_device {
 
 const std::vector<const char*> physical_device_exts = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 
-uint32_t physical_device_rate(const physical_device &gpu);
+std::string physical_device_get_name(const VkPhysicalDevice &gpu);
 
-std::string physical_device_get_name(const physical_device &gpu);
+uint32_t physical_device_rate(const physical_device &gpu);
 
 bool physical_device_check_ext_supp(const physical_device &gpu);
 

@@ -10,6 +10,8 @@
 
 void model_load(model *mod, const std::string &path) 
 {
+	log_info("Loading the Model by Path: ", path);
+
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
@@ -17,7 +19,7 @@ void model_load(model *mod, const std::string &path)
 	std::string err;
 
 	if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str())) 
-		log_error("Failed to Load the Model. Error: ", err);
+		log_error("Failed to Load the Model by Path: ", path + ". Error: " + err);
 
 	std::unordered_map<vertex, uint32_t> unique_verts = {};
 
@@ -46,4 +48,6 @@ void model_load(model *mod, const std::string &path)
 			mod->ibuf.data.push_back(unique_verts[vert]);
 		}
 	}
+
+	log_info("The Model was Loaded by Path: ", path);
 }

@@ -1,6 +1,7 @@
 #include "core/vulkan/obj/image/depth_image.hpp"
 #include "core/vulkan/obj/device/physical_device.hpp"
 #include "core/vulkan/obj/swapchain/swapchain.hpp"
+#include "util/debug/log.hpp"
 
 VkFormat depth_image_find_fmt(const physical_device &gpu)
 {
@@ -11,10 +12,13 @@ VkFormat depth_image_find_fmt(const physical_device &gpu)
 		VK_IMAGE_TILING_OPTIMAL,
 		VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 	);
+
 }
 
 void depth_image_create(swapchain_state *st, const device &dev, const physical_device &gpu)
 {
+	log_info("Creating a Depth Image...");
+
 	VkFormat fmt = depth_image_find_fmt(gpu);
 
 	st->dp_img.img.extent.width = st->imgs[0].extent.width;
@@ -28,10 +32,16 @@ void depth_image_create(swapchain_state *st, const device &dev, const physical_d
 
 	image_create(&st->dp_img.img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 	image_view_create(&st->dp_img.view, dev, st->dp_img.img);
+
+	log_info("The Depth Image was Created.");
 }
 
 void depth_image_destroy(const swapchain_state &st, const device &dev)
 {
+	log_info("Destroying the Depth Image...");
+
 	image_destroy(st.dp_img.img, dev);
 	image_view_destroy(st.dp_img.view, dev);
+
+	log_info("The Depth Image was Destroyed."); 
 }

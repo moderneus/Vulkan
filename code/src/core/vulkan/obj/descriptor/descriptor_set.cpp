@@ -39,10 +39,15 @@ VkDescriptorBufferInfo descriptor_set_create_buf_info(const uniform_buffer &buf)
 
 VkDescriptorImageInfo descriptor_set_create_img_info(const image_view &view, const sampler &samp)
 {
+	log_info("Creating the Descriptor Set Image Info...");
+
 	VkDescriptorImageInfo info = {};
 	info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	info.imageView = view.handle;
 	info.sampler = samp.handle;
+
+	log_info("The Descriptor Set Image Info was Created.");
+
 	return info;
 }
 
