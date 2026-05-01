@@ -24,6 +24,7 @@ void depth_image_create(swapchain_state *st, const device &dev, const physical_d
 	st->dp_img.img.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 	st->dp_img.img.aspect_flags = VK_IMAGE_ASPECT_DEPTH_BIT;
 	st->dp_img.img.mip_lvls = 1;
+	st->dp_img.img.samples = physical_device_get_max_usable_sample_cnt(gpu);
 
 	image_create(&st->dp_img.img, dev, gpu, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 	image_view_create(&st->dp_img.view, dev, st->dp_img.img);

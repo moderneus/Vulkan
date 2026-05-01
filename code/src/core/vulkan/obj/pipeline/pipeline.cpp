@@ -170,14 +170,14 @@ VkPipelineRasterizationStateCreateInfo pipeline_create_rast_info()
 	return info;
 }
 
-VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info() 
+VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info(const swapchain_state &st) 
 {
 	log_info("Creating a Multisampling Info...");
 
 	VkPipelineMultisampleStateCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 	info.sampleShadingEnable = VK_FALSE;
-	info.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+	info.rasterizationSamples = st.col_img.img.samples;
 
 	log_info("The Multisampling Info was Created.");
 
@@ -254,7 +254,7 @@ void pipeline_create(pipeline *pl, const device &dev, const pipeline_layout &lyt
 	pl_info.asm_input = pipeline_create_asm_input_info();
 	pl_info.vp = pipeline_create_viewport_info(cfg);
 	pl_info.rast = pipeline_create_rast_info();
-	pl_info.msaa = pipeline_create_msaa_info();
+	pl_info.msaa = pipeline_create_msaa_info(st);
 	pl_info.ds = pipeline_create_depth_stencil_info();
 	pl_info.col_blend = pipeline_create_col_blend_info(cfg);
 	pl_info.dyn_state = pipeline_create_dyn_state_info(cfg);

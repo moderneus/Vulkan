@@ -36,7 +36,7 @@ VkImageCreateInfo image_create_info(const image &img)
 	info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	info.usage = img.usage;
 	info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	info.samples = VK_SAMPLE_COUNT_1_BIT;
+	info.samples = img.samples;
 
 	log_info("The Image Info was Created.");
 

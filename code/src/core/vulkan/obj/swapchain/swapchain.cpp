@@ -191,6 +191,7 @@ void swapchain_recreate(swapchain *swp, swapchain_state *swp_st, renderer_state 
 	vkDeviceWaitIdle(dev.handle);
 
 	framebuffers_destroy(*swp_st, dev);
+	color_image_destroy(*swp_st, dev);
 	depth_image_destroy(*swp_st, dev);
 	image_views_destroy(*swp_st, dev);
 	swapchain_destroy(*swp, dev);
@@ -198,6 +199,7 @@ void swapchain_recreate(swapchain *swp, swapchain_state *swp_st, renderer_state 
 	swapchain_create(swp, swp_st, dev, gpu, q_idx, surf, win);
 	image_views_create(swp_st, dev);
 	depth_image_create(swp_st, dev, gpu);
+	color_image_create(swp_st, dev, gpu);
 	framebuffers_create(swp_st, dev, rp);
 }
 

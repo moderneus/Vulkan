@@ -17,14 +17,14 @@ VkRenderPassBeginInfo render_pass_create_begin_info(const render_pass &rp, const
 	return info;
 }
 
-std::array<VkAttachmentDescription, 2> render_pass_create_att_descs(const swapchain_state &st, const physical_device &gpu) 
+std::array<VkAttachmentDescription, 3> render_pass_create_att_descs(const swapchain_state &st, const physical_device &gpu) 
 {
 	log_info("Creating an Attachment Description...");
 
-	std::array<VkAttachmentDescription, 2> descs = {};
+	std::array<VkAttachmentDescription, 3> descs = {};
 
 	descs[0].format = st.imgs[0].fmt;
-	descs[0].samples = VK_SAMPLE_COUNT_1_BIT;
+	descs[0].samples = st.col_img.img.samples;
 	descs[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	descs[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 	descs[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -33,13 +33,22 @@ std::array<VkAttachmentDescription, 2> render_pass_create_att_descs(const swapch
 	descs[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
 	descs[1].format = depth_image_find_fmt(gpu);
-	descs[1].samples = VK_SAMPLE_COUNT_1_BIT;
+	descs[1].samples = st.col_img.img.samples;
 	descs[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	descs[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 	descs[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 	descs[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 	descs[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	descs[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+	descs[2].format = st.imgs[0].fmt;
+	descs[2].samples = VK_SAMPLE_COUNT_1_BIT;
+	descs[2].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	descs[2].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	descs[2].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	descs[2].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	descs[2].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	descs[2].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
 	log_info("The Attachment Description was Created.");
 
@@ -67,7 +76,15 @@ VkAttachmentReference render_pass_create_depth_att_ref()
 	return ref;
 }
 
-VkSubpassDescription render_pass_create_subp_desc(const VkAttachmentReference &col_ref, const VkAttachmentReference &dp_ref) 
+VkAttachmentReference render_pass_create_resolve_att_ref()
+{
+	VkAttachmentReference ref = {};
+	ref.attachment = 2;
+	ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	return ref;
+}
+
+VkSubpassDescription render_pass_create_subp_desc(const VkAttachmentReference &col_ref, const VkAttachmentReference &dp_ref, const VkAttachmentReference &res_ref) 
 {
 	log_info("Creating a Subpass Description...");
 
@@ -76,6 +93,7 @@ VkSubpassDescription render_pass_create_subp_desc(const VkAttachmentReference &c
 	desc.colorAttachmentCount = 1;
 	desc.pColorAttachments = &col_ref;
 	desc.pDepthStencilAttachment = &dp_ref;
+	desc.pResolveAttachments = &res_ref;
 
 	log_info("The Subpasss Description was Created.");
 
@@ -88,13 +106,13 @@ VkSubpassDependency render_pass_create_subp_dep()
 	dep.srcSubpass = VK_SUBPASS_EXTERNAL;
 	dep.dstSubpass = 0;
 	dep.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-	dep.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+	dep.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 	dep.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 	dep.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 	return dep;
 }
 
-VkRenderPassCreateInfo render_pass_create_info(const std::array<VkAttachmentDescription, 2> &atts, const VkSubpassDescription &subp, const VkSubpassDependency &dep) 
+VkRenderPassCreateInfo render_pass_create_info(const std::array<VkAttachmentDescription, 3> &atts, const VkSubpassDescription &subp, const VkSubpassDependency &dep) 
 {
 	log_info("Creating the Render Pass Info...");
 
@@ -116,10 +134,11 @@ void render_pass_create(render_pass *rp, const device &dev, const physical_devic
 {
 	log_info("Creating a Render Pass...");
 
-	std::array<VkAttachmentDescription, 2> atts = render_pass_create_att_descs(st, gpu);
+	std::array<VkAttachmentDescription, 3> atts = render_pass_create_att_descs(st, gpu);
 	VkAttachmentReference col_ref = render_pass_create_color_att_ref();
 	VkAttachmentReference dp_ref = render_pass_create_depth_att_ref();
-	VkSubpassDescription subp = render_pass_create_subp_desc(col_ref, dp_ref);
+	VkAttachmentReference res_ref = render_pass_create_resolve_att_ref();
+	VkSubpassDescription subp = render_pass_create_subp_desc(col_ref, dp_ref, res_ref);
 	VkSubpassDependency dep = render_pass_create_subp_dep();
 	VkRenderPassCreateInfo info = render_pass_create_info(atts, subp, dep);
 

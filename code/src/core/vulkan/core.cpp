@@ -1,5 +1,6 @@
 #include "core/vulkan/core.hpp"
 #include "core/vulkan/obj/swapchain/framebuffer.hpp"
+#include "core/vulkan/obj/image/color_image.hpp"
 #include "util/debug/log.hpp"
 
 void core_init(core *c, const window &win) 
@@ -14,12 +15,13 @@ void core_init(core *c, const window &win)
 	device_create(&c->dev, &c->q, c->q_idx, c->gpu);
 	swapchain_create(&c->swp, &c->swp_st, c->dev, c->gpu, c->q_idx, c->surf, win);
 	image_views_create(&c->swp_st, c->dev);
+	depth_image_create(&c->swp_st, c->dev, c->gpu);
+	color_image_create(&c->swp_st, c->dev, c->gpu);
 	render_pass_create(&c->rp, c->dev, c->gpu, c->swp_st);
 	shaders_create(&c->shdrs, c->dev);
 	descriptor_set_layout_create(&c->set_lyt, c->dev);
 	pipeline_layout_create(&c->lyt, c->dev, c->set_lyt);
 	pipeline_create(&c->pl, c->dev, c->lyt, c->rp, c->swp_st, c->shdrs);
-	depth_image_create(&c->swp_st, c->dev, c->gpu);
 	framebuffers_create(&c->swp_st, c->dev, c->rp);
 	command_pool_create(&c->cmd_pool, c->dev, c->q_idx);
 	command_buffers_create(&c->cmds, c->dev, c->cmd_pool);
@@ -58,8 +60,9 @@ void core_destroy(core *c)
 	shaders_destroy(c->shdrs, c->dev);
 	render_pass_destroy(c->rp, c->dev);
 	pipeline_layout_destroy(c->lyt, c->dev);
-	image_views_destroy(c->swp_st, c->dev);
+	color_image_destroy(c->swp_st, c->dev);
 	depth_image_destroy(c->swp_st, c->dev);
+	image_views_destroy(c->swp_st, c->dev);
 	swapchain_destroy(c->swp, c->dev);
 	device_destroy(c->dev);
 	surface_destroy(c->surf, c->inst);

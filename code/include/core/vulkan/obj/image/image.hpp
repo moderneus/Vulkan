@@ -22,6 +22,7 @@ struct image {
 	VkImageTiling			tiling;
 	VkFormat			fmt;
 	VkImageAspectFlags		aspect_flags;
+	VkSampleCountFlagBits		samples = VK_SAMPLE_COUNT_1_BIT;
 };
 
 VkMemoryAllocateInfo image_create_alloc_info(const physical_device &gpu, const VkMemoryRequirements &reqs, const VkMemoryPropertyFlags &props);

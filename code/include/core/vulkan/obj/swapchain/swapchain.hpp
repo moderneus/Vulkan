@@ -5,6 +5,7 @@
 
 #include "core/vulkan/obj/swapchain/framebuffer.hpp"
 #include "core/vulkan/obj/image/image_view.hpp"
+#include "core/vulkan/obj/image/color_image.hpp"
 #include "core/vulkan/obj/image/depth_image.hpp"
 #include "core/vulkan/obj/image/image.hpp"
 
@@ -35,6 +36,7 @@ struct swapchain_state {
 	std::vector<image_view>				views; 
 	std::vector<image>				imgs;
 	depth_image					dp_img;
+	color_image					col_img;
 };
 
 swapchain_support_details swapchain_query_supp_details(const physical_device &gpu, const surface &surf);

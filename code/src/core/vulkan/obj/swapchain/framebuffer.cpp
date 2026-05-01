@@ -5,7 +5,7 @@
 #include "core/vulkan/obj/image/depth_image.hpp"
 #include "util/debug/log.hpp"
 
-VkFramebufferCreateInfo framebuffer_create_info(const swapchain_state &st, const render_pass &rp, const std::array<VkImageView, 2> &atts)
+VkFramebufferCreateInfo framebuffer_create_info(const swapchain_state &st, const render_pass &rp, const std::array<VkImageView, 3> &atts)
 {
 	VkFramebufferCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -25,7 +25,7 @@ void framebuffers_create(swapchain_state *st, const device &dev, const render_pa
 	st->fbs.resize(st->views.size());
 
 	for(uint32_t i = 0; i < st->views.size(); ++i) {
-		std::array<VkImageView, 2> atts = {st->views[i].handle, st->dp_img.view.handle};
+		std::array<VkImageView, 3> atts = {st->col_img.view.handle, st->dp_img.view.handle, st->views[i].handle};
 		VkFramebufferCreateInfo info = framebuffer_create_info(*st, rp, atts);
 
 		if (vkCreateFramebuffer(dev.handle, &info, nullptr, &st->fbs[i]) != VK_SUCCESS)

@@ -63,7 +63,7 @@ VkPipelineViewportStateCreateInfo pipeline_create_viewport_info(const pipeline_c
 
 VkPipelineRasterizationStateCreateInfo pipeline_create_rast_info();
 
-VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info();
+VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info(const swapchain_state &st);
 
 VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info();
 

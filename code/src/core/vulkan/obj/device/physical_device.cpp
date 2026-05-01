@@ -125,3 +125,20 @@ VkFormat physical_device_find_supp_fmt(const physical_device &gpu, const std::ve
 
 	return VK_FORMAT_UNDEFINED;
 }
+
+VkSampleCountFlagBits physical_device_get_max_usable_sample_cnt(const physical_device &gpu) 
+{
+	VkPhysicalDeviceProperties props;
+	vkGetPhysicalDeviceProperties(gpu.handle, &props);
+
+	VkSampleCountFlags cnts = props.limits.framebufferColorSampleCounts & props.limits.framebufferDepthSampleCounts;
+
+	if (cnts & VK_SAMPLE_COUNT_64_BIT) return VK_SAMPLE_COUNT_64_BIT;
+	if (cnts & VK_SAMPLE_COUNT_32_BIT) return VK_SAMPLE_COUNT_32_BIT;
+	if (cnts & VK_SAMPLE_COUNT_16_BIT) return VK_SAMPLE_COUNT_16_BIT;
+	if (cnts & VK_SAMPLE_COUNT_8_BIT) return VK_SAMPLE_COUNT_8_BIT;
+	if (cnts & VK_SAMPLE_COUNT_4_BIT) return VK_SAMPLE_COUNT_4_BIT;
+	if (cnts & VK_SAMPLE_COUNT_4_BIT) return VK_SAMPLE_COUNT_2_BIT;
+
+	return VK_SAMPLE_COUNT_1_BIT;
+}

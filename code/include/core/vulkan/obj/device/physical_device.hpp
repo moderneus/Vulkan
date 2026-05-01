@@ -31,4 +31,6 @@ uint32_t physical_device_find_mem_type(const physical_device &gpu, uint32_t type
 
 VkFormat physical_device_find_supp_fmt(const physical_device &gpu, const std::vector<VkFormat> &fmts, VkImageTiling tiling, VkFormatFeatureFlags features);
 
+VkSampleCountFlagBits physical_device_get_max_usable_sample_cnt(const physical_device &gpu);
+
 #endif
