@@ -7,3 +7,9 @@
 [submodule "code/libs/glm"]
 	path = code/libs/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "code/libs/stb"]
+	path = code/libs/stb
+	url = https://github.com/nothings/stb.git
+[submodule "code/libs/tinyobjloader"]
+	path = code/libs/tinyobjloader
+	url = https://github.com/tinyobjloader/tinyobjloader.git

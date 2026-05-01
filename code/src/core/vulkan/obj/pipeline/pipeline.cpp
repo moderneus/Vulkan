@@ -1,5 +1,5 @@
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
-#include "core/vulkan/obj/pipeline/layout.hpp"
+#include "core/vulkan/obj/pipeline/pipeline_layout.hpp"
 #include "core/vulkan/obj/pipeline/shader.hpp"
 #include "core/vulkan/obj/swapchain/swapchain.hpp"
 #include "core/vulkan/obj/device/device.hpp"
@@ -12,8 +12,8 @@ VkViewport pipeline_create_viewport(const swapchain_state &st)
 	VkViewport vp = {};
 	vp.x = 0.0f;
 	vp.y = 0.0f;
-	vp.width = static_cast<float>(st.extent.width);
-	vp.height = static_cast<float>(st.extent.height);
+	vp.width = static_cast<float>(st.imgs[0].extent.width);
+	vp.height = static_cast<float>(st.imgs[0].extent.height);
 	vp.minDepth = 0.0f;
 	vp.maxDepth = 1.0f;
 	return vp;
@@ -23,7 +23,7 @@ VkRect2D pipeline_create_scissor(const swapchain_state &st)
 {
 	VkRect2D scissor = {};
 	scissor.offset = {0, 0};
-	scissor.extent = st.extent;
+	scissor.extent = st.imgs[0].extent;
 	return scissor;
 }
 
@@ -159,7 +159,7 @@ VkPipelineRasterizationStateCreateInfo pipeline_create_rast_info()
 	info.polygonMode = VK_POLYGON_MODE_FILL;
 	info.lineWidth = 1.0f;
 	info.cullMode = VK_CULL_MODE_BACK_BIT;
-	info.frontFace = VK_FRONT_FACE_CLOCKWISE;
+	info.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 	info.depthBiasEnable = VK_FALSE;
 	info.depthBiasConstantFactor = 0.0f;
 	info.depthBiasClamp = 0.0f;
@@ -170,25 +170,35 @@ VkPipelineRasterizationStateCreateInfo pipeline_create_rast_info()
 	return info;
 }
 
-VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info() 
+VkPipelineMultisampleStateCreateInfo pipeline_create_msaa_info(const swapchain_state &st) 
 {
 	log_info("Creating a Multisampling Info...");
 
 	VkPipelineMultisampleStateCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 	info.sampleShadingEnable = VK_FALSE;
-	info.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+	info.rasterizationSamples = st.col_img.img.samples;
 
 	log_info("The Multisampling Info was Created.");
 
 	return info;
 }
 
-#if 0
-VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info() {
-    
+VkPipelineDepthStencilStateCreateInfo pipeline_create_depth_stencil_info()
+{
+	log_info("Creating the Depth Stencil Info...");
+
+	VkPipelineDepthStencilStateCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	info.depthTestEnable = VK_TRUE;
+	info.depthWriteEnable = VK_TRUE;
+	info.depthCompareOp = VK_COMPARE_OP_LESS;
+	info.depthBoundsTestEnable = VK_FALSE;
+
+	log_info("The Depth Stencil Info was Created.");
+
+	return info;
 }
-#endif
 
 VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipeline_config &cfg) 
 {
@@ -205,7 +215,7 @@ VkPipelineColorBlendStateCreateInfo pipeline_create_col_blend_info(const pipelin
 	return info;
 }
 
-VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const layout &lyt, const render_pass &rp)
+VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, const pipeline_layout &lyt, const render_pass &rp)
 {
 	log_info("Creating the Pipeline Info...");
 
@@ -218,7 +228,7 @@ VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, 
 	info.pViewportState = &pl_info.vp;
 	info.pRasterizationState = &pl_info.rast;
 	info.pMultisampleState = &pl_info.msaa;
-	info.pDepthStencilState = nullptr;
+	info.pDepthStencilState = &pl_info.ds;
 	info.pColorBlendState = &pl_info.col_blend;
 	info.pDynamicState = &pl_info.dyn_state;
 	info.layout = lyt.handle;
@@ -230,7 +240,7 @@ VkGraphicsPipelineCreateInfo pipeline_create_info(const pipeline_info &pl_info, 
 	return info;
 }
 
-void pipeline_create(pipeline *pl, const device &dev, const layout &lyt, const render_pass &rp, 
+void pipeline_create(pipeline *pl, const device &dev, const pipeline_layout &lyt, const render_pass &rp, 
 		     const swapchain_state &st, const std::array<shader, 2> &shdrs)
 {
 	log_info("Creating a Pipeline...");
@@ -249,7 +259,8 @@ void pipeline_create(pipeline *pl, const device &dev, const layout &lyt, const r
 	pl_info.asm_input = pipeline_create_asm_input_info();
 	pl_info.vp = pipeline_create_viewport_info(cfg);
 	pl_info.rast = pipeline_create_rast_info();
-	pl_info.msaa = pipeline_create_msaa_info();
+	pl_info.msaa = pipeline_create_msaa_info(st);
+	pl_info.ds = pipeline_create_depth_stencil_info();
 	pl_info.col_blend = pipeline_create_col_blend_info(cfg);
 	pl_info.dyn_state = pipeline_create_dyn_state_info(cfg);
 

@@ -1,12 +1,14 @@
 #include "core/vulkan/obj/swapchain/swapchain.hpp"
 #include "core/vulkan/obj/swapchain/framebuffer.hpp"
-#include "core/vulkan/obj/swapchain/image_view.hpp"
 #include "core/vulkan/obj/device/queue_indices.hpp"
 #include "core/vulkan/obj/device/device.hpp"
 #include "core/vulkan/obj/device/physical_device.hpp"
+#include "core/vulkan/obj/image/depth_image.hpp"
 #include "core/vulkan/obj/instance/surface.hpp"
 #include "engine/window/window.hpp"
 #include "util/debug/log.hpp"
+
+#include "SDL3/SDL_events.h"
 
 #include <array>
 #include <limits>
@@ -14,6 +16,8 @@
 
 swapchain_support_details swapchain_query_supp_details(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surf) 
 {
+	log_info("Querying the Swapchain Support Details...");
+
 	swapchain_support_details d;
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surf, &d.caps);
 
@@ -33,11 +37,15 @@ swapchain_support_details swapchain_query_supp_details(const VkPhysicalDevice &g
 		vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surf, &pm_cnt, d.pms.data());
 	}
 
+	log_info("The Swapchain Support Details were Returned.");
+
 	return d;
 }
 
 bool swapchain_is_adequate(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surf) 
 {
+	log_info("Checking an Adequacy of Swapchain...");
+
 	swapchain_support_details d = swapchain_query_supp_details(gpu, surf);
 
 	bool srgb_ok = false;
@@ -52,6 +60,11 @@ bool swapchain_is_adequate(const VkPhysicalDevice &gpu, const VkSurfaceKHR &surf
 		if (pm == VK_PRESENT_MODE_MAILBOX_KHR || pm == VK_PRESENT_MODE_FIFO_KHR)
 			pm_ok = true;
 	}
+
+	if (!(srgb_ok && pm_ok))
+		log_critical("The Swapchain is not Adequate.");
+
+	log_info("The Swapchain is Adequate.");
 
 	return srgb_ok && pm_ok;
 }
@@ -153,34 +166,59 @@ VkSwapchainCreateInfoKHR swapchain_create_info(const queue_indices &q_idx, const
 	return info;
 }
 
-void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, const VkSurfaceFormatKHR &fmt, 
-			   const VkExtent2D &extent)
+void swapchain_state_setup(swapchain_state *st, const swapchain &swp, const device &dev, 
+			   const VkSurfaceFormatKHR &fmt, const VkExtent2D &extent)
 {
-	st->fmt = fmt.format;
-	st->extent = extent;
+	log_info("Setting up the Swapchain State...");
 
 	uint32_t img_cnt = 0;
 	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, nullptr);
 
+	std::vector<VkImage> tmp_imgs(img_cnt);
+	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, tmp_imgs.data());
+
 	st->imgs.resize(img_cnt);
-	vkGetSwapchainImagesKHR(dev.handle, swp.handle, &img_cnt, st->imgs.data());
+
+	for(uint32_t i = 0; i < img_cnt; ++i) {
+		st->imgs[i].handle = tmp_imgs[i];
+		st->imgs[i].fmt = fmt.format;
+		st->imgs[i].extent = extent;
+		st->imgs[i].aspect_flags = VK_IMAGE_ASPECT_COLOR_BIT;
+		st->imgs[i].mip_lvls = 1;
+	}
+
+	log_info("The Swapchain State was Setted up.");
 }
 
-void swapchain_recreate(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, const render_pass &rp, 
-			const queue_indices &q_idx, const surface &surf, const window &win)
+void swapchain_recreate(swapchain *swp, swapchain_state *swp_st, renderer_state *rnd_st, const device &dev, const physical_device &gpu, 
+			const render_pass &rp, const queue_indices &q_idx, const surface &surf, const window &win)
 {
+	int w = 0, h = 0;
+	SDL_Event e;
+	while(w == 0 || h == 0) {
+		SDL_GetWindowSizeInPixels(win.handle, &w, &h);
+		SDL_WaitEvent(&e);
+
+		if (e.type == SDL_EVENT_WINDOW_RESIZED)
+			rnd_st->fb_resized = true;
+	}
+
 	vkDeviceWaitIdle(dev.handle);
 
-	framebuffers_destroy(*st, dev);
-	image_views_destroy(*st, dev);
+	framebuffers_destroy(*swp_st, dev);
+	color_image_destroy(*swp_st, dev);
+	depth_image_destroy(*swp_st, dev);
+	image_views_destroy(*swp_st, dev);
 	swapchain_destroy(*swp, dev);
 	
-	swapchain_create(swp, st, dev, gpu, q_idx, surf, win);
-	image_views_create(st, dev);
-	framebuffers_create(st, dev, rp);
+	swapchain_create(swp, swp_st, dev, gpu, q_idx, surf, win);
+	image_views_create(swp_st, dev);
+	depth_image_create(swp_st, dev, gpu);
+	color_image_create(swp_st, dev, gpu);
+	framebuffers_create(swp_st, dev, rp);
 }
 
-void swapchain_create(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu, 
+void swapchain_create(swapchain *swp, swapchain_state *st, const device &dev, const physical_device &gpu,
 		      const queue_indices &q_idx, const surface &surf, const window &win)
 {
 	log_info("Creating a Swapchain...");
