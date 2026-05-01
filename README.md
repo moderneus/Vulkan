@@ -12,7 +12,7 @@
 
 **Now the program can draw a Multisampled Model! :DDD**
 
-![Model](images/triangle.png)
+![Model](gifs/viking_room.gif)
 
 # How to build?
 
