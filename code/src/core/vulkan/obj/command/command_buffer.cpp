@@ -1,10 +1,14 @@
 #include "core/vulkan/obj/command/command_buffer.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
-#include "core/vulkan/obj/renderpass/render_pass.hpp"
+#include "core/vulkan/obj/pipeline/pipeline_layout.hpp"
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
 #include "core/vulkan/obj/device/device.hpp"
+#include "core/vulkan/obj/device/queue.hpp"
 #include "core/vulkan/obj/buffer/vertex.hpp"
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
+#include "core/vulkan/obj/buffer/index_buffer.hpp"
+#include "core/vulkan/obj/descriptor/descriptor_set.hpp"
+#include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "util/debug/log.hpp"
 #include "util/constants.hpp"
 
@@ -19,16 +23,18 @@ VkCommandBufferBeginInfo command_buffer_create_begin_info()
 	return info;
 }
 
-void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const render_pass &rp, 
-			   const swapchain_state &st, const vertex_buffer &buf, const uint32_t img_idx)
+void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const pipeline_layout &lyt, const render_pass &rp, 
+			   const swapchain_state &st, const vertex_buffer &buf, const index_buffer &idx_buf, const descriptor_set &set, const uint32_t img_idx)
 {
 	VkCommandBufferBeginInfo cmd_begin = command_buffer_create_begin_info();
 
 	if (vkBeginCommandBuffer(cmd.handle, &cmd_begin) != VK_SUCCESS)
 		log_critical("Failed to Begin Recording Command Buffer.");
 
-	VkClearValue clear_col = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-	VkRenderPassBeginInfo rp_begin = render_pass_create_begin_info(rp, st, clear_col, img_idx);
+	std::array<VkClearValue, 2> vals;
+	vals[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+	vals[1].depthStencil = {1.0f, 0};
+	VkRenderPassBeginInfo rp_begin = render_pass_create_begin_info(rp, st, vals, img_idx);
 
 	vkCmdBeginRenderPass(cmd.handle, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -38,11 +44,14 @@ void command_buffer_record(const command_buffer &cmd, const pipeline &pl, const 
 		VkRect2D sc = pipeline_create_scissor(st);
 		vkCmdSetScissor(cmd.handle, 0, 1, &sc);
 
-		std::array<VkBuffer, 1> bufs = {buf.handle};
-		std::array<VkDeviceSize, 1> offsets = {0};
-		vkCmdBindVertexBuffers(cmd.handle, 0, 1, bufs.data(), offsets.data());
+		std::array<VkBuffer, 1> bufs = {buf.vbuf.handle}; std::array<VkDeviceSize, 1> offsets = {0};
 
-		vkCmdDraw(cmd.handle, static_cast<uint32_t>(triangle_verts.size()), 1, 0, 0);
+		vkCmdBindVertexBuffers(cmd.handle, 0, 1, bufs.data(), offsets.data());
+		vkCmdBindIndexBuffer(cmd.handle, idx_buf.ibuf.handle, 0, VK_INDEX_TYPE_UINT32);
+
+		vkCmdBindDescriptorSets(cmd.handle, VK_PIPELINE_BIND_POINT_GRAPHICS, lyt.handle, 0, 1, &set.handle, 0, nullptr);
+
+		vkCmdDrawIndexed(cmd.handle, static_cast<uint32_t>(idx_buf.data.size()), 1, 0, 0, 0);
 
 	vkCmdEndRenderPass(cmd.handle);
 
@@ -79,4 +88,43 @@ void command_buffers_create(std::vector<command_buffer> *cmds, const device &dev
 	}
 
 	log_info("The Command Buffer was Created.");
+}
+
+command_buffer command_buffer_begin_single_time_cmds(const device &dev, const command_pool &pool)
+{
+	log_info("Beginning the Command Buffer Single Time Commands.");
+
+	VkCommandBufferAllocateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	info.commandPool = pool.handle;
+	info.commandBufferCount = 1;
+	
+	command_buffer cmd;
+	vkAllocateCommandBuffers(dev.handle, &info, &cmd.handle);
+
+	VkCommandBufferBeginInfo begin_info = {};
+	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+	vkBeginCommandBuffer(cmd.handle, &begin_info);
+
+	return cmd;
+}
+
+void command_buffer_end_single_time_cmds(const command_buffer &cmd, const device &dev, const command_pool &pool, const queue &q)
+{
+	vkEndCommandBuffer(cmd.handle);
+
+	VkSubmitInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	info.commandBufferCount = 1;
+	info.pCommandBuffers = &cmd.handle;
+
+	vkQueueSubmit(q.gfx, 1, &info, VK_NULL_HANDLE);
+	vkQueueWaitIdle(q.gfx);
+
+	vkFreeCommandBuffers(dev.handle, pool.handle, 1, &cmd.handle);
+
+	log_info("Ending the Command Buffer Single Time Commands.");
 }

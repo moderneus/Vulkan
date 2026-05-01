@@ -22,22 +22,22 @@ file(GLOB_RECURSE SRC "src/*.cpp")
 
 add_executable(${TARGET} ${SRC})
 
-target_compile_options(${TARGET} PRIVATE -g -std=c++20 -O2 -Wall -Wextra -Wpedantic -frtti -fexceptions)
-target_include_directories(${TARGET} PRIVATE include libs/SDL/include libs/fmt/include libs/glm)
+target_compile_options(${TARGET} PRIVATE -std=c++20 -g -O1 -Wall -Wextra -Wpedantic -frtti -fexceptions)
+target_include_directories(${TARGET} PRIVATE include libs/SDL/include libs/fmt/include libs/glm libs/stb libs/tinyobjloader)
 target_link_libraries(${TARGET} PRIVATE SDL3::SDL3 fmt::fmt Vulkan::Vulkan)
 
 set(DYNAMIC_LIBS SDL3::SDL3 fmt::fmt glm::glm)
 
 foreach(lib IN LISTS DYNAMIC_LIBS)
-    get_target_property(lib_type ${lib} TYPE)
-    if(lib_type STREQUAL "SHARED_LIBRARY")
-        add_custom_command(TARGET ${TARGET} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                $<TARGET_FILE:${lib}>
-                $<TARGET_FILE_DIR:${TARGET}>
+        add_custom_command(
+		TARGET ${TARGET} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:${lib}>
+		$<TARGET_FILE_DIR:${TARGET}>
         )
-    endif()
 endforeach()
+
+file(COPY assets DESTINATION .)
 
 find_program(GLSLC glslc REQUIRED)
 

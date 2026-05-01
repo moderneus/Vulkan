@@ -13,7 +13,7 @@ struct device {
 	VkDevice handle = VK_NULL_HANDLE;
 };
 
-VkPhysicalDeviceFeatures device_get_enabled_features(const physical_device &gpu);
+VkPhysicalDeviceFeatures device_get_enabled_features();
 
 std::vector<VkDeviceQueueCreateInfo> device_create_queue_infos(const queue_indices &q_idx, const float &prior);
 

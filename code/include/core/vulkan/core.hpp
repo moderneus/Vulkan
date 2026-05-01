@@ -8,8 +8,18 @@
 #include "core/vulkan/obj/device/physical_device.hpp" 
 #include "core/vulkan/obj/device/device.hpp"
 #include "core/vulkan/obj/swapchain/swapchain.hpp"
-#include "core/vulkan/obj/pipeline/layout.hpp"
+#include "core/vulkan/obj/pipeline/pipeline_layout.hpp"
 #include "core/vulkan/obj/buffer/vertex_buffer.hpp"
+#include "core/vulkan/obj/buffer/index_buffer.hpp"
+#include "core/vulkan/obj/buffer/uniform_buffer.hpp"
+#include "core/vulkan/obj/descriptor/descriptor_set_layout.hpp"
+#include "core/vulkan/obj/descriptor/descriptor_pool.hpp"
+#include "core/vulkan/obj/descriptor/descriptor_set.hpp"
+#include "core/vulkan/obj/image/depth_image.hpp"
+#include "core/vulkan/obj/image/texture.hpp"
+#include "core/vulkan/obj/image/image_view.hpp"
+#include "core/vulkan/obj/image/sampler.hpp"
+#include "core/vulkan/obj/model/model.hpp"
 #include "core/vulkan/obj/pipeline/pipeline.hpp"
 #include "core/vulkan/obj/renderpass/render_pass.hpp"
 #include "core/vulkan/obj/command/command_pool.hpp"
@@ -34,10 +44,15 @@ struct core {
 	device					dev;
 	swapchain				swp;
 	swapchain_state				swp_st;
-	layout					lyt;
+	pipeline_layout				lyt;
 	std::array<shader, 2>			shdrs;
-	vertex_buffer				buf;
-	vertex_buffer_mem			mem;
+	texture					tex;
+	sampler					samp;
+	model					mod;
+	std::vector<uniform_buffer>		uniform_bufs;
+	descriptor_set_layout			set_lyt;
+	descriptor_pool				set_pool;
+	std::vector<descriptor_set>		sets;
 	pipeline				pl;
 	render_pass				rp;
 	command_pool				cmd_pool;
