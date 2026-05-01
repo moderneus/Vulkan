@@ -1,6 +1,6 @@
 # What's that?
 
-**This is my own take on the code from the Vulkan Tutorial. It's not a unique project or design — it's simply my vision of the potential structure of a good Vulkan program.**
+**This is my own take on the code from the Vulkan Tutorial. It's not a unique project or design — it's simply my vision of the potential structure of a Vulkan program.**
 
 - **Feel free to criticize any part of the program.**
 
@@ -8,11 +8,11 @@
 
 - **Give it a star if you like it! :)**
 
-# Screenshot!
+# GIF!
 
-**Now the program can draw a multi-colored triangle! :DDD**
+**Now the program can draw a Multisampled Model! :DDD**
 
-![Triangle](images/triangle.png)
+![Model](images/triangle.png)
 
 # How to build?
 
@@ -41,6 +41,7 @@
   - ```sudo pacman -S cmake```
 
   - ```sudo pacman -S clang```
+
 ### Windows:
 - [Vulkan SDK](https://vulkan.lunarg.com/sdk/home)
 - [CMake](https://cmake.org/download/)
