@@ -2,11 +2,14 @@
 
 ```
 code
+│
 ├── CMakeLists.txt
 │
 ├── assets
+│   ├── models
+│   │   └── viking_room.obj
 │   └── textures
-│       └── texture.png
+│       └── viking_room.png
 │
 ├── include
 │   ├── core
@@ -19,8 +22,8 @@ code
 │   │           │   ├── buffer.hpp
 │   │           │   ├── index_buffer.hpp
 │   │           │   ├── uniform_buffer.hpp
-│   │           │   ├── vertex_buffer.hpp
-│   │           │   └── vertex.hpp
+│   │           │   ├── vertex.hpp
+│   │           │   └── vertex_buffer.hpp
 │   │           ├── command
 │   │           │   ├── command_buffer.hpp
 │   │           │   └── command_pool.hpp
@@ -36,6 +39,8 @@ code
 │   │           │   ├── queue.hpp
 │   │           │   └── queue_indices.hpp
 │   │           ├── image
+│   │           │   ├── color_image.hpp
+│   │           │   ├── depth_image.hpp
 │   │           │   ├── image.hpp
 │   │           │   ├── image_view.hpp
 │   │           │   ├── sampler.hpp
@@ -43,6 +48,8 @@ code
 │   │           ├── instance
 │   │           │   ├── instance.hpp
 │   │           │   └── surface.hpp
+│   │           ├── model
+│   │           │   └── model.hpp
 │   │           ├── pipeline
 │   │           │   ├── pipeline.hpp
 │   │           │   ├── pipeline_layout.hpp
@@ -76,9 +83,10 @@ code
 │
 ├── shaders
 │   ├── frag
-│   │   └── square.frag
+│   │   └── viking_room.frag
 │   └── vert
-│       └── square.vert
+│       └── viking_room.vert
+│
 └── src
     ├── core
     │   ├── SDL
@@ -90,8 +98,8 @@ code
     │           │   ├── buffer.cpp
     │           │   ├── index_buffer.cpp
     │           │   ├── uniform_buffer.cpp
-    │           │   ├── vertex_buffer.cpp
-    │           │   └── vertex.cpp
+    │           │   ├── vertex.cpp
+    │           │   └── vertex_buffer.cpp
     │           ├── command
     │           │   ├── command_buffer.cpp
     │           │   └── command_pool.cpp
@@ -107,6 +115,8 @@ code
     │           │   ├── queue.cpp
     │           │   └── queue_indices.cpp
     │           ├── image
+    │           │   ├── color_image.cpp
+    │           │   ├── depth_image.cpp
     │           │   ├── image.cpp
     │           │   ├── image_view.cpp
     │           │   ├── sampler.cpp
@@ -114,6 +124,8 @@ code
     │           ├── instance
     │           │   ├── instance.cpp
     │           │   └── surface.cpp
+    │           ├── model
+    │           │   └── model.cpp
     │           ├── pipeline
     │           │   ├── pipeline.cpp
     │           │   ├── pipeline_layout.cpp
@@ -142,5 +154,6 @@ code
     │   │   └── val_layers.cpp
     │   ├── file.cpp
     │   └── string.cpp
+    │
     └── vulkan.cpp
 ```
