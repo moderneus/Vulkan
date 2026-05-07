@@ -38,7 +38,7 @@ code
 │   │           │   ├── <a href="https://github.com/moderneus/Vulkan/blob/master/code/include/core/vulkan/obj/device/physical_device.hpp">physical_device.hpp</a>
 │   │           │   ├── <a href="https://github.com/moderneus/Vulkan/blob/master/code/include/core/vulkan/obj/device/queue.hpp">queue.hpp</a>
 │   │           │   └── <a href="https://github.com/moderneus/Vulkan/blob/master/code/include/core/vulkan/obj/device/queue_indices.hpp">queue_indices.hpp</a>
-│   │           ├── image/
+│   │           ├── image
 │   │           │   ├── <a href="https://github.com/moderneus/Vulkan/blob/master/code/include/core/vulkan/obj/image/color_image.hpp">color_image.hpp</a>
 │   │           │   ├── <a href="https://github.com/moderneus/Vulkan/blob/master/code/include/core/vulkan/obj/image/depth_image.hpp">depth_image.hpp</a>
 │   │           │   ├── <a href="https://github.com/moderneus/Vulkan/blob/master/code/include/core/vulkan/obj/image/image.hpp">image.hpp</a>
