@@ -1,6 +1,6 @@
 # What is an Image?
 
-The Image is just a set of pixels of special format, size, layers count and mip level in the GPU memory. The Image has usage flags; it can be a sampled image, a color attachment, etc. It defines how the GPU should interact with this memory.
+The Image is just a set of pixels of special format, size, layers count and mip level in the GPU memory. The Image has usage flags; it can be a sampled image, a depth image, a color attachment, etc. It defines how the GPU should interact with this memory.
 
 # Dependencies
 
