@@ -18,11 +18,16 @@ the process of selecting pixels to be filled with color).
 
 ## Image Types
 
-- Color Image - 
+- Color Image - A color image is an image for which the final color has been calculated for each pixel.
 
-- Depth Image - 
+- Depth Image - A depth image is an image used as a buffer, storing a value between 0.0 and 1.0, representing the pixel's distance (think of it as an additional Z-axis
+for each pixel). During rasterization, a depth check is performed: the depth value of each subsequent pixel is compared with the previous one. If it's less than or
+equal, it's drawn; if it's greater, it's not. The depth value of the very first pixel is always compared to 1.0.
 
-- Sampled Image - 
+- Multisampled Image - A multisampled image is an image with an increased number of sample points per pixel. This allows for more accurate rasterization. This image is
+later written to a single-sample image (Color Image) and displayed on the screen since the monitor has only one sample per pixel. To write a multi-sampled image to a
+single-sampled image, the GPU performs a process called resolve—an averaging of the values ​​for each pixel. It takes all the samples (subpixels), adds their corresponding
+color channels, and divides the result by the number of samples. 
 
 # Dependencies
 
