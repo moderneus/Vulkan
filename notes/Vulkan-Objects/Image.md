@@ -2,7 +2,8 @@
 
 The Image is just a set of pixels of special format, size, layers count, samples count and mip level in the GPU memory. The Image has usage flags; it can be a sampled image, a depth image, a color attachment, etc. It defines how the GPU should interact with this memory.
 
-The Image characteristics:
+## The Image main characteristics
+
 - Format - format of the Image is a symbiosis of color channels and color depth. The color channel is the level of a particular color in an image.
 And color depth is the number of bits allocated to each channel. The more bits, the more accurate the color reproduction.
 
@@ -11,6 +12,9 @@ And color depth is the number of bits allocated to each channel. The more bits, 
 - Layer - layer is an element of an array of image slices. The image could be, for example, a cube map, with each slice representing one face of the cube.
 
 - Mip Levels - mip levels are pre-created reduced copies of an image, where each subsequent copy is two times smaller in size.
+
+- Samples Count - samples count is the number of samples per pixel used during rasterization. The more pixels, the more accurate the sampling (sampling is
+the process of selecting pixels to be filled with color).
 
 # Dependencies
 
