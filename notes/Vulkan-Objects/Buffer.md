@@ -3,7 +3,7 @@
 The Buffer is a Vulkan object that represents the linear arrays of data for special puproses. The Buffer binds to the [Pipeline](Pipeline.md)
 via [DescriptorSet](DescriptorSet.md) and provides the data stored in this Buffer.
 
-Buffers come in different types:
+## Buffer types
 
 - Vertex Buffer - buffer that stores vertices. Each vertex consists of typically three
 attributes: position, color, texture coordinate. They bind using the
