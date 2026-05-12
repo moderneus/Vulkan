@@ -13,8 +13,16 @@ And color depth is the number of bits allocated to each channel. The more bits, 
 
 - Mip Levels - mip levels are pre-created reduced copies of an image, where each subsequent copy is two times smaller in size.
 
-- Samples Count - samples count is the number of samples per pixel used during rasterization. The more pixels, the more accurate the sampling (sampling is
+- Samples Count - samples count is the number of sample points per pixel used during rasterization. The more pixels, the more accurate the sampling (sampling is
 the process of selecting pixels to be filled with color).
+
+## Image Types
+
+- Color Image - 
+
+- Depth Image - 
+
+- Sampled Image - 
 
 # Dependencies
 
