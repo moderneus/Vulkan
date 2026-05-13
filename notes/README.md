@@ -28,7 +28,8 @@ graphics program. Personally I chose Vulkan because I'm interested in full contr
 - **[CommandPool](Vulkan-Objects/CommandPool.md)**
 - **[CommandBuffer](Vulkan-Objects/CommandBuffer.md)**
 - **[Buffer](Vulkan-Objects/Buffer.md)**
-- **[DescriptorSet](Vulkan-Objects/DescriptorSet.md)**
+- **[DescriptorPool](Vulkan-Objects/DescriptorPool.md)**
 - **[DescriptorSetLayout](Vulkan-Objects/DescriptorSetLayout.md)**
+- **[DescriptorSet](Vulkan-Objects/DescriptorSet.md)**
 - **[Semaphore](Vulkan-Objects/Semaphore.md)**
 - **[Fence](Vulkan-Objects/Fence.md)**
