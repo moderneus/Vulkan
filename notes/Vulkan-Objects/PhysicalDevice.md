@@ -8,7 +8,7 @@ command execution.
 
 The PhysicalDevice is created after the [Instance](Instance.md) and depends only on it, as the Vulkan instance determines which physical 
 devices are available on the system. It has no mutable state and does not depend on any [Device](Device.md) or resources. The creation of a 
-[Device](Device.md) directly depends on the PhysicalDevice, since it defines the available [queues](Queue.md), features, limits, and extensions. 
+[Device](Device.md) directly depends on the PhysicalDevice, since it defines the available [Queues](Queue.md), features, limits, and extensions. 
 All Vulkan resources and operations ultimately rely on the selected PhysicalDevice through the corresponding Device.
 
 # Links
